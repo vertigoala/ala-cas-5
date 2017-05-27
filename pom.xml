@@ -64,13 +64,13 @@
             <artifactId>cas-server-webapp</artifactId>
             <version>${cas.version}</version>
             <type>war</type>
-            <scope>runtime</scope>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
     <properties>
-        <cas.version>5.0.4</cas.version>
-        <springboot.version>1.4.2.RELEASE</springboot.version>
+        <cas.version>5.1.0-RC4</cas.version>
+        <springboot.version>1.5.3.RELEASE</springboot.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
