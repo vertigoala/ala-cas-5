@@ -2,11 +2,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd ">
+
+    <parent>
+        <groupId>au.org.ala</groupId>
+        <artifactId>ala-parent-pom</artifactId>
+        <version>2</version>
+        <!--<relativePath>../ala-parent-pom/pom.xml</relativePath>-->
+    </parent>
+
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.apereo.cas</groupId>
-    <artifactId>cas-overlay</artifactId>
+    <artifactId>cas</artifactId>
     <packaging>war</packaging>
-    <version>1.0</version>
+    <version>5.1</version>
 
     <build>
         <plugins>
@@ -104,6 +111,16 @@
         <repository>
             <id>spring-milestones</id>
             <url>https://repo.spring.io/milestone</url>
+        </repository>
+        <repository>
+            <id>ala-repo-release</id>
+            <name>ALA Internal Releases</name>
+            <url>https://nexus.ala.org.au/content/repositories/releases/</url>
+        </repository>
+        <repository>
+            <id>ala-repo-snapshot</id>
+            <name>ALA Internal Snapshots</name>
+            <url>https://nexus.ala.org.au/content/repositories/snapshots/</url>
         </repository>
     </repositories>
 
