@@ -13,7 +13,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>cas</artifactId>
     <packaging>war</packaging>
-    <version>5.1</version>
+    <version>${cas.version}</version>
 
     <build>
         <plugins>
@@ -118,6 +118,11 @@
             <version>${kotlin.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>4.2.0</version>
+        </dependency>
+        <dependency>
             <groupId>org.apereo.cas</groupId>
             <artifactId>cas-server-webapp</artifactId>
             <version>${cas.version}</version>
@@ -142,7 +147,7 @@
     </dependencies>
 
     <properties>
-        <cas.version>5.1.0-RC4</cas.version>
+        <cas.version>5.1.0</cas.version>
         <springboot.version>1.5.3.RELEASE</springboot.version>
         <kotlin.version>1.1.2-2</kotlin.version>
         <maven.compiler.source>1.8</maven.compiler.source>
