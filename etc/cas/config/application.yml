@@ -1,2 +1,43 @@
 info:
   description: CAS Configuration
+
+jndi:
+  hikari:
+    - name: jdbccas
+      driverClass: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost/cas
+      user: username
+      password: password
+      dataSourceProperties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+
+flyway:
+  url: jdbc:mysql://localhost/cas
+  user: root
+  password: password
+
+cas:
+  authn:
+    jdbc:
+      query:
+# Use this for a Tomcat provided JNDI DataSource
+#        - dataSourceName: java:comp/env/jdbccas
+        - dataSourceName: jdbccas
+        - dataSourceName: jdbccas
+    attributeRepository:
+      jdbc:
+        - dataSourceName: jdbccas
+  monitor:
+    jdbc:
+      validationQuery: /* ping */ SELECT 1
+      dataSourceName: jdbccas
+  ticket:
+    registry:
+      jpa:
+        ddl-auto: update
+        url: jdbc:mysql://localhost/casTicketRegistry
+        user: username
+        password: password
+
