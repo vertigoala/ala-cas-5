@@ -105,6 +105,10 @@ cas:
 #    cipherEnabled=true
 
   ticket:
+    tgt:
+      rememberMe:
+        enabled: true
+        timeToKillInSeconds: 1209600
     registry:
       cleaner:
         appId: cas-ticket-registry-cleaner
