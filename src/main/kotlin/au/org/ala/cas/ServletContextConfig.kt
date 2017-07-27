@@ -5,9 +5,9 @@ import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.context.properties.EnableConfigurationProperties
-import org.springframework.context.annotation.Configuration;
 import org.springframework.boot.web.servlet.ServletContextInitializer
 import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
 import javax.naming.InitialContext
 import javax.sql.DataSource
 
@@ -29,9 +29,9 @@ open class ServletContextConfig {
             log.info("Servlet Context Initializer running")
             // Obtain our environment naming context
             val initCtx = InitialContext()
-//            val envCtx = initCtx.lookup("java:comp/env") as Context
             log.info("Adding {} JNDI Hikari Datasources", jndiConfigurationProperties.hikari.size)
             jndiConfigurationProperties.hikari.map(this::hikariDataSource).forEach { (name, dataSource) ->
+                log.debug("Inserting Hikari Datasource $dataSource at $name")
                 initCtx.bind(name, dataSource)
             }
         }
@@ -44,6 +44,7 @@ open class ServletContextConfig {
             jdbcUrl = jndiJdbc.url
             username = jndiJdbc.user
             password = jndiJdbc.password
+            jndiJdbc.poolName = jndiJdbc.name // TODO good idea?
             jndiJdbc.allowPoolSuspension?.let { isAllowPoolSuspension = it }
             jndiJdbc.autoCommit?.let { isAutoCommit = it }
             jndiJdbc.catalog?.let { catalog = it }
