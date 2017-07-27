@@ -3,7 +3,7 @@ ALA CAS 5.1
 
 The ALA CAS 5.1 deployment is based off the generic CAS WAR overlay.
 
-CAS documentation is available [here](https://apereo.github.io/cas/5.1.x/index.html}.)
+CAS documentation is available [here](https://apereo.github.io/cas/5.1.x/index.html)
 
 In addition to upgrading the core CAS components this upgrade hopes to minimise overrides of existing CAS classes as 
 used in previous versions of ALA CAS.  Customising these classes by overriding the classes directly complicates future
