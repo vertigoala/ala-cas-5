@@ -23,7 +23,7 @@ cas:
     jdbc:
       query:
 # Use this for a Tomcat provided JNDI DataSource
-#        - dataSourceName: java:comp/env/jdbccas
+#        - dataSourceName: java:comp/env/jdbc/cas
         - dataSourceName: jdbccas
         - dataSourceName: jdbccas
     attributeRepository:

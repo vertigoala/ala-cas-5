@@ -108,7 +108,7 @@ cas:
     tgt:
       rememberMe:
         enabled: true
-        timeToKillInSeconds: 1209600
+        timeToKillInSeconds: 1209600 # P14D
     registry:
       cleaner:
         appId: cas-ticket-registry-cleaner
