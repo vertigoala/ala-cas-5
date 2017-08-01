@@ -133,3 +133,13 @@ cas:
   jdbc:
     showSql: true
     genDdl: true
+
+# Override these for non-ALA deployments
+auth:
+  cookie:
+    domain: ala.org.au
+    httpOnly: true
+    maxAge: -1
+    name: ALA-Auth
+    path: /
+    secure: false
