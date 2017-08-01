@@ -7,7 +7,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_get_user_attributes`(p_username 
     UNION SELECT 'givenName' AS 'key', firstname AS 'value' FROM users WHERE username=p_username
     UNION SELECT 'lastname' AS 'key', lastname AS 'value' FROM users WHERE username=p_username
     UNION SELECT 'sn' AS 'key', lastname AS 'value' FROM users WHERE username=p_username
-    UNION SELECT 'userid' AS 'key', cast(userid AS char) AS 'value', 'id' AS 'key2', cast(userid AS char) AS 'value2' FROM users WHERE username=p_username
+    UNION SELECT 'userid' AS 'key', cast(userid AS char) AS 'value' FROM users WHERE username=p_username
     UNION SELECT 'id' AS 'key', cast(userid AS char) AS 'value' FROM users WHERE username=p_username
     UNION SELECT 'authority' AS 'key', group_concat(a.role_id) AS 'value' FROM user_role a JOIN users u ON a.user_id=u.userid WHERE u.username=p_username
     UNION SELECT 'role' AS 'key', a.role_id AS 'value' FROM user_role a JOIN users u ON a.user_id=u.userid WHERE u.username=p_username

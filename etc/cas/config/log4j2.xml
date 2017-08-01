@@ -185,11 +185,11 @@
             <AppenderRef ref="casAudit"/>
             <AppenderRef ref="casFile"/>
         </AsyncLogger>
-        <AsyncLogger name="au.org.ala" level="info" includeLocation="true">
+        <AsyncLogger name="au.org.ala" level="warn" additivity="false" includeLocation="true">
             <AppenderRef ref="casFile"/>
             <AppenderRef ref="casConsole"/>
         </AsyncLogger>
-        <AsyncLogger name="au.org.ala.cas" level="debug" includeLocation="true">
+        <AsyncLogger name="au.org.ala.cas" level="info" additivity="false" includeLocation="true">
             <AppenderRef ref="casFile"/>
             <AppenderRef ref="casConsole"/>
         </AsyncLogger>

@@ -28,32 +28,24 @@ open class ServletContextConfig {
     @Autowired
     lateinit var jndiConfigurationProperties: JndiConfigurationProperties
 
-    private var initialised: Boolean = false
-
     @Bean
     @Scope("singleton")
 //    @RefreshScope
     open fun simpleJndiInitializer(): ServletContextInitializer {
         return ServletContextInitializer { _ ->
-            log.info("Servlet Context Initializer running (initialised {})", initialised)
             // Obtain our environment naming context
-            if (!initialised) {
-                val initCtx = InitialContext()
-                log.info("Adding {} JNDI Hikari Datasources", jndiConfigurationProperties.hikari.size)
-                jndiConfigurationProperties.hikari.filter {
-                    try {
-                        initCtx.lookup(it.name) == null
-                    } catch (e: NamingException) {
-                        true
-                    }
-                }.map(this::hikariDataSource).forEach { (name, dataSource) ->
-                    log.debug("Inserting Hikari Datasource $dataSource at $name")
-                    initCtx.bind(name, dataSource)
+            val initCtx = InitialContext()
+            log.info("Adding {} JNDI Hikari Datasources", jndiConfigurationProperties.hikari.size)
+            jndiConfigurationProperties.hikari.filter {
+                try {
+                    initCtx.lookup(it.name) == null
+                } catch (e: NamingException) {
+                    true
                 }
-            } else {
-                log.debug("Skipping initialisation because it has already run")
+            }.map(this::hikariDataSource).forEach { (name, dataSource) ->
+                log.debug("Inserting Hikari Datasource $dataSource at $name")
+                initCtx.bind(name, dataSource)
             }
-            initialised = true
         }
     }
 
