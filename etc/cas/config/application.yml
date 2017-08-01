@@ -5,7 +5,7 @@ jndi:
   hikari:
     - name: jdbccas
       driverClass: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://localhost/cas
+      url: jdbc:mysql://localhost/cas[?serverTimezone=Australia/Sydney]
       user: username
       password: password
       dataSourceProperties:
@@ -14,7 +14,7 @@ jndi:
         prepStmtCacheSqlLimit: 2048
 
 flyway:
-  url: jdbc:mysql://localhost/cas
+  url: jdbc:mysql://localhost/cas[?serverTimezone=Australia/Sydney]
   user: root
   password: password
 
@@ -24,8 +24,8 @@ cas:
       query:
 # Use this for a Tomcat provided JNDI DataSource
 #        - dataSourceName: java:comp/env/jdbc/cas
-        - dataSourceName: jdbccas
-        - dataSourceName: jdbccas
+        - dataSourceName: jdbccas # For the bcrypt password encoder
+        - dataSourceName: jdbccas # For md5 password encoder
     attributeRepository:
       jdbc:
         - dataSourceName: jdbccas
@@ -37,7 +37,7 @@ cas:
     registry:
       jpa:
         ddl-auto: update
-        url: jdbc:mysql://localhost/casTicketRegistry
+        url: jdbc:mysql://localhost/casTicketRegistry[?serverTimezone=Australia/Sydney]
         user: username
         password: password
 

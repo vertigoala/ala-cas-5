@@ -1,11 +1,9 @@
 package au.org.ala.cas.password
 
 import au.org.ala.utils.*
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import java.io.File
 import java.io.FileNotFoundException
-import java.security.SecureRandom
 import java.util.*
 
 /**
@@ -17,7 +15,7 @@ import java.util.*
  */
 class AlaPasswordEncoder private constructor(val delegate: PasswordEncoder) : PasswordEncoder by delegate {
 
-    constructor() : this(delegate = loadFallback())
+    constructor() : this(delegate = loadAlaLegacyEncoder())
 
     companion object {
         private val log = logger<AlaPasswordEncoder>()
@@ -29,7 +27,7 @@ class AlaPasswordEncoder private constructor(val delegate: PasswordEncoder) : Pa
         const val MD5_SECRET_PROPERTY = "md5.secret"
         const val MD5_BASE64_ENCODE_PROPERTY = "md5.base64Encode"
 
-        fun loadFallback(): PasswordEncoder {
+        fun loadAlaLegacyEncoder(): PasswordEncoder {
             // TODO find a way to get to the Spring Boot properties so we don't need a second property source
             val location = System.getProperty(LOCATION_SYSTEM_PROPERTY) ?: System.getenv(LOCATION_ENV_VARIABLE) ?: DEFAULT_LOCATION
             log.info("Loading AlaPasswordEncoder properties from $location")
@@ -45,11 +43,11 @@ class AlaPasswordEncoder private constructor(val delegate: PasswordEncoder) : Pa
                 throw e
             }
 
-            return loadFallBack(props)
+            return loadAlaLegacyEncoder(props)
         }
 
-        fun loadFallBack(props: Properties): PasswordEncoder {
-            val md5Secret = props.getProperty(MD5_SECRET_PROPERTY)?.orNull() ?: throw IllegalArgumentException("md5.secret property must be set in ALA Password Encoder properties!")
+        fun loadAlaLegacyEncoder(props: Properties): PasswordEncoder {
+            val md5Secret = props.getProperty(MD5_SECRET_PROPERTY) ?: throw IllegalArgumentException("md5.secret property must be set in ALA Password Encoder properties!")
             val md5Base64Encode = props.getProperty(MD5_BASE64_ENCODE_PROPERTY)?.toBoolean() ?: true
             log.debug("MD5 PWE: Using {} for secret, {} for base64Encode", md5Secret, md5Base64Encode)
 

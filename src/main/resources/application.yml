@@ -42,7 +42,7 @@ cas:
       jdbc:
         - driverClass: com.mysql.cj.jdbc.Driver
           requireAllAttributes: false
-#          caseCanonicalization=NONE|LOWER|UPPER
+          # caseCanonicalization=NONE|LOWER|UPPER
           caseCanonicalization: NONE
           queryType: AND
           singleRow: false
@@ -50,10 +50,9 @@ cas:
           sql: call sp_get_user_attributes(?);
           # username is not used because we don't use {0} in sql: above
           username: username
-# Used only when there is a mapping of many rows to one user
+          # Used only when there is a mapping of many rows to one user
           columnMappings:
             key: value
-            key2: value2
           attributes:
             userid: userid
             id: id

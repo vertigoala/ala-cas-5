@@ -2,12 +2,17 @@ package au.org.ala.cas
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 
+/**
+ * Configuration properties mapping for generating jndi datasources within an application.
+ *
+ * At the moment only hikari connection pool data sources are supported.
+ */
 @ConfigurationProperties(value = "jndi")
 class JndiConfigurationProperties(var hikari: List<HikariDatasource> = mutableListOf<HikariDatasource>())
 
 open class HikariDatasource(
         var name: String = "jdbc/ds",
-        var driverClass: String? = null,
+        var driverClass: String? = null, // Nullable because Hikari can determine the driver from the URL
         var url: String = "jdbc:hsqldb:mem:cas-hsql-database",
         var user: String = "sa",
         var password: String = "",

@@ -6,12 +6,17 @@ import com.zaxxer.hikari.HikariDataSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.servlet.ServletContextInitializer
+import org.springframework.cloud.context.config.annotation.RefreshScope
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Scope
 import javax.naming.InitialContext
+import javax.naming.NamingException
 import javax.sql.DataSource
 
-
+/**
+ * This Configuration simply creates simple JNDI datasources based off the JndiConfigurationProperites.
+ */
 @Configuration
 @EnableConfigurationProperties(JndiConfigurationProperties::class)
 open class ServletContextConfig {
@@ -23,17 +28,32 @@ open class ServletContextConfig {
     @Autowired
     lateinit var jndiConfigurationProperties: JndiConfigurationProperties
 
+    private var initialised: Boolean = false
+
     @Bean
-    open fun initializer(): ServletContextInitializer {
-        return ServletContextInitializer { servletContext ->
-            log.info("Servlet Context Initializer running")
+    @Scope("singleton")
+//    @RefreshScope
+    open fun simpleJndiInitializer(): ServletContextInitializer {
+        return ServletContextInitializer { _ ->
+            log.info("Servlet Context Initializer running (initialised {})", initialised)
             // Obtain our environment naming context
-            val initCtx = InitialContext()
-            log.info("Adding {} JNDI Hikari Datasources", jndiConfigurationProperties.hikari.size)
-            jndiConfigurationProperties.hikari.map(this::hikariDataSource).forEach { (name, dataSource) ->
-                log.debug("Inserting Hikari Datasource $dataSource at $name")
-                initCtx.bind(name, dataSource)
+            if (!initialised) {
+                val initCtx = InitialContext()
+                log.info("Adding {} JNDI Hikari Datasources", jndiConfigurationProperties.hikari.size)
+                jndiConfigurationProperties.hikari.filter {
+                    try {
+                        initCtx.lookup(it.name) == null
+                    } catch (e: NamingException) {
+                        true
+                    }
+                }.map(this::hikariDataSource).forEach { (name, dataSource) ->
+                    log.debug("Inserting Hikari Datasource $dataSource at $name")
+                    initCtx.bind(name, dataSource)
+                }
+            } else {
+                log.debug("Skipping initialisation because it has already run")
             }
+            initialised = true
         }
     }
 

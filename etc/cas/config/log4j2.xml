@@ -185,6 +185,14 @@
             <AppenderRef ref="casAudit"/>
             <AppenderRef ref="casFile"/>
         </AsyncLogger>
+        <AsyncLogger name="au.org.ala" level="info" includeLocation="true">
+            <AppenderRef ref="casFile"/>
+            <AppenderRef ref="casConsole"/>
+        </AsyncLogger>
+        <AsyncLogger name="au.org.ala.cas" level="debug" includeLocation="true">
+            <AppenderRef ref="casFile"/>
+            <AppenderRef ref="casConsole"/>
+        </AsyncLogger>
         <AsyncRoot level="error">
             <AppenderRef ref="casConsole"/>
         </AsyncRoot>

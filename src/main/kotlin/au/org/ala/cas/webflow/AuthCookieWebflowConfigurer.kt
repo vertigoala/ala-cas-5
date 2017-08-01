@@ -19,7 +19,7 @@ class AuthCookieWebflowConfigurer(
 
     override fun doInitialize() {
         log.info("doInitialize()")
-        createRedirectToServiceActionState(loginFlow)
+//        createRedirectToServiceActionState(loginFlow)
     }
 
     /**

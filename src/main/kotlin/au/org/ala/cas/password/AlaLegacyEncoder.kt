@@ -31,8 +31,8 @@ class AlaLegacyEncoder(val salt: String, val base64Encode: Boolean = true) : Pas
             return false
         }
 
-        if (!OLD_ALA_PATTERN.matches(encodedPassword)) {
-            log.debug("Encoded password does not look like our salted MD5")
+        if (base64Encode && !OLD_ALA_PATTERN.matches(encodedPassword)) {
+            log.debug("Encoded password does not look like base64 encoded salted MD5")
             return false
         }
 
