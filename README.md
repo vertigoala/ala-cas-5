@@ -32,10 +32,16 @@ By default, CAS will load properties from `/etc/cas/config` but can be changed i
   - `cas.ticket.registry.jpa` should have `url`, `user` and `password` set for the ticket database.  For the first run 
     of each version `ddl-auto` should be set to `update` to get the latest changes from JPA.
 
-*NOTE:* The MySQL driver used by this CAS version is v6.0.6.  This DB driver requires that the server returns a timezone
+*NOTE:* The MySQL driver used by this CAS version is 8.0.7.  This DB driver requires that the server returns a timezone
 in the form `Australia/Sydney`, whereas the MySQL versions available on Ubuntu 16.04 will tell the client `AEST` (which
 causes an Exception in the client).  The simplest fix is to override the server timezone in the JDBC URL by appending 
 `?serverTimezone=Australia/Sydney` to the URL.
+
+*IF USING MYSQL Connector 6.0+* note that the `UserCreatorALA` uses Spring JDBC's `SimpleJdbcCall` to execute a stored procedure.
+Spring JDBC makes some assumptions about the behaviour of the JDBC driver which [changed in `mysql-connector-java` 6.0+]()
+and as such the following driver properties are also required:
+ - `nullCatalogMeansCurrent=true`
+ - `nullNamePatternMatchesAll=true`
 
 ## Legacy passwords
 
@@ -70,8 +76,8 @@ the default ALA CAS configuration a datasource is used to share the same connect
  - monitoring.
 
 For ease of configuration, ALA CAS uses Simple JNDI to create a writable JNDI sub-directory.  Hikari Connection Pool 
-datasource(s) are then inserted into JNDI directory.  See `au.org.ala.cas.ServletContextConfig` for the JNDI insertion and 
-`au.org.ala.cas.JndiConfigurationProperties` for the Spring Boot configuration types.
+datasource(s) are then inserted into JNDI directory.  See `au.org.ala.cas.jndi.ServletContextConfig` for the JNDI insertion and 
+`au.org.ala.cas.jndi.JndiConfigurationProperties` for the Spring Boot configuration types.
 
 Instead of using the Simple JNDI based datasource, a container based source could be used instead.  Use 
 `dataSourceName: java:comp/env/<name>` for each JDBC property and remove `jndi.hikari` in `application.yml`.

@@ -3,14 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd ">
 
-    <!--<parent>-->
-        <!--<groupId>au.org.ala</groupId>-->
-        <!--<artifactId>ala-parent-pom</artifactId>-->
-        <!--<version>2</version>-->
-    <!--</parent>-->
+    <parent>
+        <groupId>au.org.ala</groupId>
+        <artifactId>ala-parent-pom</artifactId>
+        <version>4</version>
+    </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>au.org.ala</groupId>
+    <!--<groupId>au.org.ala</groupId>-->
     <artifactId>cas</artifactId>
     <packaging>war</packaging>
     <!-- Version should ${cas.version}-${ala.build.version}(-SNAPSHOT)? -->
@@ -29,9 +29,17 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${springboot.version}</version>
+                <executions>
+                    <execution>
+                        <goals><goal>repackage</goal></goals>
+                    </execution>
+                </executions>
                 <configuration>
-                    <mainClass>org.springframework.boot.loader.WarLauncher</mainClass>
+                    <mainClass>org.apereo.cas.web.CasWebApplication</mainClass>
                     <addResources>true</addResources>
+                    <classifier>boot</classifier>
+                    <executable>true</executable>
+                    <!--<skip>false</skip>-->
                 </configuration>
             </plugin>
             <plugin>
@@ -95,6 +103,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.6.2</version>
                 <executions>
                     <!-- Replacing default-compile as it is treated specially by maven -->
                     <execution>
@@ -158,17 +167,7 @@
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.github.h-thurow</groupId>
-            <artifactId>simple-jndi</artifactId>
-            <version>0.14.0</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>ch.qos.logback</groupId>
-                    <artifactId>logback-classic</artifactId>
-                </exclusion>
-            </exclusions>
+            <version>3.1.0</version>
         </dependency>
         <dependency>
             <groupId>org.flywaydb</groupId>
@@ -180,6 +179,12 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
             <version>${springboot.version}</version>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <version>${springboot.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apereo.cas</groupId>
@@ -213,11 +218,11 @@
             <artifactId>cas-server-core</artifactId>
             <version>${cas.version}</version>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.apereo.cas</groupId>-->
-            <!--<artifactId>cas-server-support-pac4j-webflow</artifactId>-->
-            <!--<version>${cas.version}</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>org.apereo.cas</groupId>
+            <artifactId>cas-server-support-pac4j-webflow</artifactId>
+            <version>${cas.version}</version>
+        </dependency>
         <!-- BELOW IS STUFF PROVIDED BY THE CAS WAR BUT LISTED HERE FOR
              TO ALLOW THE IDE TO FIND IT -->
         <!--<dependency>-->
@@ -317,6 +322,7 @@
         <dependency>
             <groupId>org.apereo.cas</groupId>
             <artifactId>cas-server-security-filter</artifactId>
+            <version>2.0.6</version>
         </dependency>
         <dependency>
             <groupId>org.apereo.cas</groupId>
@@ -381,7 +387,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>6.0.6</version>
+            <version>5.1.43</version>
             <scope>runtime</scope>
         </dependency>
 
@@ -390,6 +396,11 @@
             <!--<artifactId>datasource-proxy</artifactId>-->
             <!--<version>1.4.1</version>-->
         <!--</dependency>-->
+        <dependency>
+            <groupId>com.github.h-thurow</groupId>
+            <artifactId>simple-jndi</artifactId>
+            <version>0.15.0</version>
+        </dependency>
     </dependencies>
 
     <properties>

@@ -1,5 +1,6 @@
 package au.org.ala.cas.webflow
 
+import au.org.ala.cas.AlaCasProperties
 import org.apereo.cas.ticket.registry.TicketRegistrySupport
 import org.apereo.cas.web.support.CookieRetrievingCookieGenerator
 import org.springframework.beans.factory.annotation.Autowired
@@ -13,11 +14,11 @@ import org.springframework.webflow.definition.registry.FlowDefinitionRegistry
 import org.springframework.webflow.engine.builder.support.FlowBuilderServices
 
 @Configuration("alaCasWebflowConfiguration")
-@EnableConfigurationProperties(AuthCookieProperties::class)
+@EnableConfigurationProperties(AlaCasProperties::class)
 open class AlaCasWebflowConfiguration {
 
     @Autowired
-    lateinit var authCookieProperties: AuthCookieProperties
+    lateinit var alaCasProperties: AlaCasProperties
 
     @Autowired
     @Qualifier("loginFlowRegistry")
@@ -38,7 +39,7 @@ open class AlaCasWebflowConfiguration {
     @RefreshScope
     @Qualifier("alaProxyAuthenticationCookieGenerator")
     open fun alaProxyAuthenticationCookieGenerator(): CookieRetrievingCookieGenerator =
-            authCookieProperties.cookie.run { CookieRetrievingCookieGenerator(name, path, maxAge, isSecure, domain, isHttpOnly) }
+            alaCasProperties.cookie.run { CookieRetrievingCookieGenerator(name, path, maxAge, isSecure, domain, isHttpOnly) }
 
     @Bean
     @RefreshScope

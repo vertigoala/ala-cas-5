@@ -29,6 +29,18 @@ cas:
     attributeRepository:
       jdbc:
         - dataSourceName: jdbccas
+    pac4j:
+      facebook:
+        id: xxxxxxxxxxxxxxx
+        secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+        scope: public_profile,email
+      twitter:
+        id: xxxxxxxxxxxxxxxxxxxxxxxxx
+        secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      google:
+        id: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+        secret: xxxxxxxxxxxxxxxxxxxxxxxx
+        scope: EMAIL_AND_PROFILE
   monitor:
     jdbc:
       validationQuery: /* ping */ SELECT 1
@@ -40,4 +52,6 @@ cas:
         url: jdbc:mysql://localhost/casTicketRegistry[?serverTimezone=Australia/Sydney]
         user: username
         password: password
-
+ala:
+  userCreator:
+    userCreatePassword: random-default-password-here

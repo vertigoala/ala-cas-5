@@ -1,1 +1,2 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=au.org.ala.cas.ServletContextConfig,au.org.ala.cas.webflow.AlaCasWebflowConfiguration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=au.org.ala.cas.jndi.ServletContextConfig,au.org.ala.cas.webflow.AlaCasWebflowConfiguration,au.org.ala.cas.delegated.AlaPac4jAuthenticationConfiguration
+org.springframework.boot.SpringApplicationRunListener=au.org.ala.cas.jndi.JndiRunListener

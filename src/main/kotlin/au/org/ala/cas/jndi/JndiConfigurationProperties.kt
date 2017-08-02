@@ -1,4 +1,4 @@
-package au.org.ala.cas
+package au.org.ala.cas.jndi
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 

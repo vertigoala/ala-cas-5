@@ -1,4 +1,4 @@
-package au.org.ala.cas;
+package au.org.ala.cas.jndi;
 
 import au.org.ala.utils.logger
 import com.zaxxer.hikari.HikariConfig

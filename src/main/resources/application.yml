@@ -40,7 +40,7 @@ cas:
       defaultAttributesToRelease: id,userid,givenName,sn,firstname,lastname,email,affiliation,organisation,city,state,country,role,authority,telephone,primaryUserType,secondaryUserType
 
       jdbc:
-        - driverClass: com.mysql.cj.jdbc.Driver
+        - driverClass: com.mysql.jdbc.Driver
           requireAllAttributes: false
           # caseCanonicalization=NONE|LOWER|UPPER
           caseCanonicalization: NONE
@@ -75,7 +75,7 @@ cas:
       query:
         - sql: SELECT p.password as password FROM passwords p JOIN users u ON u.userid = p.userid AND u.activated = 1 AND p.status = 'CURRENT' AND p.type = 'bcrypt' WHERE u.username = ?;
           fieldPassword: password
-          driverClass: com.mysql.cj.jdbc.Driver
+          driverClass: com.mysql.jdbc.Driver
           # fieldExpired:
           # fieldDisabled:
           # principalAttributeList:sn,cn:commonName,givenName
@@ -85,13 +85,23 @@ cas:
             strength: 10
         - sql: SELECT p.password as password FROM passwords p JOIN users u ON u.userid = p.userid AND u.activated = 1 AND p.status = 'CURRENT' AND p.type = 'legacy' WHERE u.username = ?;
           fieldPassword: password
-          driverClass: com.mysql.cj.jdbc.Driver
+          driverClass: com.mysql.jdbc.Driver
           passwordEncoder:
             type: au.org.ala.cas.password.AlaPasswordEncoder
+    pac4j:
+      typedIdUsed: true
+#      autoRedirect: false
+#      name:
+      facebook:
+        # fields:
+        scope: public_profile,email
+      google:
+        scope: EMAIL_AND_PROFILE
+        # scope=EMAIL|PROFILE|EMAIL_AND_PROFILE
 
   monitor:
     jdbc:
-      driverClass: com.mysql.cj.jdbc.Driver
+      driverClass: com.mysql.jdbc.Driver
       validationQuery: /* ping */ SELECT 1
 
   tgc:
@@ -117,7 +127,7 @@ cas:
 
       jpa:
         jpaLockingTimeout: 3600
-        driverClass: com.mysql.cj.jdbc.Driver
+        driverClass: com.mysql.jdbc.Driver
         ddl-auto: validate
         dialect: org.hibernate.dialect.MySQL57Dialect
         jpaLockingTgtEnabled: true
@@ -129,13 +139,19 @@ cas:
 #            key:
 #            keySize: 16
 #          alg: AES
-
   jdbc:
     showSql: true
     genDdl: true
+  logout:
+    followServiceRedirects: true
+    redirectParameter: url
+    confirmLogout: false
+  slo:
+    disabled: false
+    asynchronous: true
 
 # Override these for non-ALA deployments
-auth:
+ala:
   cookie:
     domain: ala.org.au
     httpOnly: true
@@ -143,3 +159,11 @@ auth:
     name: ALA-Auth
     path: /
     secure: false
+  userCreator:
+    passwordEncoder: # This should be the same as the primary password encoder above
+      type: BCRYPT
+      characterEncoding: UTF-8
+      strength: 10
+    jdbc:
+      driverClass: com.mysql.jdbc.Driver
+      createUserProcedure: "sp_create_user"

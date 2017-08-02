@@ -16,7 +16,7 @@ open class RemoveAuthCookieAction(
     }
 
     override fun doExecute(context: RequestContext?): Event {
-        log.error("GenerateAuthCookieAction running")
+        log.error("RemoveAuthCookieAction running")
         val response = WebUtils.getHttpServletResponse(context)
         alaProxyAuthenticationCookieGenerator.removeCookie(response)
         return success() // unnecessary?

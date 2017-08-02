@@ -30,28 +30,30 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS `sp_create_user`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_create_user`(
-  `email`              varchar(255),
-  `firstname`          varchar(255),
-  `lastname`           varchar(255),
-  `password`           varchar(255),
-  `city`               varchar(255),
-  `organisation`       varchar(255),
-  `primaryUserType`    varchar(255),
-  `secondaryUserType`  varchar(255),
-  `ausstate`           varchar(255),
-  `telephone`          varchar(255))
+  IN `email`              varchar(255),
+  IN `firstname`          varchar(255),
+  IN `lastname`           varchar(255),
+  IN `password`           varchar(255),
+  IN `city`               varchar(255),
+  IN `organisation`       varchar(255),
+  IN `primaryUserType`    varchar(255),
+  IN `secondaryUserType`  varchar(255),
+  IN `ausstate`           varchar(255),
+  IN `telephone`          varchar(255),
+  OUT `user_id`            int(11))
   BEGIN
-    DECLARE userid int(11);
-    INSERT INTO `emmet`.`users` (`username`, `firstname`, `lastname`, `email`, `activated`, `locked`) VALUES (email, firstname, lastname, email, '1', '0');
-    SET userid = LAST_INSERT_ID();
-    INSERT INTO `emmet`.`passwords` (`userid`, `password`, `status`, `type`) VALUES (userid, password, 'CURRENT', 'bcrypt');
-    INSERT INTO `emmet`.`user_role` (`user_id`, `role_id`) VALUES (userid, 'ROLE_USER');
-    INSERT INTO `emmet`.`profiles` (`userid`, `property`, `value`) VALUES (userid, 'city',              city);
-    INSERT INTO `emmet`.`profiles` (`userid`, `property`, `value`) VALUES (userid, 'organisation',      organisation);
-    INSERT INTO `emmet`.`profiles` (`userid`, `property`, `value`) VALUES (userid, 'primaryUserType',   primaryUserType);
-    INSERT INTO `emmet`.`profiles` (`userid`, `property`, `value`) VALUES (userid, 'secondaryUserType', secondaryUserType);
-    INSERT INTO `emmet`.`profiles` (`userid`, `property`, `value`) VALUES (userid, 'state',             ausstate);
-    INSERT INTO `emmet`.`profiles` (`userid`, `property`, `value`) VALUES (userid, 'telephone',         telephone);
+    DECLARE new_id int(11);
+    INSERT INTO `users` (`username`, `firstname`, `lastname`, `email`, `activated`, `locked`) VALUES (email, firstname, lastname, email, '1', '0');
+    SET new_id = LAST_INSERT_ID();
+    INSERT INTO `passwords` (`userid`, `password`, `status`, `type`) VALUES (new_id, password, 'CURRENT', 'bcrypt');
+    INSERT INTO `user_role` (`user_id`, `role_id`) VALUES (new_id, 'ROLE_USER');
+    INSERT INTO `profiles` (`userid`, `property`, `value`) VALUES (new_id, 'city',              city);
+    INSERT INTO `profiles` (`userid`, `property`, `value`) VALUES (new_id, 'organisation',      organisation);
+    INSERT INTO `profiles` (`userid`, `property`, `value`) VALUES (new_id, 'primaryUserType',   primaryUserType);
+    INSERT INTO `profiles` (`userid`, `property`, `value`) VALUES (new_id, 'secondaryUserType', secondaryUserType);
+    INSERT INTO `profiles` (`userid`, `property`, `value`) VALUES (new_id, 'state',             ausstate);
+    INSERT INTO `profiles` (`userid`, `property`, `value`) VALUES (new_id, 'telephone',         telephone);
+    SELECT new_id INTO `user_id`;
   END
 //
 DELIMITER ;
