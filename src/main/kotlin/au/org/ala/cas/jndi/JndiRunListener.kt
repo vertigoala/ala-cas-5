@@ -24,12 +24,12 @@ open class JndiRunListener(val application: SpringApplication, args: Array<Strin
     override fun starting() {
         println("JNDI Run Listener - starting")
         Class.forName("com.mysql.jdbc.Driver").newInstance() // TODO???
+        System.setProperty(Context.INITIAL_CONTEXT_FACTORY, "org.osjava.sj.SimpleContextFactory") // override the Tomcat apache naming factory
     }
 
 
     override fun environmentPrepared(environment: ConfigurableEnvironment?) {
         log.debug("JNDI Run Listener - environment prepared")
-        System.setProperty(Context.INITIAL_CONTEXT_FACTORY, "org.osjava.sj.SimpleContextFactory") // override the Tomcat apache naming factory
     }
 
     override fun contextPrepared(context: ConfigurableApplicationContext?) {
@@ -39,11 +39,11 @@ open class JndiRunListener(val application: SpringApplication, args: Array<Strin
             if (location != null) {
                 log.info("Using {} for JNDI root directory", location)
                 System.setProperty(SimpleJndi.ROOT, location) // SimpleJNDI will use this as an override to the value in jndi.properties
+                val ctx = InitialContext()
+                log.debug("Created initial context {}", ctx)
+                log.info("JNDI config complete")
+                initialised = true
             }
-
-            val ctx = InitialContext()
-            log.info("JNDI config complete")
-            initialised = true
         }
     }
 
