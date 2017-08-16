@@ -1,6 +1,7 @@
 package au.org.ala.cas.webflow
 
 import au.org.ala.cas.AlaCasProperties
+import org.apereo.cas.services.ServicesManager
 import org.apereo.cas.ticket.registry.TicketRegistrySupport
 import org.apereo.cas.web.support.CookieRetrievingCookieGenerator
 import org.springframework.beans.factory.annotation.Autowired
@@ -12,6 +13,8 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.webflow.definition.registry.FlowDefinitionRegistry
 import org.springframework.webflow.engine.builder.support.FlowBuilderServices
+import org.springframework.webflow.execution.Action
+
 
 @Configuration("alaCasWebflowConfiguration")
 @EnableConfigurationProperties(AlaCasProperties::class)
@@ -55,11 +58,20 @@ open class AlaCasWebflowConfiguration {
     ): RemoveAuthCookieAction =
             RemoveAuthCookieAction(alaProxyAuthenticationCookieGenerator)
 
+    @Bean
+    @RefreshScope
+    open fun initializeLoginAction(): AlaInitializeLoginAction {
+        return AlaInitializeLoginAction(alaCasProperties)
+    }
+
     @ConditionalOnMissingBean(name = arrayOf("authCookieWebflowConfigurer"))
     @Bean("authCookieWebflowConfigurer")
     open fun authCookieWebflowConfigurer(
             generateAuthCookieAction: GenerateAuthCookieAction,
-            removeAuthCookieAction: RemoveAuthCookieAction
-    ): AuthCookieWebflowConfigurer =
-            AuthCookieWebflowConfigurer(flowBuilderServices, loginFlowDefinitionRegistry, logoutFlowDefinitionRegistry, generateAuthCookieAction, removeAuthCookieAction)
+            removeAuthCookieAction: RemoveAuthCookieAction,
+            initializeLoginAction: AlaInitializeLoginAction
+    ): AlaCasWebflowConfigurer =
+            AlaCasWebflowConfigurer(flowBuilderServices, loginFlowDefinitionRegistry, logoutFlowDefinitionRegistry, generateAuthCookieAction, removeAuthCookieAction, initializeLoginAction)
+
 }
+

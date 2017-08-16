@@ -1,7 +1,5 @@
 package au.org.ala.cas.delegated;
 
-import au.org.ala.cas.delegated.UserCreator
-import au.org.ala.cas.delegated.UserCreatorALA
 import au.org.ala.cas.AlaCasProperties
 import au.org.ala.utils.logger
 import org.apereo.cas.authentication.principal.PrincipalFactory

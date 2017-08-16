@@ -8,7 +8,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 @ConfigurationProperties(value = "ala")
 open class AlaCasProperties(
         var cookie: CookieProperties = CookieProperties(),
-        var userCreator: UserCreatorProperties = UserCreatorProperties()
+        var userCreator: UserCreatorProperties = UserCreatorProperties(),
+        val skin: SkinProperties = SkinProperties()
 )
 
 open class UserCreatorProperties(
@@ -20,5 +21,18 @@ open class UserCreatorProperties(
         var createUserProcedure: String = "sp_create_user"
     }
 
+}
+
+open class SkinProperties {
+    lateinit var baseUrl: String
+    lateinit var headerFooterUrl: String
+    lateinit var favIconBaseUrl: String
+    lateinit var bieBaseUrl: String
+    lateinit var bieSearchPath: String
+    lateinit var userDetailsUrl: String
+    lateinit var orgShortName: String
+    lateinit var orgLongName: String
+    lateinit var orgNameKey: String
+    var cacheDuration: Long = 1800_000
 }
 

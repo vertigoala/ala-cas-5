@@ -73,18 +73,20 @@ cas:
             secondaryUserType: secondaryUserType
     jdbc:
       query:
-        - sql: SELECT p.password as password FROM passwords p JOIN users u ON u.userid = p.userid AND u.activated = 1 AND p.status = 'CURRENT' AND p.type = 'bcrypt' WHERE u.username = ?;
+        - sql: SELECT p.password as password, u.locked as disabled, p.expiry < CURRENT_TIMESTAMP() as expired FROM passwords p JOIN users u ON u.userid = p.userid AND u.activated = 1 AND p.status = 'CURRENT' AND p.type = 'bcrypt' WHERE u.username = ?;
           fieldPassword: password
+          fieldDisabled: disabled
+          fieldExpired: expired
           driverClass: com.mysql.jdbc.Driver
-          # fieldExpired:
-          # fieldDisabled:
           # principalAttributeList:sn,cn:commonName,givenName
           passwordEncoder:
             type: BCRYPT
             characterEncoding: UTF-8
             strength: 10
-        - sql: SELECT p.password as password FROM passwords p JOIN users u ON u.userid = p.userid AND u.activated = 1 AND p.status = 'CURRENT' AND p.type = 'legacy' WHERE u.username = ?;
+        - sql: SELECT p.password as password, u.locked as disabled, p.expiry < CURRENT_TIMESTAMP() as expired FROM passwords p JOIN users u ON u.userid = p.userid AND u.activated = 1 AND p.status = 'CURRENT' AND p.type = 'legacy' WHERE u.username = ?;
           fieldPassword: password
+          fieldDisabled: disabled
+          fieldExpired: expired
           driverClass: com.mysql.jdbc.Driver
           passwordEncoder:
             type: au.org.ala.cas.password.AlaPasswordEncoder
@@ -112,7 +114,8 @@ cas:
 #    encryptionKey=
 #    signingKey=
 #    cipherEnabled=true
-
+  theme:
+    default-theme-name: ala
   ticket:
     tgt:
       rememberMe:
@@ -139,9 +142,9 @@ cas:
 #            key:
 #            keySize: 16
 #          alg: AES
-  jdbc:
-    showSql: true
-    genDdl: true
+#  jdbc:
+#    showSql: true
+#    genDdl: true
   logout:
     followServiceRedirects: true
     redirectParameter: url
@@ -149,7 +152,12 @@ cas:
   slo:
     disabled: false
     asynchronous: true
-
+spring:
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        show_sql: false
 # Override these for non-ALA deployments
 ala:
   cookie:
@@ -167,3 +175,15 @@ ala:
     jdbc:
       driverClass: com.mysql.jdbc.Driver
       createUserProcedure: "sp_create_user"
+  skin:
+    baseUrl: https://www.ala.org.au/
+    headerFooterUrl: ${ala.skin.baseUrl}commonui-bs3/
+    favIconBaseUrl: ${ala.skin.baseUrl}wp-content/themes/ala-wordpress-theme/img/favicon/
+    bieBaseUrl: https://bie.ala.org.au/
+    bieSearchPath: search
+    userDetailsUrl: https://auth.ala.org.au/userdetails/
+    orgShortName: ALA
+    orgLongName: Atlas Of Living Australia
+    orgNameKey: ala
+    cacheDuration: 1800000 # P30m
+debug: false

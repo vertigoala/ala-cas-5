@@ -2,7 +2,7 @@
   "@class" : "org.apereo.cas.services.RegexRegisteredService",
   "serviceId" : "^https?://.*",
   "name" : "Atlas of Living Australia",
-  "theme" : "default",
+  "theme" : "ala",
   "id" : 10000003,
   "description" : "All Atlas Services",
   "evaluationOrder" : 1
