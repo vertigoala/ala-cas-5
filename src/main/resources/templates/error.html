@@ -18,16 +18,24 @@
 
 <body id="cas">
 <div layout:fragment="content">
-    <div class="alert alert-danger">
-        <h2 th:utext="#{screen.unavailable.heading(${status},${error})}" />
-        <p th:utext="#{screen.unavailable.message}" />
-        <p id="errorMsg">
-        <pre th:text="${'Error: ' + message}" />
-        </p>
-        <p id="errorDetails">
-            <button type="button" class="btn btn-shutdown" 
-                    onclick="showErrorDetails();">View Details</button>
-        </p>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    <h2 class="panel-title" th:utext="#{screen.unavailable.heading(${status},${error})}" />
+                </div>
+                <div class="panel-body">
+                    <p th:utext="#{screen.unavailable.message}" />
+                    <p id="errorMsg">
+                    <pre th:text="${'Error: ' + message}" />
+                    </p>
+                    <p id="errorDetails">
+                        <button type="button" class="btn btn-shutdown"
+                                onclick="showErrorDetails();">View Details</button>
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 </body>

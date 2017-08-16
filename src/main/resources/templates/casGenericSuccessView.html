@@ -7,11 +7,19 @@
 
 <body id="cas">
 <div layout:fragment="content">
-    <div class="alert alert-success">
-        <h2 th:utext="#{screen.success.header}"/>
-        <p th:utext="#{screen.success.success(${principal.id})}"/>
-        <br>
-        <p th:utext="#{screen.success.security}"/>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <h2 class="panel-title" th:utext="#{screen.success.header}"/>
+                </div>
+                <div class="panel-body">
+                    <p th:utext="#{screen.success.success(${principal.id})}"/>
+                    <br>
+                    <p th:utext="#{screen.success.security}"/>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 </body>

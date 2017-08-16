@@ -1,0 +1,58 @@
+.logo-brand {
+    text-align: center;
+    margin-top: 1em;
+}
+
+.brand-layout-control {
+    display: inline-block;
+    font-size: 64px;
+}
+
+.heading-medium-large {
+    border-bottom: inherit;
+    font-size: 26px;
+    font-weight: 900;
+    line-height: 1.25;
+    margin-bottom: .8em;
+    margin-top: 0.3em;
+    text-transform: none;
+}
+
+.btn-social {
+    padding-left: 0;
+    text-align: center;
+    font-size:16px;
+    line-height: 2;
+}
+
+.btn-social>:first-child {
+    line-height: 44px;
+    border-right: 0;
+}
+
+.form-group-overlay {
+    position: relative;
+}
+
+.form-group-overlay .forgot {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 10px 16px;
+    border: 1px solid transparent;
+    height: 49px;
+    line-height: 30px;
+}
+
+.form-control:focus {
+    border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6);
+}
+
+/* TODO Remove these from ALA overrides */
+#main .panel-heading h1, #main .panel-heading h2, #main .panel-heading h3 {
+    margin-bottom: 0;
+}
+

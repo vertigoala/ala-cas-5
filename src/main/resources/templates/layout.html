@@ -1,25 +1,50 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="description" th:content="#{'ala.skin.orgLongName.'+${orgNameKey}}"/>
+    <meta name="author" th:content="#{'ala.skin.orgLongName.'+${orgNameKey}}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" th:href="@{${favIconBaseUrl}+'favicon.ico'}">
+    <link rel="apple-touch-icon" sizes="57x57" th:href="@{${favIconBaseUrl}+'apple-icon-57x57.png'}">
+    <link rel="apple-touch-icon" sizes="60x60" th:href="@{${favIconBaseUrl}+'apple-icon-60x60.png'}">
+    <link rel="apple-touch-icon" sizes="72x72" th:href="@{${favIconBaseUrl}+'apple-icon-72x72.png'}">
+    <link rel="apple-touch-icon" sizes="76x76" th:href="@{${favIconBaseUrl}+'apple-icon-76x76.png'}">
+    <link rel="apple-touch-icon" sizes="114x114" th:href="@{${favIconBaseUrl}+'apple-icon-114x114.png'}">
+    <link rel="apple-touch-icon" sizes="120x120" th:href="@{${favIconBaseUrl}+'apple-icon-120x120.png'}">
+    <link rel="apple-touch-icon" sizes="144x144" th:href="@{${favIconBaseUrl}+'apple-icon-144x144.png'}">
+    <link rel="apple-touch-icon" sizes="152x152" th:href="@{${favIconBaseUrl}+'apple-icon-152x152.png'}">
+    <link rel="apple-touch-icon" sizes="180x180" th:href="@{${favIconBaseUrl}+'apple-icon-180x180.png'}">
+    <link rel="icon" type="image/png" sizes="192x192" th:href="@{${favIconBaseUrl}+'android-icon-192x192.png'}">
+    <link rel="icon" type="image/png" sizes="32x32" th:href="@{${favIconBaseUrl}+'favicon-32x32.png'}">
+    <link rel="icon" type="image/png" sizes="96x96" th:href="@{${favIconBaseUrl}+'favicon-96x96.png'}">
+    <link rel="icon" type="image/png" sizes="16x16" th:href="@{${favIconBaseUrl}+'favicon-16x16.png'}">
+    <link rel="manifest" th:href="@{${favIconBaseUrl}+'manifest.json'}">
+    <link rel="mask-icon" th:href="@{${favIconBaseUrl}+'safari-pinned-tab.svg'}" color="#5bbad5}">
+    <meta name="msapplication-TileColor" content="#c44d34">
+    <meta name="msapplication-TileImage" th:content="@{${favIconBaseUrl}+'ms-icon-144x144.png'}">
+    <meta name="msapplication-config" th:content="@{${favIconBaseUrl}+'browserconfig.xml'}">
+    <meta name="theme-color" content="#c44d34">
 
-    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE">CAS &#8211; Central Authentication Service</title>
+    <title layout:title-pattern="$LAYOUT_TITLE | $CONTENT_TITLE" th:text="${#strings.replace(#messages.msg('ala.skin.orgShortName.' + orgNameKey), 'ala.skin.orgShortName.' + orgNameKey, orgShortName)}">ALA</title>
 
 
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
-    <link type="text/css" rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
-
+    <link rel="stylesheet" th:href="@{${headerFooterUrl}+'css/bootstrap.min.css'}" media="screen,print"/>
+    <link rel="stylesheet" th:href="@{${headerFooterUrl}+'css/ala-styles.css'}" media="screen,print"/>
+    <link rel="stylesheet" th:href="@{#{webjars.fontawesomemin.css}}"/>
+    <link rel="stylesheet" th:href="@{#{webjars.bootstrapsocial.css}}"/>
+    <link rel="stylesheet" th:href="@{#{webjars.jqautocomplete.css}}"/>
     <link rel="stylesheet" th:href="@{${#themes.code('standard.custom.css.file')}}"/>
 
-    <link rel="icon" th:href="@{/favicon.ico}" type="image/x-icon"/>
-
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.3.0/zxcvbn.js"></script>
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script type="text/javascript" th:src="@{#{webjars.zxcvbn.js}}"></script>
+    <script type="text/javascript" th:src="@{#{webjars.jquerymin.js}}"></script>
+    <script type="text/javascript" th:src="@{#{webjars.jqueryui.js}}"></script>
+    <script type="text/javascript" th:src="@{#{webjars.jquerycookie.js}}"></script>
+    <script type="text/javascript" th:src="@{${headerFooterUrl}+'js/application.js'}" defer></script>
+    <script type="text/javascript" th:src="@{${headerFooterUrl}+'js/bootstrap.min.js'}"></script>
     <script src="//www.google.com/recaptcha/api.js" async defer th:if="${recaptchaSiteKey}"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
     <script th:inline="javascript">
         /*<![CDATA[*/
@@ -42,15 +67,32 @@
     </script>
 </head>
 
-<body>
-<div id="container" class="container">
-    <div th:replace="fragments/logo"/>
+<body id="ala">
+<ala:banner></ala:banner>
+<!--<div th:replace="fragments/banner"/>-->
+<!-- Breadcrumb -->
+<section id="breadcrumb">
+    <div class="container">
+        <div class="row">
+            <nav aria-label="Breadcrumb" role="navigation">
+                <ol class="breadcrumb-list">
+                    <li><a th:href="@{${baseUrl}}" th:text="#{ala.breadcrumb.home}">Home</a></li>
+                    <li class="active" th:text="#{ala.breadcrumb.authentication}">Authentication</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</section>
+<!-- End Breadcrumb -->
+<!-- Container -->
+<div class="container" id="main">
     <div layout:fragment="content" id="content">
         <h1/>
         <p/>
     </div>
-    <div th:replace="fragments/footer"/>
-</div>
+</div><!-- End container #main col -->
+<ala:footer></ala:footer>
+<!--<div th:replace="fragments/footer"/>-->
 <div th:insert="fragments/bottom"/>
 
 </body>

@@ -7,11 +7,19 @@
 
 <body id="cas">
 <div layout:fragment="content">
-      <div class="alert alert-success">
-          <h2 th:utext="#{screen.logout.header}"/>
-          <p th:utext="#{screen.logout.success}"/>
-          <p th:utext="#{screen.logout.security}" />
-      </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <h2 class="panel-title" th:utext="#{screen.logout.header}"/>
+                </div>
+                <div class="panel-body">
+                    <p th:utext="#{screen.logout.success}"/>
+                    <p th:utext="#{screen.logout.security}" />
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>
