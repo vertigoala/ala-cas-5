@@ -1,4 +1,4 @@
-ALA CAS 5.1
+ALA CAS 5.1 [![Build Status](https://travis-ci.org/AtlasOfLivingAustralia/ala-cas-5.svg?branch=master)](https://travis-ci.org/AtlasOfLivingAustralia/ala-cas-5)
 ============================
 
 The ALA CAS 5.1 deployment is based off the generic CAS WAR overlay.
