@@ -76,17 +76,17 @@ cas:
         - sql: SELECT p.password as password, u.locked as disabled, p.expiry < CURRENT_TIMESTAMP() as expired FROM passwords p JOIN users u ON u.userid = p.userid AND u.activated = 1 AND p.status = 'CURRENT' AND p.type = 'bcrypt' WHERE u.username = ?;
           fieldPassword: password
           fieldDisabled: disabled
-          fieldExpired: expired
+#          fieldExpired: expired
           driverClass: com.mysql.jdbc.Driver
           # principalAttributeList:sn,cn:commonName,givenName
           passwordEncoder:
             type: BCRYPT
             characterEncoding: UTF-8
             strength: 10
-        - sql: SELECT p.password as password, u.locked as disabled, p.expiry < CURRENT_TIMESTAMP() as expired FROM passwords p JOIN users u ON u.userid = p.userid AND u.activated = 1 AND p.status = 'CURRENT' AND p.type = 'legacy' WHERE u.username = ?;
+        - sql: SELECT p.password as password, u.locked as disabled, p.expiry < CURRENT_TIMESTAMP() as expired FROM passwords p JOIN users u ON u.userid = p.userid AND u.activated = 1 AND p.status = 'CURRENT' WHERE u.username = ?;
           fieldPassword: password
           fieldDisabled: disabled
-          fieldExpired: expired
+#          fieldExpired: expired
           driverClass: com.mysql.jdbc.Driver
           passwordEncoder:
             type: au.org.ala.cas.password.AlaPasswordEncoder
