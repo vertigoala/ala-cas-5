@@ -21,7 +21,7 @@ default in `src/main/resources/application.yml` and won't need to be added to th
 
 The `etc` directory contains the configuration files and directories that need to be copied to `/etc/cas/config`.
 
-By default, CAS will load properties from `/etc/cas/config` but can be changed in `src/main/resources/bootstrap.properties`.
+By default, CAS will load properties from `/etc/cas/config` but can be changed by specifying `-Dcas.standalone.config=/data/cas/config` or by adding in `src/main/resources/bootstrap.properties`.
 
 `application.yml` **will** require some customisation:
  
@@ -30,15 +30,16 @@ By default, CAS will load properties from `/etc/cas/config` but can be changed i
     - By default flyway is configured to be run against a pre-populated DB from ala-cas 2.0.
     - If that's not the case, set `flyway.baseline-on-migrate` to `false`, this will setup the database from scratch.
   - `cas.ticket.registry.jpa` should have `url`, `user` and `password` set for the ticket database.  For the first run 
-    of each version `ddl-auto` should be set to `update` to get the latest changes from JPA.
+    of each version `ddl-auto` should be set to `update` to get the latest changes from JPA (or run the provided SQL file to upgrade a CAS 4 JPA ticket registry to CAS 5).
+  - `cas.authn.pac4j.facebook|google|twitter` will require id and secret to be set.
 
-*NOTE:* The MySQL driver used by this CAS version is 8.0.7.  This DB driver requires that the server returns a timezone
+*NOTE:* The MySQL driver used by this CAS version is 5.1.43.  This DB driver requires that the server returns a timezone
 in the form `Australia/Sydney`, whereas the MySQL versions available on Ubuntu 16.04 will tell the client `AEST` (which
 causes an Exception in the client).  The simplest fix is to override the server timezone in the JDBC URL by appending 
 `?serverTimezone=Australia/Sydney` to the URL.
 
 *IF USING MYSQL Connector 6.0+* note that the `UserCreatorALA` uses Spring JDBC's `SimpleJdbcCall` to execute a stored procedure.
-Spring JDBC makes some assumptions about the behaviour of the JDBC driver which [changed in `mysql-connector-java` 6.0+]()
+Spring JDBC makes some assumptions about the behaviour of the JDBC driver which [changed in `mysql-connector-java` 6.0+](https://dev.mysql.com/doc/connector-j/8.0/en/connector-j-properties-changed.html)
 and as such the following driver properties are also required:
  - `nullCatalogMeansCurrent=true`
  - `nullNamePatternMatchesAll=true`
@@ -47,7 +48,7 @@ and as such the following driver properties are also required:
 
 CAS no longer provides an MD5 type password encoder.  To that end a custom password encoder is used by the system, 
 however, due to being constructed outside of Spring it does not have access to the Spring properties
-mechanism.  An additional config file must be placed at `/etc/cas/config/pwe.properties` with two attributes:
+mechanism.  An additional config file must be placed at `/etc/cas/config/pwe.properties` (the location can be specified with `-Dala.password.properties` with two attributes:
 
   - md5.secret
   - md5.base64Encode
