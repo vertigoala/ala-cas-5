@@ -117,13 +117,13 @@ A non-exhaustive list of stuff and/or things:
     - [x] Enable remember me
  - [x] Add `ALA-Auth` cookie to [Web Flow](https://apereo.github.io/cas/5.1.x/installation/Webflow-Customization.html)
  - [x] Add [delegated authentication](https://apereo.github.io/cas/5.1.x/integration/Delegate-Authentication.html) (Facebook, Twitter, Google)
- - Investigate [monitoring options](https://apereo.github.io/cas/5.1.x/installation/Monitoring-Statistics.html)
- - Create a [CAS management server](https://github.com/apereo/cas-services-management-overlay) application.
- - Move the Service Registry out of `src/main/resources/services` and somewhere the CAS management web app can access them
- - Enable OpenID Connect server
- - Enable password management?
+ - [ ] Investigate [monitoring options](https://apereo.github.io/cas/5.1.x/installation/Monitoring-Statistics.html)
+ - [ ] Create a [CAS management server](https://github.com/apereo/cas-services-management-overlay) application.
+ - [ ] Move the Service Registry out of `src/main/resources/services` and somewhere the CAS management web app can access them
+ - [ ] Enable OpenID Connect server
+ - [ ] Enable password management?
  - [x] Update user details to include password type changes
- - [High availability](https://apereo.github.io/cas/5.1.x/planning/High-Availability-Guide.html)
+ - [ ] [High availability](https://apereo.github.io/cas/5.1.x/planning/High-Availability-Guide.html)
 
 # Build
 
