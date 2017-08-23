@@ -14,8 +14,7 @@ class AlaCasWebflowConfigurer(
         loginFlowDefinitionRegistry: FlowDefinitionRegistry,
         logoutFlowDefinitionRegistry: FlowDefinitionRegistry,
         val generateAuthCookieAction: GenerateAuthCookieAction,
-        val removeAuthCookieAction: RemoveAuthCookieAction,
-        val initializeLoginAction: AlaInitializeLoginAction) :
+        val removeAuthCookieAction: RemoveAuthCookieAction) :
         AbstractCasWebflowConfigurer(flowBuilderServices, loginFlowDefinitionRegistry) {
 
     init {
@@ -34,17 +33,11 @@ class AlaCasWebflowConfigurer(
 
         if (inFlow != null) {
             doGenerateAuthCookieOnLoginAction(inFlow)
-            doInitWebflow(inFlow)
         }
 
         if (outFlow != null) {
             doRemoveAuthCookieOnLogoutAction(outFlow)
-            doInitWebflow(outFlow)
         }
-    }
-
-    private fun doInitWebflow(flow: Flow) {
-        flow.startActionList.add(initializeLoginAction)
     }
 
     private fun doGenerateAuthCookieOnLoginAction(flow: Flow) {

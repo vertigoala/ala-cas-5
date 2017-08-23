@@ -10,7 +10,7 @@ import javax.annotation.PostConstruct
 
 @Configuration
 @EnableConfigurationProperties(AlaCasProperties::class)
-open class CasThymeleafProperties {
+open class AlaStaticThymeleafPropertiesConfiguration {
 
     companion object {
         const val BASE_URL = "baseUrl"

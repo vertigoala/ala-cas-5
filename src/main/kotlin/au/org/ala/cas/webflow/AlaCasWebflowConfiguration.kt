@@ -58,20 +58,13 @@ open class AlaCasWebflowConfiguration {
     ): RemoveAuthCookieAction =
             RemoveAuthCookieAction(alaProxyAuthenticationCookieGenerator)
 
-    @Bean
-    @RefreshScope
-    open fun initializeLoginAction(): AlaInitializeLoginAction {
-        return AlaInitializeLoginAction(alaCasProperties)
-    }
-
     @ConditionalOnMissingBean(name = arrayOf("authCookieWebflowConfigurer"))
     @Bean("authCookieWebflowConfigurer")
     open fun authCookieWebflowConfigurer(
             generateAuthCookieAction: GenerateAuthCookieAction,
-            removeAuthCookieAction: RemoveAuthCookieAction,
-            initializeLoginAction: AlaInitializeLoginAction
+            removeAuthCookieAction: RemoveAuthCookieAction
     ): AlaCasWebflowConfigurer =
-            AlaCasWebflowConfigurer(flowBuilderServices, loginFlowDefinitionRegistry, logoutFlowDefinitionRegistry, generateAuthCookieAction, removeAuthCookieAction, initializeLoginAction)
+            AlaCasWebflowConfigurer(flowBuilderServices, loginFlowDefinitionRegistry, logoutFlowDefinitionRegistry, generateAuthCookieAction, removeAuthCookieAction)
 
 }
 
