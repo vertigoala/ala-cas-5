@@ -144,24 +144,17 @@ class GithubAttributeParser(val userAttributes: Map<String, Any>) : AttributePar
             conn = url.openConnection() as HttpURLConnection
             conn.requestMethod = "GET"
 
-            reader = BufferedReader(InputStreamReader(conn.inputStream))
-            val result = StringBuffer()
+            reader = BufferedReader(InputStreamReader(conn.inputStream, Charsets.UTF_8)) // assume utf-8
 
-            while (true) {
-                val line = reader.readLine() ?: break
-
-                result.append(line)
-            }
-
-            return result.toString()
+            return reader.readText()
 
         } catch (e: Exception) {
             logger.warn("HTTP_GET error for {}", urlStr, e)
 
         } finally {
             try {
-                reader!!.close()
-                conn!!.disconnect()
+                reader?.close()
+                conn?.disconnect()
 
             } catch (ioe: IOException) {
                 logger.warn("Exception while closing HTTP_GET {}", urlStr, ioe)

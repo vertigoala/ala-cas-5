@@ -3,7 +3,6 @@ package au.org.ala.cas.webflow
 import au.org.ala.utils.logger
 import org.apereo.cas.web.flow.AbstractCasWebflowConfigurer
 import org.apereo.cas.web.flow.CasWebflowConstants
-import org.apereo.cas.web.flow.DefaultWebflowConfigurer
 import org.springframework.webflow.definition.registry.FlowDefinitionRegistry
 import org.springframework.webflow.engine.ActionState
 import org.springframework.webflow.engine.Flow

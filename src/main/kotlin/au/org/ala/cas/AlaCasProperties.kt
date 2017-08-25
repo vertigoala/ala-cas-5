@@ -14,13 +14,12 @@ open class AlaCasProperties(
 
 open class UserCreatorProperties(
         var passwordEncoder: PasswordEncoderProperties = PasswordEncoderProperties(),
-        var jdbc: JDBCUserCreatorProperties = UserCreatorProperties.JDBCUserCreatorProperties(),
+        var jdbc: JDBCUserCreatorProperties = JDBCUserCreatorProperties(),
         var userCreatePassword: String = ""
-) {
-    open class JDBCUserCreatorProperties : AbstractJpaProperties() {
-        var createUserProcedure: String = "sp_create_user"
-    }
+)
 
+open class JDBCUserCreatorProperties : AbstractJpaProperties() {
+    var createUserProcedure: String = "sp_create_user"
 }
 
 open class SkinProperties {

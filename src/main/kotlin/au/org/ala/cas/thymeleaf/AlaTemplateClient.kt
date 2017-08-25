@@ -4,6 +4,7 @@ import au.org.ala.cas.SkinProperties
 import au.org.ala.utils.logger
 import com.github.benmanes.caffeine.cache.Caffeine
 import org.apereo.cas.web.support.WebUtils
+import org.apereo.inspektr.common.spi.PrincipalResolver
 import org.springframework.webflow.execution.RequestContextHolder
 import java.io.Reader
 import java.net.URI
@@ -39,7 +40,7 @@ class AlaTemplateClient(val skinConfig: SkinProperties, val cookieName: String) 
                 .replace("::centralServer::", skinConfig.baseUrl)
                 .replace("::searchServer::", skinConfig.bieBaseUrl)
                 .replace("::searchPath::", skinConfig.bieSearchPath)
-                .replace("::authStatusClass::", if (isLoggedIn(request)) LOGGED_IN_CLASS else LOGGED_OUT_CLASS)
+                .replace("::authStatusClass::", if (isLoggedIn()) LOGGED_IN_CLASS else LOGGED_OUT_CLASS)
         if (fluidLayout) {
             content = content.replace("class=\"container\"", "class=\"container-fluid\"")
         }
@@ -50,14 +51,9 @@ class AlaTemplateClient(val skinConfig: SkinProperties, val cookieName: String) 
         return content
     }
 
-    fun isLoggedIn(request: HttpServletRequest?): Boolean {
-        val ctx = RequestContextHolder.getRequestContext()
-        return if (ctx != null) {
-            // TODO pass in the request context
-            WebUtils.getCredential(ctx) != null
-//            (request.cookies?.any { it.name ==  cookieName } ?: false) || request.userPrincipal != null
-        } else { false }
-    }
+    fun isLoggedIn() =
+            RequestContextHolder.getRequestContext()?.let { WebUtils.getCredential(it) != null } ?: WebUtils.getAuthenticatedUsername() != PrincipalResolver.UNKNOWN_USER
+
 
     /**
      * Builds the login or logout link based on current login status.
@@ -65,17 +61,8 @@ class AlaTemplateClient(val skinConfig: SkinProperties, val cookieName: String) 
      * @return
      */
     fun buildLoginoutLink(request: HttpServletRequest?): String {
-//        val requestUri = removeContext(grailServerURL) + request.forwardURI
-//        val logoutUrl = attrs.logoutUrl ?: grailServerURL + "/session/logout"
-//        val logoutReturnToUrl = attrs.logoutReturnToUrl ?: requestUri
-//                def casLogoutUrl = attrs.casLogoutUrl ?: casLogoutUrl
-//
-//                // TODO should this be attrs.logoutReturnToUrl?
-//                if (!attrs.loginReturnToUrl && request.queryString) {
-//                    logoutReturnToUrl += "?" + URLEncoder.encode(request.queryString, "UTF-8")
-//                }
 
-        return if (isLoggedIn(request)) {
+        return if (isLoggedIn()) {
             val casLogoutUrl = request?.servletContext?.contextPath + "/logout"
             "<a href=\"$casLogoutUrl\">Logout</a>"
         } else {

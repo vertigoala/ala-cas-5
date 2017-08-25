@@ -8,6 +8,9 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.ViewResolver
 import javax.annotation.PostConstruct
 
+/**
+ * Inject all skin properties into all Thymeleaf templates as static variables
+ */
 @Configuration
 @EnableConfigurationProperties(AlaCasProperties::class)
 open class AlaStaticThymeleafPropertiesConfiguration {

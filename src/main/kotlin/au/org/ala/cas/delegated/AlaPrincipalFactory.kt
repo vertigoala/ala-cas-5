@@ -1,6 +1,5 @@
 package au.org.ala.cas.delegated
 
-import au.org.ala.cas.delegated.UserCreator
 import au.org.ala.utils.logger
 import org.apache.commons.lang3.builder.HashCodeBuilder
 import org.apereo.cas.authentication.Credential

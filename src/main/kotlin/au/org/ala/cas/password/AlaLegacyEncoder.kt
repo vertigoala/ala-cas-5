@@ -2,7 +2,6 @@ package au.org.ala.cas.password
 
 import au.org.ala.utils.logger
 import com.google.common.hash.Hashing
-import org.slf4j.LoggerFactory
 import org.springframework.security.crypto.password.PasswordEncoder
 import java.util.*
 
@@ -15,7 +14,7 @@ class AlaLegacyEncoder(val salt: String, val base64Encode: Boolean = true) : Pas
 
     companion object {
         private val log = logger<AlaLegacyEncoder>()
-        val OLD_ALA_PATTERN = Regex("^[a-zA-Z0-9+/]{22,24}+={0,2}$")
+        val OLD_ALA_PATTERN = Regex("^[a-zA-Z0-9+/]{22,24}={0,2}$")
     }
 
     override fun encode(rawPassword: CharSequence): String {

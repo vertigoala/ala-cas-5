@@ -7,24 +7,20 @@ import org.springframework.jdbc.core.simple.SimpleJdbcCall
 import org.springframework.security.crypto.password.NoOpPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import javax.sql.DataSource
-import kotlin.LazyThreadSafetyMode.NONE
 
-class UserCreatorALA : UserCreator {
+class UserCreatorALA(
+        val dataSource: DataSource,
+        val createUserProcedure: String,
+        val userCreatePassword: String,
+        val passwordEncoder: PasswordEncoder = NoOpPasswordEncoder.getInstance()
+) : UserCreator {
 
     companion object {
         /** Log instance.  */
         private val logger = logger<UserCreatorALA>()
     }
 
-    val jdbcTemplate: JdbcTemplate by lazy(NONE) { JdbcTemplate(dataSource) }
-
-    lateinit var dataSource: DataSource
-
-    lateinit var createUserProcedure: String
-
-    var passwordEncoder: PasswordEncoder = NoOpPasswordEncoder.getInstance()
-
-    lateinit var userCreatePassword: String
+    private val jdbcTemplate = JdbcTemplate(dataSource)
 
     override fun createUser(email: String, firstName: String, lastName: String): Long? {
         logger.debug("createUser: {} {} {}", email, firstName, lastName)

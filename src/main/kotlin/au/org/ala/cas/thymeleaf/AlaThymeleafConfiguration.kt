@@ -19,18 +19,4 @@ open class AlaThymeleafConfiguration {
     @Bean
     open fun alaDialect(alaTemplateClient: AlaTemplateClient) = AlaDialect(alaTemplateClient)
 
-//    @Autowired
-//    lateinit var templateEngine: SpringTemplateEngine
-//
-//    @PostConstruct
-//    fun extension() {
-//        templateEngine.addDialect(alaDialect(alaTemplateClient()))
-//        val resolver = UrlTemplateResolver()
-//        resolver.prefix = alaCasProperties.skin.headerFooterUrl ?: "https://www.ala.org.au/commonui"
-//        resolver.suffix = ".html"
-//        resolver.setTemplateMode("HTML5")
-//        resolver.order = templateEngine.templateResolvers.size
-//        resolver.isCacheable = true
-//        templateEngine.addTemplateResolver(resolver)
-//    }
 }

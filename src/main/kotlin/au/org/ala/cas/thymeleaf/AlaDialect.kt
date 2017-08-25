@@ -12,7 +12,5 @@ class AlaDialect(val alaTemplateClient: AlaTemplateClient) : AbstractProcessorDi
         )
     }
 
-
-    //override fun getExpressionObjectFactory() = AlaExpressionFactory(skinConfig)
 }
 

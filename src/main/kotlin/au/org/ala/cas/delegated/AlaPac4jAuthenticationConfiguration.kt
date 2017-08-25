@@ -22,13 +22,12 @@ open class AlaPac4jAuthenticationConfiguration {
     lateinit var alaCasProperties: AlaCasProperties
 
     @Bean
-    open fun userCreator(): UserCreator = UserCreatorALA().apply {
-        logger.debug("Creating UserCreatorALA with {}, {}, {}, {}", alaCasProperties.userCreator.jdbc.dataSourceName, alaCasProperties.userCreator.userCreatePassword, alaCasProperties.userCreator.jdbc.createUserProcedure)
-        dataSource = Beans.newDataSource(alaCasProperties.userCreator.jdbc)
-        passwordEncoder = Beans.newPasswordEncoder(alaCasProperties.userCreator.passwordEncoder)
-        userCreatePassword = alaCasProperties.userCreator.userCreatePassword
-        createUserProcedure = alaCasProperties.userCreator.jdbc.createUserProcedure
-    }
+    open fun userCreator(): UserCreator = UserCreatorALA(
+            dataSource = Beans.newDataSource(alaCasProperties.userCreator.jdbc),
+            userCreatePassword = alaCasProperties.userCreator.userCreatePassword,
+            createUserProcedure = alaCasProperties.userCreator.jdbc.createUserProcedure,
+            passwordEncoder = Beans.newPasswordEncoder(alaCasProperties.userCreator.passwordEncoder)
+    )
 
     @Bean(name = arrayOf("clientPrincipalFactory"))
     open fun clientPrincipalFactory(
