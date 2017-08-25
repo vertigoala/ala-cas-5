@@ -1,7 +1,6 @@
 package au.org.ala.cas.delegated;
 
 import au.org.ala.cas.AlaCasProperties
-import au.org.ala.utils.logger
 import org.apereo.cas.authentication.principal.PrincipalFactory
 import org.apereo.cas.authentication.principal.PrincipalResolver
 import org.apereo.cas.configuration.support.Beans
@@ -13,10 +12,6 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 @EnableConfigurationProperties(AlaCasProperties::class)
 open class AlaPac4jAuthenticationConfiguration {
-
-    companion object {
-        private val logger = logger<AlaPac4jAuthenticationConfiguration>()
-    }
 
     @Autowired
     lateinit var alaCasProperties: AlaCasProperties

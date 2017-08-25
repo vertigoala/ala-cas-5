@@ -50,14 +50,14 @@ class AlaPrincipalFactory(private val principalResolver: PrincipalResolver,
             if (firstName != null && lastName != null)  {
                 // if no userId parameter is returned then no db entry was created
                 val userId = userCreator.createUser(emailAddress, firstName, lastName) ?: throw FailedLoginException("Unable to create user for $emailAddress, $firstName, $lastName")
-                logger.debug("Received new user id $userId")
+                logger.debug("Received new user id {}", userId)
 
                 // re-try (we have to retry, because that is how we get the required "userid")
                 principal = principalResolver.resolve(alaCredential)
 
                 logger.debug("{} resolved principal: {}", principalResolver, principal)
             } else {
-                logger.warn("Couldn't extract firstname or lastname for {} from attributes", id, attributes)
+                logger.warn("Couldn't extract firstname or lastname for {} from attributes: {}", id, attributes)
             }
 
             if (!validatePrincipalALA(principal)) {

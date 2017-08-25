@@ -111,7 +111,7 @@ class GithubAttributeParser(val userAttributes: Map<String, Any>) : AttributePar
             val emails = JSONArray(result)
             logger.debug("GitHub emails: {}", emails)
 
-            for (i in 0..emails.length() - 1) {
+            for (i in 0 until emails.length()) {
                 val emailRecord = emails.getJSONObject(i)
                 if (emailRecord.getBoolean("primary")) { //TODO: enforce verified email: && emailRecord.getBoolean("verified")
                     val email = emailRecord.getString("email")
