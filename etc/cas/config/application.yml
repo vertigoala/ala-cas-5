@@ -52,6 +52,19 @@ cas:
         url: jdbc:mysql://localhost/casTicketRegistry[?serverTimezone=Australia/Sydney]
         user: username
         password: password
+        signing:
+          key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+        encryption:
+          key: xxxxxxxxxxxxxxxx
+  tgc:
+    encryptionKey: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    signingKey: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  webflow:
+    signing:
+      key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    encryption:
+      key: xxxxxxxxxxxxxxxx
+
 ala:
   userCreator:
     userCreatePassword: random-default-password-here

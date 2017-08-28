@@ -32,6 +32,6 @@ open class SkinProperties {
     lateinit var orgShortName: String
     lateinit var orgLongName: String
     lateinit var orgNameKey: String
-    var cacheDuration: Long = 1800_000
+    var cacheDuration: Long = 1_800_000
 }
 

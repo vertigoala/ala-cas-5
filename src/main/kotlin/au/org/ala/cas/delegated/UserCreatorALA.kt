@@ -43,7 +43,7 @@ class UserCreatorALA(
                 .addValue("ausstate", "N/A")
                 .addValue("telephone", "")
 
-        val result = call.execute(inParams) //telephone
+        val result = call.execute(inParams)
 
         val userId = result["user_id"]
 
