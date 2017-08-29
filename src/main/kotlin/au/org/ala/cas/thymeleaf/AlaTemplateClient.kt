@@ -36,23 +36,24 @@ class AlaTemplateClient(val skinConfig: SkinProperties, val cookieName: String) 
         if (cached == null || cached.isBlank()) {
             return null
         }
+        val loggedIn = isLoggedIn()
         var content = cached.replace("::headerFooterServer::", skinConfig.headerFooterUrl)
                 .replace("::centralServer::", skinConfig.baseUrl)
                 .replace("::searchServer::", skinConfig.bieBaseUrl)
                 .replace("::searchPath::", skinConfig.bieSearchPath)
-                .replace("::authStatusClass::", if (isLoggedIn()) LOGGED_IN_CLASS else LOGGED_OUT_CLASS)
+                .replace("::authStatusClass::", if (loggedIn) LOGGED_IN_CLASS else LOGGED_OUT_CLASS)
         if (fluidLayout) {
             content = content.replace("class=\"container\"", "class=\"container-fluid\"")
         }
         if (content.contains("::loginLogoutListItem::")) {
             // only do the work if it is needed
-            content = content.replace("::loginLogoutListItem::", buildLoginoutLink(request))
+            content = content.replace("::loginLogoutListItem::", buildLoginoutLink(request, loggedIn))
         }
         return content
     }
 
     fun isLoggedIn() =
-            RequestContextHolder.getRequestContext()?.let { WebUtils.getCredential(it) != null } ?: WebUtils.getAuthenticatedUsername() != PrincipalResolver.UNKNOWN_USER
+            RequestContextHolder.getRequestContext()?.let { WebUtils.getCredential(it) != null } ?: (WebUtils.getAuthenticatedUsername() != PrincipalResolver.UNKNOWN_USER)
 
 
     /**
@@ -60,9 +61,9 @@ class AlaTemplateClient(val skinConfig: SkinProperties, val cookieName: String) 
      * @param attrs any specified params to override defaults
      * @return
      */
-    fun buildLoginoutLink(request: HttpServletRequest?): String {
+    fun buildLoginoutLink(request: HttpServletRequest?, loggedIn: Boolean): String {
 
-        return if (isLoggedIn()) {
+        return if (loggedIn) {
             val casLogoutUrl = request?.servletContext?.contextPath + "/logout"
             "<a href=\"$casLogoutUrl\">Logout</a>"
         } else {
