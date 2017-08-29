@@ -142,8 +142,8 @@ cas:
 #            key:
 #            keySize: 16
 #          alg: AES
-jdbc:
-  showSql: false
+  jdbc:
+    showSql: false
 #  genDdl: true
   logout:
     followServiceRedirects: true
