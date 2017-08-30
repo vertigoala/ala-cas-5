@@ -31,7 +31,10 @@
                 <version>${springboot.version}</version>
                 <executions>
                     <execution>
-                        <goals><goal>repackage</goal></goals>
+                        <goals>
+                            <goal>build-info</goal>
+                            <goal>repackage</goal>
+                        </goals>
                     </execution>
                 </executions>
                 <configuration>
