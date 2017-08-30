@@ -1,10 +1,50 @@
 info:
-  description: CAS Configuration
+  description: ALA CAS Configuration
+
+# Enable these for Spring Boot actuator (required for Spring Boot Admin client)
+
+#endpoints:
+#  enabled: true
+#security:
+##  ignored[0]: "/**"
+#  filterOrder: 0
+#  requireSsl: true
+#  sessions: if_required
+#  user:
+#    name: admin
+#    password: secret
+#    role:
+#      - ACTUATOR
+#  basic:
+#    enabled: true
+#    authorizeMode: role
+#    realm: ALA CAS
+#    path:
+#      - /status/**
+#management:
+#  security:
+#    enabled: true
+#    roles: ACTUATOR
+
+# Enable these to connect to a Spring Boot Admin server
+
+#spring:
+#  boot:
+#    admin:
+#      url: https://bootadmin.example.org:8444
+#      client:
+#        managementUrl: ${cas.server.prefix}/status
+#        name: ALA CAS
+#        metadata:
+#          user:
+#            name: xxxxxxxx
+#            password: xxxxxxx
+
 
 jndi:
   hikari:
     - name: jdbccas
-      driverClass: com.mysql.cj.jdbc.Driver
+      driverClass: com.mysql.jdbc.Driver
       url: jdbc:mysql://localhost/cas[?serverTimezone=Australia/Sydney]
       user: username
       password: password
@@ -68,3 +108,6 @@ cas:
 ala:
   userCreator:
     userCreatePassword: random-default-password-here
+    jdbc:
+      dataSourceName: jdbccas
+#      sql: sp_create_user
