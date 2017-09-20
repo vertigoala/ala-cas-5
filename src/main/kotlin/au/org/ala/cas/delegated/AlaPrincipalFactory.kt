@@ -27,7 +27,8 @@ class AlaPrincipalFactory(private val principalResolver: PrincipalResolver,
         logger.debug("email : {}", email)
 
         if (email == null || !EMAIL_PATTERN.matches(email)) {
-            logger.debug("Invalid email : {}, authentication aborted!", email)
+            logger.info("ID {} provided an invalid email address: {}, authentication aborted!", id, email)
+            logger.debug("ID {} params: {}", id, attributes)
             throw FailedLoginException("No email address found in $email; email address is required to lookup (and/or create) ALA user!")
         }
 
