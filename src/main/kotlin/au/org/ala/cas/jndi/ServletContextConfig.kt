@@ -19,7 +19,7 @@ import javax.sql.DataSource
  */
 @Configuration
 @EnableConfigurationProperties(JndiConfigurationProperties::class)
-open class ServletContextConfig {
+class ServletContextConfig {
 
     companion object {
         val log = logger<ServletContextConfig>()
@@ -31,7 +31,7 @@ open class ServletContextConfig {
     @Bean
     @Scope("singleton")
 //    @RefreshScope
-    open fun simpleJndiInitializer(): ServletContextInitializer {
+    fun simpleJndiInitializer(): ServletContextInitializer {
         return ServletContextInitializer { _ ->
             // Obtain our environment naming context
             val initCtx = InitialContext()

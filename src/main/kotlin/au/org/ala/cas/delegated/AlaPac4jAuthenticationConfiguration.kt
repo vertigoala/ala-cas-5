@@ -11,13 +11,13 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 @EnableConfigurationProperties(AlaCasProperties::class)
-open class AlaPac4jAuthenticationConfiguration {
+class AlaPac4jAuthenticationConfiguration {
 
     @Autowired
     lateinit var alaCasProperties: AlaCasProperties
 
     @Bean
-    open fun userCreator(): UserCreator = UserCreatorALA(
+    fun userCreator(): UserCreator = UserCreatorALA(
             dataSource = Beans.newDataSource(alaCasProperties.userCreator.jdbc),
             userCreatePassword = alaCasProperties.userCreator.userCreatePassword,
             createUserProcedure = alaCasProperties.userCreator.jdbc.createUserProcedure,
@@ -25,7 +25,7 @@ open class AlaPac4jAuthenticationConfiguration {
     )
 
     @Bean(name = arrayOf("clientPrincipalFactory"))
-    open fun clientPrincipalFactory(
+    fun clientPrincipalFactory(
             @Autowired personDirectoryPrincipalResolver: PrincipalResolver,
             @Autowired userCreator: UserCreator
     ): PrincipalFactory = AlaPrincipalFactory(personDirectoryPrincipalResolver, userCreator)
