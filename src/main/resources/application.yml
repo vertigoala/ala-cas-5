@@ -34,9 +34,20 @@ flyway:
 #  validate-on-migrate: true #
 
 cas:
-  serviceRegistry: # TODO REPLACE THIS WITH SOMETHING STORED IN A DATABASE
+  mgmt:
+    serverName: https://devt.ala.org.au
+  serviceRegistry:
+#    watcherEnabled: true
+#    repeatInterval: 120000
+#    startDelay: 15000
+    initFromJson: false
     config:
       location: classpath:/services
+    jpa:
+      driverClass: com.mysql.jdbc.Driver
+      dialect: org.hibernate.dialect.MySQL57Dialect
+      ddlAuto: validate
+      healthQuery: /* ping */ SELECT
   authn:
     accept:
       users: ''
@@ -46,7 +57,6 @@ cas:
       merger: MERGE
 # Attributes that you wish to resolve for the principal
       defaultAttributesToRelease: id,userid,givenName,sn,firstname,lastname,email,affiliation,organisation,city,state,country,role,authority,telephone,primaryUserType,secondaryUserType
-
       jdbc:
         - driverClass: com.mysql.jdbc.Driver
           requireAllAttributes: false
@@ -118,7 +128,7 @@ cas:
     maxAge: -1
     secure: true
     httpOnly: true
-    rememberMeMaxAge: 1209600 # P14D
+    rememberMeMaxAge: 7884000 #P3M 1209600 # P14D
 #    encryptionKey=
 #    signingKey=
 #    cipherEnabled=true
@@ -128,7 +138,7 @@ cas:
     tgt:
       rememberMe:
         enabled: true
-        timeToKillInSeconds: 1209600 # P14D
+        timeToKillInSeconds: 7884000 # P3M 1209600 # P14D
     registry:
       cleaner:
         appId: cas-ticket-registry-cleaner
@@ -160,6 +170,9 @@ cas:
   slo:
     disabled: false
     asynchronous: true
+  sso:
+    missingService: true
+    renewedAuthn: true #createSsoSessionCookieOnRenewAuthentications
   httpWebRequest:
     cors:
       enabled: true

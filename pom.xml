@@ -91,6 +91,9 @@
                         <overlay>
                             <groupId>org.apereo.cas</groupId>
                             <artifactId>cas-server-webapp${app.server}</artifactId>
+                            <excludes>
+                                <exclude>WEB-INF/classes/services/*.json</exclude>
+                            </excludes>
                         </overlay>
                     </overlays>
                 </configuration>
@@ -240,14 +243,9 @@
             <artifactId>cas-server-support-jpa-ticket-registry</artifactId>
             <version>${cas.version}</version>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.apereo.cas</groupId>-->
-            <!--<artifactId>cas-server-support-jpa-service-registry</artifactId>-->
-            <!--<version>${cas.version}</version>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>org.apereo.cas</groupId>
-            <artifactId>cas-server-support-json-service-registry</artifactId>
+            <artifactId>cas-server-support-jpa-service-registry</artifactId>
             <version>${cas.version}</version>
         </dependency>
         <dependency>
@@ -272,16 +270,16 @@
             <artifactId>cas-server-support-bootadmin-client</artifactId>
             <version>${cas.version}</version>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.apereo.cas</groupId>-->
-            <!--<artifactId>cas-server-support-oauth-webflow</artifactId>-->
-            <!--<version>${cas.version}</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.apereo.cas</groupId>-->
-            <!--<artifactId>cas-server-support-oidc</artifactId>-->
-            <!--<version>${cas.version}</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>org.apereo.cas</groupId>
+            <artifactId>cas-server-support-oauth-webflow</artifactId>
+            <version>${cas.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apereo.cas</groupId>
+            <artifactId>cas-server-support-oidc</artifactId>
+            <version>${cas.version}</version>
+        </dependency>
         <!-- BELOW IS STUFF PROVIDED BY THE CAS WAR BUT LISTED HERE
              IN PROVIDED SCOPE TO ALLOW THE IDE TO FIND IT -->
         <dependency>
@@ -553,7 +551,7 @@
         <!-- app.server could be -jetty, -undertow, -tomcat, or blank if you plan to provide appserver -->
         <!-- we use blank to create a blank war and spring boot repackage to build an executable jar -->
         <app.server></app.server>
-        <kotlin.version>1.1.4-3</kotlin.version>
+        <kotlin.version>1.1.50</kotlin.version>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
         <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
         <maven.compiler.source>1.8</maven.compiler.source>
