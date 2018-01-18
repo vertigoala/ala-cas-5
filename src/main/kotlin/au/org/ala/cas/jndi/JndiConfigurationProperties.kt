@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
  * At the moment only hikari connection pool data sources are supported.
  */
 @ConfigurationProperties(value = "jndi")
-class JndiConfigurationProperties(var hikari: List<HikariDatasource> = mutableListOf<HikariDatasource>())
+class JndiConfigurationProperties(var hikari: List<HikariDatasource> = mutableListOf())
 
 open class HikariDatasource(
         var name: String = "jdbc/ds",
@@ -34,5 +34,6 @@ open class HikariDatasource(
         var transactionIsolation: String? = null,
         var validationTimeout: Long? = null,
         var leakDetectionThreshold: Long? = null,
-        var dataSourceProperties: MutableMap<String, String> = mutableMapOf()
+        var dataSourceProperties: MutableMap<String, String> = mutableMapOf(),
+        var schema: String? = null
 )
