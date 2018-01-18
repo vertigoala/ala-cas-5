@@ -18,7 +18,7 @@ import org.springframework.webflow.engine.builder.support.FlowBuilderServices
 
 @Configuration("alaCasWebflowConfiguration")
 @EnableConfigurationProperties(AlaCasProperties::class, CasConfigurationProperties::class)
-open class AlaCasWebflowConfiguration {
+class AlaCasWebflowConfiguration {
 
     @Autowired
     lateinit var alaCasProperties: AlaCasProperties
@@ -47,26 +47,26 @@ open class AlaCasWebflowConfiguration {
     @Bean
     @RefreshScope
     @Qualifier("alaProxyAuthenticationCookieGenerator")
-    open fun alaProxyAuthenticationCookieGenerator(): CookieRetrievingCookieGenerator =
+    fun alaProxyAuthenticationCookieGenerator(): CookieRetrievingCookieGenerator =
             alaCasProperties.cookie.run { CookieRetrievingCookieGenerator(name, path, maxAge, isSecure, domain, isHttpOnly) }
 
     @Bean
     @RefreshScope
-    open fun generateAuthCookieAction(
+    fun generateAuthCookieAction(
             @Qualifier("alaProxyAuthenticationCookieGenerator") alaProxyAuthenticationCookieGenerator: CookieRetrievingCookieGenerator
     ): GenerateAuthCookieAction =
             GenerateAuthCookieAction(ticketRegistrySupport, alaProxyAuthenticationCookieGenerator)
 
     @Bean
     @RefreshScope
-    open fun removeAuthCookieAction(
+    fun removeAuthCookieAction(
             @Qualifier("alaProxyAuthenticationCookieGenerator") alaProxyAuthenticationCookieGenerator: CookieRetrievingCookieGenerator
     ): RemoveAuthCookieAction =
             RemoveAuthCookieAction(alaProxyAuthenticationCookieGenerator)
 
     @ConditionalOnMissingBean(name = ["authCookieWebflowConfigurer"])
     @Bean("authCookieWebflowConfigurer")
-    open fun authCookieWebflowConfigurer(
+    fun authCookieWebflowConfigurer(
             generateAuthCookieAction: GenerateAuthCookieAction,
             removeAuthCookieAction: RemoveAuthCookieAction
     ): AlaCasWebflowConfigurer =

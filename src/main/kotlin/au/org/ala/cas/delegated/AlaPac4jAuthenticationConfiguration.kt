@@ -1,4 +1,4 @@
-package au.org.ala.cas.delegated;
+package au.org.ala.cas.delegated
 
 import au.org.ala.cas.AlaCasProperties
 import org.apereo.cas.authentication.principal.PrincipalFactory

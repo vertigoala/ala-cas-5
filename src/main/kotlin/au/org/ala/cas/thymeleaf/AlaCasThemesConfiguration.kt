@@ -24,7 +24,7 @@ import java.util.LinkedHashMap
  */
 @Configuration("alaCasThemesConfiguration")
 @EnableConfigurationProperties(AlaCasProperties::class, ThymeleafProperties::class)
-open class AlaCasThemesConfiguration : CasThemesConfiguration() {
+class AlaCasThemesConfiguration : CasThemesConfiguration() {
 
     companion object {
         const val BASE_URL = "baseUrl"
