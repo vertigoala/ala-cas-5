@@ -48,29 +48,46 @@ class AlaCasWebflowConfiguration {
     @RefreshScope
     @Qualifier("alaProxyAuthenticationCookieGenerator")
     fun alaProxyAuthenticationCookieGenerator(): CookieRetrievingCookieGenerator =
-            alaCasProperties.cookie.run { CookieRetrievingCookieGenerator(name, path, maxAge, isSecure, domain, isHttpOnly) }
+        alaCasProperties.cookie.run {
+            CookieRetrievingCookieGenerator(
+                name,
+                path,
+                maxAge,
+                isSecure,
+                domain,
+                isHttpOnly
+            )
+        }
 
     @Bean
     @RefreshScope
     fun generateAuthCookieAction(
-            @Qualifier("alaProxyAuthenticationCookieGenerator") alaProxyAuthenticationCookieGenerator: CookieRetrievingCookieGenerator
+        @Qualifier("alaProxyAuthenticationCookieGenerator") alaProxyAuthenticationCookieGenerator: CookieRetrievingCookieGenerator
     ): GenerateAuthCookieAction =
-            GenerateAuthCookieAction(ticketRegistrySupport, alaProxyAuthenticationCookieGenerator)
+        GenerateAuthCookieAction(ticketRegistrySupport, alaProxyAuthenticationCookieGenerator)
 
     @Bean
     @RefreshScope
     fun removeAuthCookieAction(
-            @Qualifier("alaProxyAuthenticationCookieGenerator") alaProxyAuthenticationCookieGenerator: CookieRetrievingCookieGenerator
+        @Qualifier("alaProxyAuthenticationCookieGenerator") alaProxyAuthenticationCookieGenerator: CookieRetrievingCookieGenerator
     ): RemoveAuthCookieAction =
-            RemoveAuthCookieAction(alaProxyAuthenticationCookieGenerator)
+        RemoveAuthCookieAction(alaProxyAuthenticationCookieGenerator)
 
     @ConditionalOnMissingBean(name = ["authCookieWebflowConfigurer"])
     @Bean("authCookieWebflowConfigurer")
     fun authCookieWebflowConfigurer(
-            generateAuthCookieAction: GenerateAuthCookieAction,
-            removeAuthCookieAction: RemoveAuthCookieAction
+        generateAuthCookieAction: GenerateAuthCookieAction,
+        removeAuthCookieAction: RemoveAuthCookieAction
     ): AlaCasWebflowConfigurer =
-            AlaCasWebflowConfigurer(flowBuilderServices, loginFlowDefinitionRegistry, logoutFlowDefinitionRegistry, generateAuthCookieAction, removeAuthCookieAction, applicationContext, casConfigurationProperties)
+        AlaCasWebflowConfigurer(
+            flowBuilderServices,
+            loginFlowDefinitionRegistry,
+            logoutFlowDefinitionRegistry,
+            generateAuthCookieAction,
+            removeAuthCookieAction,
+            applicationContext,
+            casConfigurationProperties
+        )
 
 }
 

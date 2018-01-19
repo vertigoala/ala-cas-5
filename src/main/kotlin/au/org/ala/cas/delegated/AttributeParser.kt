@@ -129,10 +129,10 @@ class GithubAttributeParser(val userAttributes: Map<String, Any>) : AttributePar
     }
 
     override fun findFirstname() =
-            AttributeParser.extractFirstName(userAttributes["name"] as? String, userAttributes["login"] as? String)
+        AttributeParser.extractFirstName(userAttributes["name"] as? String, userAttributes["login"] as? String)
 
     override fun findLastname() =
-            AttributeParser.extractLastName(userAttributes["name"] as? String, userAttributes["login"] as? String)
+        AttributeParser.extractLastName(userAttributes["name"] as? String, userAttributes["login"] as? String)
 
     fun HTTP_GET(urlStr: String): String? {
         var conn: HttpURLConnection? = null
@@ -170,13 +170,16 @@ class OAuth20AttributeParser(val userAttributes: Map<String, Any>) : AttributePa
     override fun findLastname() = findFirst("last_name", "last-name")
 
     internal fun findFirst(vararg attributeNames: String) =
-            attributeNames.mapNotNull { userAttributes[it] as? String }.firstOrNull()
+        attributeNames.mapNotNull { userAttributes[it] as? String }.firstOrNull()
 }
 
 class TwitterAttributeParser(val userAttributes: Map<String, Any>) : AttributeParser {
     override fun findEmail() = userAttributes["email"] as? String
-    override fun findFirstname() = AttributeParser.extractFirstName(userAttributes["name"] as? String, userAttributes["screen_name"] as? String)
-    override fun findLastname() = AttributeParser.extractLastName(userAttributes["name"] as? String, userAttributes["screen_name"] as? String)
+    override fun findFirstname() =
+        AttributeParser.extractFirstName(userAttributes["name"] as? String, userAttributes["screen_name"] as? String)
+
+    override fun findLastname() =
+        AttributeParser.extractLastName(userAttributes["name"] as? String, userAttributes["screen_name"] as? String)
 }
 
 class Google2AttributeParser(val userAttributes: Map<String, Any>) : AttributeParser {
@@ -191,7 +194,7 @@ class Google2AttributeParser(val userAttributes: Map<String, Any>) : AttributePa
         //       of type "account".
         //
         val emails = userAttributes[Google2ProfileDefinition.EMAILS]
-        val googleEmail = when(emails) {
+        val googleEmail = when (emails) {
             is List<*> -> (emails as List<Google2Email>).firstOrNull { it.type == "account" }?.email
             else -> userAttributes[Google2ProfileDefinition.EMAIL]?.toString()
         }

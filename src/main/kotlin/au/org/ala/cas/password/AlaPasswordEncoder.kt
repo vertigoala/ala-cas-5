@@ -29,7 +29,8 @@ class AlaPasswordEncoder private constructor(val delegate: PasswordEncoder) : Pa
 
         fun loadAlaLegacyEncoder(): PasswordEncoder {
             // TODO find a way to get to the Spring Boot properties so we don't need a second property source
-            val location = System.getProperty(LOCATION_SYSTEM_PROPERTY) ?: System.getenv(LOCATION_ENV_VARIABLE) ?: DEFAULT_LOCATION
+            val location =
+                System.getProperty(LOCATION_SYSTEM_PROPERTY) ?: System.getenv(LOCATION_ENV_VARIABLE) ?: DEFAULT_LOCATION
             log.info("Loading AlaPasswordEncoder properties from $location")
 
             val props = try {
@@ -47,7 +48,8 @@ class AlaPasswordEncoder private constructor(val delegate: PasswordEncoder) : Pa
         }
 
         fun loadAlaLegacyEncoder(props: Properties): PasswordEncoder {
-            val md5Secret = props.getProperty(MD5_SECRET_PROPERTY) ?: throw IllegalArgumentException("md5.secret property must be set in ALA Password Encoder properties!")
+            val md5Secret = props.getProperty(MD5_SECRET_PROPERTY)
+                    ?: throw IllegalArgumentException("md5.secret property must be set in ALA Password Encoder properties!")
             val md5Base64Encode = props.getProperty(MD5_BASE64_ENCODE_PROPERTY)?.toBoolean() ?: true
             log.debug("MD5 PWE: Using {} for secret, {} for base64Encode", md5Secret, md5Base64Encode)
 

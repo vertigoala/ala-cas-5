@@ -66,15 +66,16 @@ class AlaCasThemesConfiguration : CasThemesConfiguration() {
     override fun nonCachingThymeleafViewResolver(): ThymeleafViewResolver {
         return super.nonCachingThymeleafViewResolver().apply {
             // ALA static variables
-            mapOf(BASE_URL to alaCasProperties.skin.baseUrl,
-                    HEADER_FOOTER_URL to alaCasProperties.skin.headerFooterUrl,
-                    FAVION_BASE_URL to alaCasProperties.skin.favIconBaseUrl,
-                    BIE_BASE_URL to alaCasProperties.skin.bieBaseUrl,
-                    BIE_SEARCH_PATH to alaCasProperties.skin.bieSearchPath,
-                    ORG_SHORT_NAME to alaCasProperties.skin.orgShortName,
-                    ORG_LONG_NAME to alaCasProperties.skin.orgLongName,
-                    ORG_NAME_KEY to alaCasProperties.skin.orgNameKey,
-                    USERDETAILS_BASE_URL to alaCasProperties.skin.userDetailsUrl
+            mapOf(
+                BASE_URL to alaCasProperties.skin.baseUrl,
+                HEADER_FOOTER_URL to alaCasProperties.skin.headerFooterUrl,
+                FAVION_BASE_URL to alaCasProperties.skin.favIconBaseUrl,
+                BIE_BASE_URL to alaCasProperties.skin.bieBaseUrl,
+                BIE_SEARCH_PATH to alaCasProperties.skin.bieSearchPath,
+                ORG_SHORT_NAME to alaCasProperties.skin.orgShortName,
+                ORG_LONG_NAME to alaCasProperties.skin.orgLongName,
+                ORG_NAME_KEY to alaCasProperties.skin.orgNameKey,
+                USERDETAILS_BASE_URL to alaCasProperties.skin.userDetailsUrl
             ).forEach { (k, v) -> addStaticVariable(k, v) }
         }
     }

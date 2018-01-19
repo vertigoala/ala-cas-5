@@ -22,9 +22,11 @@ class AlaTemplateClient(val skinConfig: SkinProperties, val cookieName: String) 
     }
 
     val uri = URI(skinConfig.headerFooterUrl)
-    val cache = Caffeine.newBuilder().expireAfterWrite(skinConfig.cacheDuration, TimeUnit.MILLISECONDS).build(this::loadTemplate)
+    val cache = Caffeine.newBuilder().expireAfterWrite(skinConfig.cacheDuration, TimeUnit.MILLISECONDS)
+        .build(this::loadTemplate)
 
-    fun loadTemplate(template: String) = uri.resolve("./$template.html").toURL().openStream().reader().use(Reader::readText)
+    fun loadTemplate(template: String) =
+        uri.resolve("./$template.html").toURL().openStream().reader().use(Reader::readText)
 
     fun load(name: String, request: HttpServletRequest?, fluidLayout: Boolean = false): String? {
         val cached = try {
@@ -39,10 +41,10 @@ class AlaTemplateClient(val skinConfig: SkinProperties, val cookieName: String) 
         }
         val loggedIn = isLoggedIn()
         var content = cached.replace("::headerFooterServer::", skinConfig.headerFooterUrl)
-                .replace("::centralServer::", skinConfig.baseUrl)
-                .replace("::searchServer::", skinConfig.bieBaseUrl)
-                .replace("::searchPath::", skinConfig.bieSearchPath)
-                .replace("::authStatusClass::", if (loggedIn) LOGGED_IN_CLASS else LOGGED_OUT_CLASS)
+            .replace("::centralServer::", skinConfig.baseUrl)
+            .replace("::searchServer::", skinConfig.bieBaseUrl)
+            .replace("::searchPath::", skinConfig.bieSearchPath)
+            .replace("::authStatusClass::", if (loggedIn) LOGGED_IN_CLASS else LOGGED_OUT_CLASS)
         if (fluidLayout) {
             content = content.replace("class=\"container\"", "class=\"container-fluid\"")
         }
@@ -54,7 +56,8 @@ class AlaTemplateClient(val skinConfig: SkinProperties, val cookieName: String) 
     }
 
     fun isLoggedIn() =
-            RequestContextHolder.getRequestContext()?.let { WebUtils.getCredential(it) != null } ?: (Pac4jUtils.getPac4jAuthenticatedUsername() != PrincipalResolver.UNKNOWN_USER)
+        RequestContextHolder.getRequestContext()?.let { WebUtils.getCredential(it) != null }
+                ?: (Pac4jUtils.getPac4jAuthenticatedUsername() != PrincipalResolver.UNKNOWN_USER)
 
 
     /**

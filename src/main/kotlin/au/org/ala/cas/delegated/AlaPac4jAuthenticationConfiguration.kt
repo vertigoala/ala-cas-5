@@ -20,15 +20,15 @@ class AlaPac4jAuthenticationConfiguration {
 
     @Bean
     fun userCreator(): UserCreator = UserCreatorALA(
-            dataSource = JpaBeans.newDataSource(alaCasProperties.userCreator.jdbc),
-            userCreatePassword = alaCasProperties.userCreator.userCreatePassword,
-            createUserProcedure = alaCasProperties.userCreator.jdbc.createUserProcedure,
-            passwordEncoder = PasswordEncoderUtils.newPasswordEncoder(alaCasProperties.userCreator.passwordEncoder)
+        dataSource = JpaBeans.newDataSource(alaCasProperties.userCreator.jdbc),
+        userCreatePassword = alaCasProperties.userCreator.userCreatePassword,
+        createUserProcedure = alaCasProperties.userCreator.jdbc.createUserProcedure,
+        passwordEncoder = PasswordEncoderUtils.newPasswordEncoder(alaCasProperties.userCreator.passwordEncoder)
     )
 
     @Bean(name = ["clientPrincipalFactory"])
     fun clientPrincipalFactory(
-            @Autowired personDirectoryPrincipalResolver: PrincipalResolver,
-            @Autowired userCreator: UserCreator
+        @Autowired personDirectoryPrincipalResolver: PrincipalResolver,
+        @Autowired userCreator: UserCreator
     ): PrincipalFactory = AlaPrincipalFactory(personDirectoryPrincipalResolver, userCreator)
 }

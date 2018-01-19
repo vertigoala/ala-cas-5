@@ -9,10 +9,10 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import javax.sql.DataSource
 
 class UserCreatorALA(
-        val dataSource: DataSource,
-        val createUserProcedure: String,
-        val userCreatePassword: String,
-        val passwordEncoder: PasswordEncoder = NoOpPasswordEncoder.getInstance()
+    val dataSource: DataSource,
+    val createUserProcedure: String,
+    val userCreatePassword: String,
+    val passwordEncoder: PasswordEncoder = NoOpPasswordEncoder.getInstance()
 ) : UserCreator {
 
     companion object {
@@ -32,16 +32,16 @@ class UserCreatorALA(
         }
 
         val inParams = MapSqlParameterSource()
-                .addValue("email", email.toLowerCase())
-                .addValue("firstname", firstName)
-                .addValue("lastname", lastName)
-                .addValue("password", password)
-                .addValue("city", "")
-                .addValue("organisation", "")
-                .addValue("primaryUserType", "")
-                .addValue("secondaryUserType", "")
-                .addValue("ausstate", "N/A")
-                .addValue("telephone", "")
+            .addValue("email", email.toLowerCase())
+            .addValue("firstname", firstName)
+            .addValue("lastname", lastName)
+            .addValue("password", password)
+            .addValue("city", "")
+            .addValue("organisation", "")
+            .addValue("primaryUserType", "")
+            .addValue("secondaryUserType", "")
+            .addValue("ausstate", "N/A")
+            .addValue("telephone", "")
 
         val result = call.execute(inParams)
 

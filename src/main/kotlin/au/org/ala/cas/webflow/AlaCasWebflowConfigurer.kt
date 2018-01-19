@@ -11,14 +11,20 @@ import org.springframework.webflow.engine.Flow
 import org.springframework.webflow.engine.builder.support.FlowBuilderServices
 
 class AlaCasWebflowConfigurer(
-        flowBuilderServices: FlowBuilderServices,
-        loginFlowDefinitionRegistry: FlowDefinitionRegistry,
-        logoutFlowDefinitionRegistry: FlowDefinitionRegistry,
-        val generateAuthCookieAction: GenerateAuthCookieAction,
-        val removeAuthCookieAction: RemoveAuthCookieAction,
-        applicationContext: ApplicationContext,
-        casConfigurationProperties: CasConfigurationProperties) :
-        AbstractCasWebflowConfigurer(flowBuilderServices, loginFlowDefinitionRegistry, applicationContext, casConfigurationProperties) {
+    flowBuilderServices: FlowBuilderServices,
+    loginFlowDefinitionRegistry: FlowDefinitionRegistry,
+    logoutFlowDefinitionRegistry: FlowDefinitionRegistry,
+    val generateAuthCookieAction: GenerateAuthCookieAction,
+    val removeAuthCookieAction: RemoveAuthCookieAction,
+    applicationContext: ApplicationContext,
+    casConfigurationProperties: CasConfigurationProperties
+) :
+    AbstractCasWebflowConfigurer(
+        flowBuilderServices,
+        loginFlowDefinitionRegistry,
+        applicationContext,
+        casConfigurationProperties
+    ) {
 
     init {
         this.logoutFlowDefinitionRegistry = logoutFlowDefinitionRegistry
@@ -44,7 +50,8 @@ class AlaCasWebflowConfigurer(
     }
 
     private fun doGenerateAuthCookieOnLoginAction(flow: Flow) {
-        val sendTicketGrantingTicketAction = flow.getState(CasWebflowConstants.STATE_ID_SEND_TICKET_GRANTING_TICKET) as ActionState
+        val sendTicketGrantingTicketAction =
+            flow.getState(CasWebflowConstants.STATE_ID_SEND_TICKET_GRANTING_TICKET) as ActionState
         sendTicketGrantingTicketAction.exitActionList.add(generateAuthCookieAction)
     }
 

@@ -34,7 +34,8 @@ class ServletContextConfig {
         return object : TomcatEmbeddedServletContainerFactory() {
 
             override fun getTomcatEmbeddedServletContainer(
-                    tomcat: Tomcat): TomcatEmbeddedServletContainer {
+                tomcat: Tomcat
+            ): TomcatEmbeddedServletContainer {
                 tomcat.enableNaming()
                 return super.getTomcatEmbeddedServletContainer(tomcat)
             }

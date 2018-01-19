@@ -8,8 +8,10 @@ import org.apereo.cas.authentication.principal.PrincipalFactory
 import org.apereo.cas.authentication.principal.PrincipalResolver
 import javax.security.auth.login.FailedLoginException
 
-class AlaPrincipalFactory(private val principalResolver: PrincipalResolver,
-                          val userCreator: UserCreator): PrincipalFactory {
+class AlaPrincipalFactory(
+    private val principalResolver: PrincipalResolver,
+    val userCreator: UserCreator
+) : PrincipalFactory {
 
     companion object {
         private const val serialVersionUID: Long = -3999695695604948495L
@@ -43,14 +45,19 @@ class AlaPrincipalFactory(private val principalResolver: PrincipalResolver,
         // does the ALA user exist?
         if (!validatePrincipalALA(principal)) {
             // create a new ALA user in the userdetails DB
-            logger.debug("user {} not found in ALA userdetails DB, creating new ALA user for: {}.", emailAddress, emailAddress)
+            logger.debug(
+                "user {} not found in ALA userdetails DB, creating new ALA user for: {}.",
+                emailAddress,
+                emailAddress
+            )
 
             val firstName = attributeParser.findFirstname()
             val lastName = attributeParser.findLastname()
 
-            if (firstName != null && lastName != null)  {
+            if (firstName != null && lastName != null) {
                 // if no userId parameter is returned then no db entry was created
-                val userId = userCreator.createUser(emailAddress, firstName, lastName) ?: throw FailedLoginException("Unable to create user for $emailAddress, $firstName, $lastName")
+                val userId = userCreator.createUser(emailAddress, firstName, lastName)
+                        ?: throw FailedLoginException("Unable to create user for $emailAddress, $firstName, $lastName")
                 logger.debug("Received new user id {}", userId)
 
                 // re-try (we have to retry, because that is how we get the required "userid")
@@ -69,7 +76,8 @@ class AlaPrincipalFactory(private val principalResolver: PrincipalResolver,
         return principal
     }
 
-    internal fun validatePrincipalALA(principal: Principal?) = principal != null && principal.attributes != null && principal.attributes.containsKey("userid")
+    internal fun validatePrincipalALA(principal: Principal?) =
+        principal != null && principal.attributes != null && principal.attributes.containsKey("userid")
 
 
     override fun equals(other: Any?): Boolean {

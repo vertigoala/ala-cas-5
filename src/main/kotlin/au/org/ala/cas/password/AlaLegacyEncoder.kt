@@ -20,7 +20,7 @@ class AlaLegacyEncoder(val salt: String, val base64Encode: Boolean = true) : Pas
     override fun encode(rawPassword: CharSequence): String {
         val salted = "$rawPassword{$salt}"
         val hash = Hashing.md5().hashBytes(salted.toByteArray(Charsets.UTF_8)).asBytes()
-        return if(base64Encode) Base64.getEncoder().encodeToString(hash) else String(hash)
+        return if (base64Encode) Base64.getEncoder().encodeToString(hash) else String(hash)
     }
 
     override fun matches(rawPassword: CharSequence, encodedPassword: String?): Boolean {

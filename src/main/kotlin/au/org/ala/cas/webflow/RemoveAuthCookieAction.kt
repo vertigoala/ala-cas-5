@@ -8,7 +8,7 @@ import org.springframework.webflow.execution.Event
 import org.springframework.webflow.execution.RequestContext
 
 open class RemoveAuthCookieAction(
-        val alaProxyAuthenticationCookieGenerator: CookieRetrievingCookieGenerator
+    val alaProxyAuthenticationCookieGenerator: CookieRetrievingCookieGenerator
 ) : AbstractAction() {
 
     companion object {

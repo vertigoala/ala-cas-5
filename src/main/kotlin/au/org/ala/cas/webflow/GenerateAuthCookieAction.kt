@@ -10,8 +10,10 @@ import org.springframework.webflow.action.AbstractAction
 import org.springframework.webflow.execution.Event
 import org.springframework.webflow.execution.RequestContext
 
-open class GenerateAuthCookieAction(val ticketRegistrySupport: TicketRegistrySupport,
-                                    val alaProxyAuthenticationCookieGenerator: CookieRetrievingCookieGenerator) : AbstractAction() {
+open class GenerateAuthCookieAction(
+    val ticketRegistrySupport: TicketRegistrySupport,
+    val alaProxyAuthenticationCookieGenerator: CookieRetrievingCookieGenerator
+) : AbstractAction() {
 
     companion object {
         val log = logger<GenerateAuthCookieAction>()
@@ -26,7 +28,11 @@ open class GenerateAuthCookieAction(val ticketRegistrySupport: TicketRegistrySup
         val ticketGrantingTicket = WebUtils.getTicketGrantingTicketId(context)
         log.debug("Ticket-granting ticket found in the context is [{}]", ticketGrantingTicket)
 
-        val authentication = this.ticketRegistrySupport.getAuthenticationFrom(ticketGrantingTicket) ?: throw InvalidTicketException(AuthenticationException("No authentication found for ticket " + ticketGrantingTicket), ticketGrantingTicket)
+        val authentication =
+            this.ticketRegistrySupport.getAuthenticationFrom(ticketGrantingTicket) ?: throw InvalidTicketException(
+                AuthenticationException("No authentication found for ticket " + ticketGrantingTicket),
+                ticketGrantingTicket
+            )
         val email = authentication.principal.id
 
         alaProxyAuthenticationCookieGenerator.addCookie(context, email)

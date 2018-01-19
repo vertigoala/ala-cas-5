@@ -21,7 +21,8 @@ class AlaLegacyEncoderTest {
         assertNotEquals(PRE_ENCODED, encoded2)
     }
 
-    @Test fun testMatch() {
+    @Test
+    fun testMatch() {
         val encoder = AlaLegacyEncoder(SALT)
         val matches = encoder.matches(RAW_PASSWORD, PRE_ENCODED)
         assertTrue(matches)
