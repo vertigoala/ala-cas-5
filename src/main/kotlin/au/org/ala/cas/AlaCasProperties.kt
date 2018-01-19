@@ -4,18 +4,19 @@ import org.apereo.cas.configuration.model.core.authentication.PasswordEncoderPro
 import org.apereo.cas.configuration.model.support.cookie.CookieProperties
 import org.apereo.cas.configuration.model.support.jpa.AbstractJpaProperties
 import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.boot.context.properties.NestedConfigurationProperty
 
 @ConfigurationProperties(value = "ala")
 open class AlaCasProperties(
-        var cookie: CookieProperties = CookieProperties(),
-        var userCreator: UserCreatorProperties = UserCreatorProperties(),
-        val skin: SkinProperties = SkinProperties()
+    @field:NestedConfigurationProperty var cookie: CookieProperties = CookieProperties(),
+    @field:NestedConfigurationProperty var userCreator: UserCreatorProperties = UserCreatorProperties(),
+    @field:NestedConfigurationProperty val skin: SkinProperties = SkinProperties()
 )
 
 open class UserCreatorProperties(
-        var passwordEncoder: PasswordEncoderProperties = PasswordEncoderProperties(),
-        var jdbc: JDBCUserCreatorProperties = JDBCUserCreatorProperties(),
-        var userCreatePassword: String = ""
+    @field:NestedConfigurationProperty var passwordEncoder: PasswordEncoderProperties = PasswordEncoderProperties(),
+    @field:NestedConfigurationProperty var jdbc: JDBCUserCreatorProperties = JDBCUserCreatorProperties(),
+    var userCreatePassword: String = ""
 )
 
 open class JDBCUserCreatorProperties : AbstractJpaProperties() {
