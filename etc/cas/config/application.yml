@@ -80,6 +80,32 @@ cas:
         id: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
         secret: xxxxxxxxxxxxxxxxxxxxxxxx
         scope: EMAIL_AND_PROFILE
+    oidc:
+      issuer: https://devt.ala.org.au/cas/oidc
+      jwksFile: file:/data/cas/config/keystore.jwks
+#      jwksCacheInMinutes: 60
+#      skew: 5
+#      dynamicClientRegistrationMode: OPEN or PROTECTED
+#      scopes:
+#      claims:
+#      subjectTypes:
+#      userDefinedScopes:
+#      claimsMap:
+#    oauth:
+#      grants:
+#        resourceOwner:
+#          requireServiceHeader: true/false
+#      code:
+#        numberOfUses: 1
+#        timeToKillInSeconds: 30
+#      accessToken:
+#        maxTimeToLiveInSeconds: PT28800S
+#        timeToKillInSeconds: PT7200S
+#        releaseProtocolAttributes: true
+#      refreshToken:
+#        timeToKillInSeconds: P14D
+#      userProfileViewType: NESTED | FLAT
+#      throttler: neverThrottle | authenticationThrottle
   monitor:
     endpoints:
 #      enabled: true
@@ -96,6 +122,8 @@ cas:
       user: root
       password: password
   ticket:
+    rememberMe:
+      enabled: true
     registry:
       jpa:
         ddl-auto: update
