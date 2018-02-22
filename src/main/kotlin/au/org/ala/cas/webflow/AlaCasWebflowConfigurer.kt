@@ -52,11 +52,13 @@ class AlaCasWebflowConfigurer(
     private fun doGenerateAuthCookieOnLoginAction(flow: Flow) {
         val sendTicketGrantingTicketAction =
             flow.getState(CasWebflowConstants.STATE_ID_SEND_TICKET_GRANTING_TICKET) as ActionState
+        log.debug("doGenerateAuthCookieOnLoginAction {}: {}", sendTicketGrantingTicketAction.javaClass.name, sendTicketGrantingTicketAction)
         sendTicketGrantingTicketAction.exitActionList.add(generateAuthCookieAction)
     }
 
     private fun doRemoveAuthCookieOnLogoutAction(flow: Flow) {
         val doLogoutAction = flow.getState(CasWebflowConstants.STATE_ID_DO_LOGOUT) as ActionState
+        log.debug("doRemoveAuthCookieOnLogoutAction {}: {}", doLogoutAction.javaClass.name, doLogoutAction)
         doLogoutAction.entryActionList.add(removeAuthCookieAction)
     }
 
