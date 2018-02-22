@@ -36,11 +36,14 @@ class AlaPasswordEncoder private constructor(val delegate: PasswordEncoder) : Pa
             val props = try {
                 File(location).loadProperties()
             } catch (e: FileNotFoundException) {
-                log.error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-                log.error("ALA Password Encoder properties were not found at $location!")
-                log.error("You must provide a properties file with password encoder settings!")
-                log.error("By default this file will be loaded from $DEFAULT_LOCATION but you can specify the location using the ALA_PASSWORD_PROPERTIES environment variable or ala.password.properties system property")
-                log.error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                log.error(
+                    """
+                        !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        ALA Password Encoder properties were not found at $location!
+                        You must provide a properties file with password encoder settings!
+                        By default this file will be loaded from $DEFAULT_LOCATION but you can specify the location using the ALA_PASSWORD_PROPERTIES environment variable or ala.password.properties system property
+                        !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!""".trimIndent()
+                )
                 throw e
             }
 

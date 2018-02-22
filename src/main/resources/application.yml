@@ -215,5 +215,5 @@ ala:
     orgShortName: ALA
     orgLongName: Atlas Of Living Australia
     orgNameKey: ala
-    cacheDuration: 1800000 # P30m
+    cacheDuration: PT30m # 1800000
 debug: false

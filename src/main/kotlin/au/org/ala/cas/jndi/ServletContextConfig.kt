@@ -1,12 +1,10 @@
 package au.org.ala.cas.jndi
 
 import au.org.ala.utils.logger
-import com.zaxxer.hikari.HikariConfig
-import com.zaxxer.hikari.HikariDataSource
 import com.zaxxer.hikari.HikariJNDIFactory
 import org.apache.catalina.Context
 import org.apache.catalina.startup.Tomcat
-import org.apache.tomcat.util.descriptor.web.ContextResource;
+import org.apache.tomcat.util.descriptor.web.ContextResource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean

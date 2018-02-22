@@ -3,6 +3,7 @@ package au.org.ala.cas.thymeleaf
 import au.org.ala.cas.SkinProperties
 import au.org.ala.utils.logger
 import com.github.benmanes.caffeine.cache.Caffeine
+import org.apereo.cas.configuration.support.Beans
 import org.apereo.cas.util.Pac4jUtils
 import org.apereo.cas.web.support.WebUtils
 import org.apereo.inspektr.common.spi.PrincipalResolver
@@ -22,7 +23,7 @@ class AlaTemplateClient(val skinConfig: SkinProperties, val cookieName: String) 
     }
 
     val uri = URI(skinConfig.headerFooterUrl)
-    val cache = Caffeine.newBuilder().expireAfterWrite(skinConfig.cacheDuration, TimeUnit.MILLISECONDS)
+    val cache = Caffeine.newBuilder().expireAfterWrite(Beans.newDuration(skinConfig.cacheDuration).toMillis(), TimeUnit.MILLISECONDS)
         .build(this::loadTemplate)
 
     fun loadTemplate(template: String) =
