@@ -221,6 +221,10 @@
             <AppenderRef ref="casAudit"/>
             <AppenderRef ref="casFile"/>
         </AsyncLogger>
+        <AsyncLogger name="com.mongo" level="warn" additivity="false">
+            <AppenderRef ref="console"/>
+            <AppenderRef ref="file"/>
+        </AsyncLogger>
         <AsyncRoot level="error">
             <AppenderRef ref="casConsole"/>
         </AsyncRoot>

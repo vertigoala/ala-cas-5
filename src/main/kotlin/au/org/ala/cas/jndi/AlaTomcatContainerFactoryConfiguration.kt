@@ -18,10 +18,10 @@ import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletCon
  */
 @Configuration
 @EnableConfigurationProperties(JndiConfigurationProperties::class)
-class ServletContextConfig {
+class AlaTomcatContainerFactoryConfiguration {
 
     companion object {
-        val log = logger<ServletContextConfig>()
+        val log = logger<AlaTomcatContainerFactoryConfiguration>()
     }
 
     @Autowired
