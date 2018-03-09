@@ -79,7 +79,7 @@ class AlaCasWebflowConfiguration {
         RemoveAuthCookieAction(alaProxyAuthenticationCookieGenerator)
 
     @ConditionalOnMissingBean(name = ["alaAuthCookieWebflowConfigurer"])
-    @Bean("authCookieWebflowConfigurer")
+    @Bean
     fun alaAuthCookieWebflowConfigurer(
         generateAuthCookieAction: GenerateAuthCookieAction,
         removeAuthCookieAction: RemoveAuthCookieAction
