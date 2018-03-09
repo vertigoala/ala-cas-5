@@ -21,7 +21,8 @@ default in `src/main/resources/application.yml` and won't need to be added to th
 
 The `etc` directory contains the configuration files and directories that need to be copied to `/etc/cas/config`.
 
-By default, CAS will load properties from `/etc/cas/config` but can be changed by specifying `-Dcas.standalone.config=/data/cas/config` or by adding in `src/main/resources/bootstrap.properties`.
+By default, CAS will load properties from `/etc/cas/config` but can be changed by specifying 
+`-Dcas.standalone.config=/data/cas/config` or by adding in `src/main/resources/bootstrap.properties`.
 
 `application.yml` **will** require some customisation:
  
@@ -33,7 +34,7 @@ By default, CAS will load properties from `/etc/cas/config` but can be changed b
     of each version `ddl-auto` should be set to `update` to get the latest changes from JPA (or run the provided SQL file to upgrade a CAS 4 JPA ticket registry to CAS 5).
   - `cas.authn.pac4j.facebook|google|twitter` will require id and secret to be set.
 
-*NOTE:* The MySQL driver used by this CAS version is 5.1.43.  This DB driver requires that the server returns a timezone
+**NOTE:** The MySQL driver used by this CAS version is 5.1.43.  This DB driver requires that the server returns a timezone
 in the form `Australia/Sydney`, whereas the MySQL versions available on Ubuntu 16.04 will tell the client `AEST` (which
 causes an Exception in the client).  The simplest fix is to override the server timezone in the JDBC URL by appending 
 `?serverTimezone=Australia/Sydney` to the URL.
@@ -61,16 +62,19 @@ Ensure that the keys are set for the following properties.  If left blank, then 
 each property and print them to the log.  After the first run, copy these values into `application.yml` and / or the
 Ansible inventory for the CAS deployment.
 
- - Ticket-granting Cookie encryption (tgc.crypto.encryption.key)
- - Ticket-granting Cookie signing (tgc.crypto.encryption.signing.key)
- - Webflow cookie encryption (webflow.crypto.signing.key)
- - Webflow cookie signing (webflow.crypto.encryption.key)
- - Ticket registry encryption (ticket.registry.jpa.crypto.signing.key)
- - Ticket registry signing (ticket.registry.jpa.crypto.encryption.key)
+**NOTE** the Ticket Granting Cookie crypto is disabled by default in ALA CAS as it requires the same IP and user agent which can be
+confusing for users whose IP address changes regularly.  You may re-enable TGC crypto by setting `cas.tgc.crypto.enabled=true`. 
+
+ - ~~Ticket-granting Cookie encryption (cas.tgc.crypto.encryption.key)~~
+ - ~~Ticket-granting Cookie signing (cas.tgc.crypto.encryption.signing.key)~~
+ - Webflow cookie encryption (cas.webflow.crypto.signing.key)
+ - Webflow cookie signing (cas.webflow.crypto.encryption.key)
+ - Ticket registry encryption (cas.ticket.registry.jpa.crypto.signing.key)
+ - Ticket registry signing (cas.ticket.registry.jpa.crypto.encryption.key)
  
 ## JNDI Datasources
 
-*NOTE* that JNDI appears to be the only way to share a connection pool between various JDBC based CAS sub systems.  In 
+**NOTE** that JNDI appears to be the only way to share a connection pool between various JDBC based CAS sub systems.  In 
 the default ALA CAS configuration a datasource is used to share the same connection pool between:
  
  - the bcrypt password query

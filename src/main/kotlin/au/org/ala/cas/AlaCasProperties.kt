@@ -33,6 +33,6 @@ open class SkinProperties {
     lateinit var orgShortName: String
     lateinit var orgLongName: String
     lateinit var orgNameKey: String
-    var cacheDuration: String = "PT30m".toString()
+    var cacheDuration: String = "PT30m"
 }
 
