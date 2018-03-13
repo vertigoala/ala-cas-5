@@ -46,12 +46,12 @@ cas:
 #    watcherEnabled: true
 #    repeatInterval: 120000
 #    startDelay: 15000
-    initFromJson: false
+    initFromJson: true
     config:
       location: classpath:/services
     mongo:
-      collection: cas-service-registry
-      databaseName: cas-mongo-database
+      collection: services
+      databaseName: cas-service-registry
       userId: cas
       password: password
     jpa:
