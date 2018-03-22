@@ -2,6 +2,7 @@ package au.org.ala.cas.thymeleaf
 
 import au.org.ala.cas.SkinProperties
 import au.org.ala.utils.logger
+import au.org.ala.utils.readText
 import com.github.benmanes.caffeine.cache.Caffeine
 import org.apereo.cas.configuration.support.Beans
 import org.apereo.cas.util.Pac4jUtils
@@ -27,7 +28,7 @@ class AlaTemplateClient(val skinConfig: SkinProperties, val cookieName: String) 
         .build(this::loadTemplate)
 
     fun loadTemplate(template: String) =
-        uri.resolve("./$template.html").toURL().openStream().reader().use(Reader::readText)
+        uri.resolve("./$template.html").readText()
 
     fun load(name: String, request: HttpServletRequest?, fluidLayout: Boolean = false): String? {
         val cached = try {
