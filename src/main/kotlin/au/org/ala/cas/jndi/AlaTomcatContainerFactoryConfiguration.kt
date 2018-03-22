@@ -2,16 +2,18 @@ package au.org.ala.cas.jndi
 
 import au.org.ala.utils.logger
 import com.zaxxer.hikari.HikariJNDIFactory
-import org.apache.catalina.Context
 import org.apache.catalina.startup.Tomcat
 import org.apache.tomcat.util.descriptor.web.ContextResource
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.context.embedded.tomcat.TomcatContextCustomizer
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import javax.sql.DataSource
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainer
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory
+import org.springframework.jdbc.datasource.AbstractDataSource
+import java.sql.Connection
 
 /**
  * This Configuration simply creates simple JNDI datasources based off the JndiConfigurationProperites.
@@ -27,6 +29,19 @@ class AlaTomcatContainerFactoryConfiguration {
     @Autowired
     lateinit var jndiConfigurationProperties: JndiConfigurationProperties
 
+    /**
+     * This @Bean (or at least a single DataSource @Bean) is required for FlywayAutoConfiguration to execute,
+     * even if Flyway is configured to create its own DataSource.
+     * As CAS doesn't expose its DataSources as @Beans, we generate a dummy DataSource to trick FlywayAutoConfiguration
+     * into executing.
+     */
+    @Bean
+    fun dummyDataSourceForFlywayAutoConfiguration() = object : AbstractDataSource() {
+        override fun getConnection(): Connection = TODO("should never be called")
+        override fun getConnection(username: String?, password: String?): Connection = TODO("should never be called")
+    }
+
+    // TODO 5.3.0+ convert to a CasTomcatEmbeddedServletContainerFactory
     @Bean
     fun tomcatEmbeddedServletContainerFactory(): TomcatEmbeddedServletContainerFactory {
         return object : TomcatEmbeddedServletContainerFactory() {
@@ -37,9 +52,8 @@ class AlaTomcatContainerFactoryConfiguration {
                 tomcat.enableNaming()
                 return super.getTomcatEmbeddedServletContainer(tomcat)
             }
-
-            override fun postProcessContext(context: Context) {
-
+        }.apply {
+            addContextCustomizers(TomcatContextCustomizer { context ->
                 jndiConfigurationProperties.hikari.map { config ->
                     ContextResource().apply {
                         name = config.name
@@ -72,7 +86,7 @@ class AlaTomcatContainerFactoryConfiguration {
                         config.dataSourceProperties.forEach { (name, value) -> setProperty("dataSource.$name", value) }
                     }
                 }.forEach(context.namingResources::addResource)
-            }
+            })
         }
     }
 

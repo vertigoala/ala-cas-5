@@ -225,6 +225,9 @@
             <AppenderRef ref="console"/>
             <AppenderRef ref="file"/>
         </AsyncLogger>
+        <AsyncLogger name="org.flywaydb" level="info" additivity="true">
+            <AppenderRef ref="file"/>
+        </AsyncLogger>
         <AsyncRoot level="error">
             <AppenderRef ref="casConsole"/>
         </AsyncRoot>
