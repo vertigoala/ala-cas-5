@@ -4,7 +4,6 @@ import au.org.ala.cas.AlaCasProperties
 import org.apereo.cas.authentication.principal.PrincipalFactory
 import org.apereo.cas.authentication.principal.PrincipalResolver
 import org.apereo.cas.authentication.support.password.PasswordEncoderUtils
-import org.apereo.cas.configuration.support.Beans
 import org.apereo.cas.configuration.support.JpaBeans
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.context.properties.EnableConfigurationProperties

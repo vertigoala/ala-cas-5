@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layout">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 
 <head>
     <title th:text="#{screen.success.header}"></title>
@@ -14,7 +14,7 @@
                     <h2 class="panel-title" th:utext="#{screen.success.header}"/>
                 </div>
                 <div class="panel-body">
-                    <p th:utext="#{screen.success.success(${principal.id})}"/>
+                    <p th:utext="#{screen.success.success(${principal.attributes['email'] ?: principal.id})}"/>
                     <br>
                     <p th:utext="#{screen.success.security}"/>
                 </div>

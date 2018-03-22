@@ -3,9 +3,7 @@ package au.org.ala.cas.delegated
 import au.org.ala.utils.logger
 import org.apache.commons.lang3.builder.HashCodeBuilder
 import org.apereo.cas.authentication.Credential
-import org.apereo.cas.authentication.principal.Principal
-import org.apereo.cas.authentication.principal.PrincipalFactory
-import org.apereo.cas.authentication.principal.PrincipalResolver
+import org.apereo.cas.authentication.principal.*
 import javax.security.auth.login.FailedLoginException
 
 class AlaPrincipalFactory(
@@ -73,7 +71,9 @@ class AlaPrincipalFactory(
                 throw FailedLoginException("Unable to create ALA user for $emailAddress with attributes $attributes")
             }
         }
-        return principal
+        // The PAC4j client support expects a principal with the same id as the input principal, so return a new
+        // principal with the input id and the attributes from the db.
+        return DefaultPrincipalFactory().createPrincipal(id, principal.attributes)
     }
 
     internal fun validatePrincipalALA(principal: Principal?) =
