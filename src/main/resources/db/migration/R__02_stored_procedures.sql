@@ -1,6 +1,6 @@
 DROP PROCEDURE IF EXISTS `sp_get_user_attributes`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_get_user_attributes`(p_username varchar(255))
+CREATE PROCEDURE `sp_get_user_attributes`(p_username varchar(255))
   BEGIN
     SELECT 'email' AS 'key', email AS 'value' FROM users WHERE username=p_username
     UNION SELECT 'firstname' AS 'key', firstname AS 'value' FROM users WHERE username=p_username
@@ -19,17 +19,16 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `sp_get_user_authorities`;
 DELIMITER //
-create procedure sp_get_user_authorities()
+CREATE PROCEDURE sp_get_user_authorities()
   BEGIN
     SELECT username, group_concat(ur.role_id) AS 'authorities' FROM users u JOIN user_role ur ON u.userid = ur.user_id GROUP BY username;
   end
 //
 DELIMITER ;
 
-
 DROP PROCEDURE IF EXISTS `sp_create_user`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_create_user`(
+CREATE PROCEDURE `sp_create_user`(
   IN `email`              varchar(255),
   IN `firstname`          varchar(255),
   IN `lastname`           varchar(255),
