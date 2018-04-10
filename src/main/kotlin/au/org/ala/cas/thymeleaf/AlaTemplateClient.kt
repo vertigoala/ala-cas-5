@@ -28,7 +28,7 @@ class AlaTemplateClient(val skinConfig: SkinProperties, val cookieName: String) 
         .build(this::loadTemplate)
 
     fun loadTemplate(template: String) =
-        uri.resolve("./$template.html").readText()
+        uri.resolve("./$template.html").also { log.debug("Loading template from {}", it) }.readText()
 
     fun load(name: String, request: HttpServletRequest?, fluidLayout: Boolean = false): String? {
         val cached = try {
@@ -39,6 +39,7 @@ class AlaTemplateClient(val skinConfig: SkinProperties, val cookieName: String) 
         }
 
         if (cached == null || cached.isBlank()) {
+            log.error("Got a blank cached template value: {}", cached)
             return null
         }
         val loggedIn = isLoggedIn()
