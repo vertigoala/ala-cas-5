@@ -316,16 +316,6 @@
             <artifactId>cas-server-support-mongo-service-registry</artifactId>
             <version>${cas.version}</version>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.apereo.cas</groupId>-->
-            <!--<artifactId>cas-server-support-jpa-ticket-registry</artifactId>-->
-            <!--<version>${cas.version}</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.apereo.cas</groupId>-->
-            <!--<artifactId>cas-server-support-jpa-service-registry</artifactId>-->
-            <!--<version>${cas.version}</version>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>org.apereo.cas</groupId>
             <artifactId>cas-server-support-pac4j-webflow</artifactId>
@@ -338,12 +328,6 @@
             <artifactId>cas-server-webapp-config-security</artifactId>
             <version>${cas.version}</version>
         </dependency>
-        <!-- TODO zipkin -->
-        <!--<dependency>-->
-            <!--<groupId>org.apereo.cas</groupId>-->
-            <!--<artifactId>cas-server-support-sleuth</artifactId>-->
-            <!--<version>${cas.version}</version>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>org.apereo.cas</groupId>
             <artifactId>cas-server-support-bootadmin-client</artifactId>
@@ -357,6 +341,11 @@
         <dependency>
             <groupId>org.apereo.cas</groupId>
             <artifactId>cas-server-support-oidc</artifactId>
+            <version>${cas.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apereo.cas</groupId>
+            <artifactId>cas-server-support-rest</artifactId>
             <version>${cas.version}</version>
         </dependency>
         <!-- BELOW IS STUFF PROVIDED BY THE CAS WAR BUT LISTED HERE
