@@ -6,7 +6,9 @@ import org.apereo.cas.services.ServiceRegistryDao
 import org.apereo.cas.services.ServiceRegistryInitializer
 import org.apereo.cas.services.ServicesManager
 
-
+/**
+ * Work around service registration issues that do a regex match
+ */
 class AlaServiceRegistryInitializer(
     val jsonServiceRegistryDao: ServiceRegistryDao,
     val serviceRegistryDao: ServiceRegistryDao,

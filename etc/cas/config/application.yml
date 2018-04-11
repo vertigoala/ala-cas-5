@@ -38,6 +38,16 @@ info:
 #            name: xxxxxxxx
 #            password: xxxxxxx
 
+# Enable these for HA
+#spring:
+#  session:
+#    store-type: redis
+#    disable-redis-config-action: true # enable in environment where redis CONFIG action is disabled, eg AWS elasticache
+#  redis:
+#    host: some-distributed-redis
+#    password: password
+#    port: 6379
+
 
 jndi:
   hikari:

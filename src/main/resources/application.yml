@@ -6,6 +6,8 @@ info:
 spring:
   application:
     name: "@pom.artifactId@"
+  session:
+    store-type: none
 server:
   tomcat:
     remote_ip_header: x-forwarded-for

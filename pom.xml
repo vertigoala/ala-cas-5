@@ -518,22 +518,13 @@
             <version>${cas.version}</version>
             <scope>provided</scope>
         </dependency>
+        <!-- End CAS provided JARs -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.43</version>
             <scope>runtime</scope>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>net.ttddyy</groupId>-->
-            <!--<artifactId>datasource-proxy</artifactId>-->
-            <!--<version>1.4.1</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>com.github.h-thurow</groupId>-->
-            <!--<artifactId>simple-jndi</artifactId>-->
-            <!--<version>0.15.0</version>-->
-        <!--</dependency>-->
         <!-- Here be webjars -->
         <dependency>
             <groupId>org.webjars</groupId>
@@ -574,6 +565,23 @@
             <groupId>org.webjars</groupId>
             <artifactId>bootstrap-social</artifactId>
             <version>5.0.0</version>
+        </dependency>
+
+        <!-- Spring Session for distributing the session because delegated auth requires it -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.session</groupId>
+            <artifactId>spring-session-data-redis</artifactId>
+            <version>1.3.2.RELEASE</version>
         </dependency>
 
         <!-- Test dependencies -->
