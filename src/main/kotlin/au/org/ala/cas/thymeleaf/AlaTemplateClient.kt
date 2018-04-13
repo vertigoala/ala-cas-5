@@ -5,16 +5,25 @@ import au.org.ala.utils.logger
 import au.org.ala.utils.readText
 import com.github.benmanes.caffeine.cache.Caffeine
 import org.apereo.cas.configuration.support.Beans
+import org.apereo.cas.ticket.registry.TicketRegistry
+import org.apereo.cas.util.HttpRequestUtils
 import org.apereo.cas.util.Pac4jUtils
+import org.apereo.cas.web.support.CookieRetrievingCookieGenerator
+import org.apereo.cas.web.support.CookieUtils
 import org.apereo.cas.web.support.WebUtils
 import org.apereo.inspektr.common.spi.PrincipalResolver
+import org.springframework.webflow.execution.RequestContext
 import org.springframework.webflow.execution.RequestContextHolder
 import java.io.Reader
 import java.net.URI
 import java.util.concurrent.TimeUnit
 import javax.servlet.http.HttpServletRequest
 
-class AlaTemplateClient(val skinConfig: SkinProperties, val cookieName: String) {
+class AlaTemplateClient(
+    val skinConfig: SkinProperties,
+//    val cookieName: String,
+    val ticketGrantingTicketCookieGenerator: CookieRetrievingCookieGenerator,
+    val ticketRegistry: TicketRegistry) {
 
     companion object {
         const val LOGGED_IN_CLASS = "logged-in"
@@ -58,10 +67,21 @@ class AlaTemplateClient(val skinConfig: SkinProperties, val cookieName: String) 
         return content
     }
 
-    fun isLoggedIn() =
-        RequestContextHolder.getRequestContext()?.let { WebUtils.getCredential(it) != null }
-                ?: (Pac4jUtils.getPac4jAuthenticatedUsername() != PrincipalResolver.UNKNOWN_USER)
-
+    fun isLoggedIn(): Boolean {
+        val request: HttpServletRequest? = HttpRequestUtils.getHttpServletRequestFromRequestAttributes()
+        val requestContext: RequestContext? = RequestContextHolder.getRequestContext()
+        val cookieTgt = request?.let { ticketGrantingTicketCookieGenerator.retrieveCookieValue(request) }
+        val requestTgt = requestContext?.let { WebUtils.getTicketGrantingTicketId(requestContext) }
+        val tgt = cookieTgt ?: requestTgt
+        val validTicket = tgt?.let { ticketRegistry.getTicket(tgt)?.isExpired?.not() }
+        return if (validTicket != null) {
+            validTicket
+        } else {
+            val credential = requestContext?.let { WebUtils.getCredential(it) != null }
+            val pac4j = (Pac4jUtils.getPac4jAuthenticatedUsername() != PrincipalResolver.UNKNOWN_USER)
+            credential ?: pac4j
+        }
+    }
 
     /**
      * Builds the login or logout link based on current login status.
