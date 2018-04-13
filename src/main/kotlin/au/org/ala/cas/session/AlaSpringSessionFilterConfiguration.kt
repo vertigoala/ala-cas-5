@@ -2,12 +2,7 @@ package au.org.ala.cas.session
 
 import org.springframework.beans.BeansException
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.autoconfigure.AutoConfigureAfter
-import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
-import org.springframework.boot.autoconfigure.hazelcast.HazelcastAutoConfiguration
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
-import org.springframework.boot.autoconfigure.jdbc.JdbcTemplateAutoConfiguration
-import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
@@ -37,6 +32,7 @@ import javax.servlet.ServletContext
 //    RedisAutoConfiguration::class,
 //    AlaSpringSessionConfiguration::class
 //)
+@ConditionalOnProperty(prefix = "spring.session", value = ["store-type"], havingValue = "redis")
 class AlaSpringSessionFilterConfiguration : ApplicationContextAware {
 
     private val defaultHttpSessionStrategy = CookieHttpSessionStrategy()
