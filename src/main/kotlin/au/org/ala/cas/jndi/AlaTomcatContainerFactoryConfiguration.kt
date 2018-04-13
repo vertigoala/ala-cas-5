@@ -14,8 +14,6 @@ import org.springframework.context.annotation.Configuration
 import javax.sql.DataSource
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainer
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory
-import org.springframework.jdbc.datasource.AbstractDataSource
-import java.sql.Connection
 
 /**
  * This Configuration simply creates simple JNDI datasources based off the JndiConfigurationProperites.
