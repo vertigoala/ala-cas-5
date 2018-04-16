@@ -68,6 +68,7 @@ class AlaPrincipalFactory(
 
             if (!validatePrincipalALA(principal)) {
                 // we failed to lookup ALA user (most likely because the creation above failed), complain, throw exception, etc.
+                logger.warn("Unable to create ALA user for $emailAddress with attributes $attributes")
                 throw FailedLoginException("Unable to create ALA user for $emailAddress with attributes $attributes")
             }
         }
