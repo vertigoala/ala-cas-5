@@ -8,6 +8,9 @@ spring:
     name: "@pom.artifactId@"
   session:
     store-type: none
+    timeout: 28800
+    redis:
+      namespace: 'cas'
 server:
   tomcat:
     remote_ip_header: x-forwarded-for
@@ -109,7 +112,7 @@ cas:
           fieldDisabled: disabled
 #          fieldExpired: expired
           driverClass: com.mysql.jdbc.Driver
-          principalAttrbiuteList: legacy_password
+          principalAttrbiuteList: legacy_password:legacyPassword
           # principalAttributeList:sn,cn:commonName,givenName
           passwordEncoder:
             type: BCRYPT
@@ -215,7 +218,7 @@ cas:
     maxAge: -1
     secure: true
     httpOnly: true
-    rememberMeMaxAge: P91D #7884000 # P14D # 1209600
+    rememberMeMaxAge: PT7884000S #7884000 # P14D # 1209600
     crypto:
       enabled: false
 #    encryptionKey=
@@ -225,8 +228,8 @@ cas:
     default-theme-name: ala
   ticket:
     tgt:
-      maxTimeToLiveInSeconds: 28800 # PT24H
-      timeToKillInSeconds: 7200 # PT8H
+      maxTimeToLiveInSeconds: 28800 # PT8H
+      timeToKillInSeconds: 7200 # PT2H
       rememberMe:
         enabled: true
         timeToKillInSeconds: 7884000 # P3M # 1209600 # P14D

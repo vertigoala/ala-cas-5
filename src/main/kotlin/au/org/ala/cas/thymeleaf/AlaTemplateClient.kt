@@ -78,8 +78,8 @@ class AlaTemplateClient(
             validTicket
         } else {
             val credential = requestContext?.let { WebUtils.getCredential(it) != null }
-            val pac4j = (Pac4jUtils.getPac4jAuthenticatedUsername() != PrincipalResolver.UNKNOWN_USER)
-            credential ?: pac4j
+//            val pac4j = (Pac4jUtils.getPac4jAuthenticatedUsername() != PrincipalResolver.UNKNOWN_USER)
+            credential ?: false
         }
     }
 

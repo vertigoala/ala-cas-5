@@ -69,6 +69,16 @@
                     <classifier>exec</classifier>
                     <executable>${isExecutable}</executable>
                     <!--<executable>true</executable>-->
+                    <!-- spring boot will add all provided dependencies in a lib-provided dir but the war
+                         overlay is unnecessary as it will be unpacked and included in the war anyway -->
+                    <!-- Also the CAS dependencies in provided scope should be excluded as well as they'll
+                         come in from the WAR -->
+                    <excludes>
+                        <exclude>
+                            <groupId>org.apereo.cas</groupId>
+                            <artifactId>cas-server-webapp${app.server}</artifactId>
+                        </exclude>
+                    </excludes>
                 </configuration>
             </plugin>
             <plugin>
@@ -96,6 +106,7 @@
                             <artifactId>cas-server-webapp${app.server}</artifactId>
                             <excludes>
                                 <exclude>WEB-INF/classes/services/*.json</exclude>
+                                <exclude>WEB-INF/lib/pac4j-oauth-2.2.0.jar</exclude>
                             </excludes>
                         </overlay>
                     </overlays>
@@ -304,7 +315,7 @@
             <artifactId>cas-server-webapp${app.server}</artifactId>
             <version>${cas.version}</version>
             <type>war</type>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apereo.cas</groupId>
@@ -342,6 +353,11 @@
             <groupId>org.apereo.cas</groupId>
             <artifactId>cas-server-support-oauth-webflow</artifactId>
             <version>${cas.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.pac4j</groupId>
+            <artifactId>pac4j-oauth</artifactId>
+            <version>2.2.0.ALA</version>
         </dependency>
         <dependency>
             <groupId>org.apereo.cas</groupId>

@@ -42,6 +42,7 @@ info:
 #spring:
 #  session:
 #    store-type: redis
+#    timeout: 28800
 #    disable-redis-config-action: true # enable in environment where redis CONFIG action is disabled, eg AWS elasticache
 #  redis:
 #    host: some-distributed-redis
