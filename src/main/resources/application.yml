@@ -112,7 +112,7 @@ cas:
           fieldDisabled: disabled
 #          fieldExpired: expired
           driverClass: com.mysql.jdbc.Driver
-          principalAttrbiuteList: legacy_password:legacyPassword
+          principalAttributeList: legacy_password:legacyPassword
           # principalAttributeList:sn,cn:commonName,givenName
           passwordEncoder:
             type: BCRYPT
@@ -123,7 +123,7 @@ cas:
           fieldDisabled: disabled
 #          fieldExpired: expired
           driverClass: com.mysql.jdbc.Driver
-          principalAttrbiuteList: legacy_password:legacyPassword
+          principalAttributeList: legacy_password:legacyPassword
           passwordEncoder:
             type: au.org.ala.cas.password.AlaPasswordEncoder
     pac4j:
