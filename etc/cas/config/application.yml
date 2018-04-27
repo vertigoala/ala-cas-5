@@ -52,7 +52,8 @@ info:
 
 jndi:
   hikari:
-    - name: jdbccas
+    jdbccas:
+      name: jdbccas
       driverClass: com.mysql.jdbc.Driver
       url: jdbc:mysql://localhost/cas[?serverTimezone=Australia/Sydney]
       user: username

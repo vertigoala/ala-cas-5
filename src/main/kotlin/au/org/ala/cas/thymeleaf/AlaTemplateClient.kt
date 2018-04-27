@@ -7,14 +7,10 @@ import com.github.benmanes.caffeine.cache.Caffeine
 import org.apereo.cas.configuration.support.Beans
 import org.apereo.cas.ticket.registry.TicketRegistry
 import org.apereo.cas.util.HttpRequestUtils
-import org.apereo.cas.util.Pac4jUtils
 import org.apereo.cas.web.support.CookieRetrievingCookieGenerator
-import org.apereo.cas.web.support.CookieUtils
 import org.apereo.cas.web.support.WebUtils
-import org.apereo.inspektr.common.spi.PrincipalResolver
 import org.springframework.webflow.execution.RequestContext
 import org.springframework.webflow.execution.RequestContextHolder
-import java.io.Reader
 import java.net.URI
 import java.util.concurrent.TimeUnit
 import javax.servlet.http.HttpServletRequest

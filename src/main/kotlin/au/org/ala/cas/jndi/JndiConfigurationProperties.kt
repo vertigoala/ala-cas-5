@@ -8,10 +8,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties
  * At the moment only hikari connection pool data sources are supported.
  */
 @ConfigurationProperties(value = "jndi")
-class JndiConfigurationProperties(var hikari: List<HikariDatasource> = mutableListOf())
+class JndiConfigurationProperties(var hikari: Map<String, HikariDatasource> = mutableMapOf())
 
 open class HikariDatasource(
-    var name: String = "jdbc/ds",
     var driverClass: String? = null, // Nullable because Hikari can determine the driver from the URL
     var url: String = "jdbc:hsqldb:mem:cas-hsql-database",
     var user: String = "sa",

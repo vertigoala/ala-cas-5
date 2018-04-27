@@ -7,6 +7,8 @@ import org.apache.tomcat.util.descriptor.web.ContextResource
 import org.apereo.cas.configuration.CasConfigurationProperties
 import org.apereo.cas.configuration.support.JpaBeans
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.autoconfigure.AutoConfigureOrder
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.embedded.tomcat.TomcatContextCustomizer
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
@@ -14,11 +16,13 @@ import org.springframework.context.annotation.Configuration
 import javax.sql.DataSource
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainer
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory
+import org.springframework.core.Ordered
 
 /**
  * This Configuration simply creates simple JNDI datasources based off the JndiConfigurationProperites.
  */
 @Configuration
+@AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE)
 @EnableConfigurationProperties(JndiConfigurationProperties::class, CasConfigurationProperties::class)
 class AlaTomcatContainerFactoryConfiguration {
 
@@ -39,6 +43,7 @@ class AlaTomcatContainerFactoryConfiguration {
      * CAS this is retrieved from JNDI so won't actually create additional db connections)
      */
     @Bean
+    @ConditionalOnMissingBean(DataSource::class)
     fun dummyDataSourceForFlywayAutoConfiguration() = JpaBeans.newDataSource(casConfigurationProperties.monitor.jdbc)
 
     // TODO 5.3.0+ convert to a CasTomcatEmbeddedServletContainerFactory
@@ -54,9 +59,9 @@ class AlaTomcatContainerFactoryConfiguration {
             }
         }.apply {
             addContextCustomizers(TomcatContextCustomizer { context ->
-                jndiConfigurationProperties.hikari.map { config ->
+                jndiConfigurationProperties.hikari.map { (configName, config) ->
                     ContextResource().apply {
-                        name = config.name
+                        name = configName
                         type = DataSource::class.java.name
                         setProperty("factory", HikariJNDIFactory::class.java.name)
                         config.driverClass?.let { setProperty("driverClassName", it) }
