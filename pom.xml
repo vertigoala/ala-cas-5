@@ -369,6 +369,11 @@
             <artifactId>cas-server-support-rest</artifactId>
             <version>${cas.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apereo.cas</groupId>
+            <artifactId>cas-server-support-jdbc-monitor</artifactId>
+            <version>${cas.version}</version>
+        </dependency>
         <!-- BELOW IS STUFF PROVIDED BY THE CAS WAR BUT LISTED HERE
              IN PROVIDED SCOPE TO ALLOW THE IDE TO FIND IT -->
         <dependency>
