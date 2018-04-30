@@ -1,6 +1,7 @@
 package au.org.ala.cas.thymeleaf
 
 import au.org.ala.cas.AlaCasProperties
+import org.apereo.cas.configuration.CasConfigurationProperties
 import org.apereo.cas.services.web.ThemeViewResolver
 import org.apereo.cas.services.web.ThemeViewResolverFactory
 import org.apereo.cas.services.web.config.CasThemesConfiguration
@@ -14,6 +15,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.DependsOn
 import org.springframework.core.Ordered
 import org.springframework.util.MimeType
 import org.thymeleaf.spring4.SpringTemplateEngine
