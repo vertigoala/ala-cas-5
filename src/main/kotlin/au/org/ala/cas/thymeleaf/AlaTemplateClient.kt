@@ -33,7 +33,7 @@ class AlaTemplateClient(
         .build(this::loadTemplate)
 
     fun loadTemplate(template: String) =
-        uri.resolve("./$template.html").also { log.debug("Loading template from {}", it) }.readText()
+        uri.resolve("./$template.html").also { log.debug("Loading template from {}", it) }.readText(2500, 2500)
 
     fun load(name: String, request: HttpServletRequest?, fluidLayout: Boolean = false): String? {
         val cached = try {

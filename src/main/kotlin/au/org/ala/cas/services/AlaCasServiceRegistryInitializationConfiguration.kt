@@ -3,7 +3,7 @@ package au.org.ala.cas.services
 import au.org.ala.utils.logger
 import org.apache.commons.lang3.ObjectUtils
 import org.apereo.cas.configuration.CasConfigurationProperties
-import org.apereo.cas.services.ServiceRegistryDao
+import org.apereo.cas.services.ServiceRegistry
 import org.apereo.cas.services.ServicesManager
 import org.apereo.cas.services.ServiceRegistryInitializer
 import org.springframework.beans.factory.annotation.Autowired
@@ -46,8 +46,8 @@ class AlaCasServiceRegistryInitializationConfiguration {
     @Bean
     fun alaServiceRegistryInitializer(
         @Qualifier("servicesManager") servicesManager: ServicesManager,
-        @Qualifier("serviceRegistryDao") serviceRegistryDao: ServiceRegistryDao,
-        @Qualifier("embeddedJsonServiceRegistry") embeddedJsonServiceRegistry: ServiceRegistryDao
+        @Qualifier("serviceRegistry") serviceRegistryDao: ServiceRegistry,
+        @Qualifier("embeddedJsonServiceRegistry") embeddedJsonServiceRegistry: ServiceRegistry
     ): ServiceRegistryInitializer {
         val serviceRegistry = casProperties.serviceRegistry
         val initializer = AlaServiceRegistryInitializer(

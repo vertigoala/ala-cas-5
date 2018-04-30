@@ -46,14 +46,26 @@ flyway:
 #  user: # Login user of the database to migrate.
 #  validate-on-migrate: true #
 
+jndi:
+  hikari:
+    jdbccas:
+      driverClass: com.mysql.jdbc.Driver
+#      url: jdbc:mysql://localhost:3306/emmet?serverTimezone=Australia/Sydney&useSSL=false
+#      user: root
+#      password: password
+#      dataSourceProperties:
+#        cachePrepStmts: true
+#        prepStmtCacheSize: 250
+#        prepStmtCacheSqlLimit: 2048
+
 cas:
   serviceRegistry:
 #    watcherEnabled: true
 #    repeatInterval: 120000
 #    startDelay: 15000
     initFromJson: true
-    config:
-      location: classpath:/services
+#    json:
+#      location: classpath:/services
     mongo:
       collection: services
       databaseName: cas-service-registry
@@ -68,13 +80,15 @@ cas:
     accept:
       users: ''
     attributeRepository:
-      expireInMinutes: 30
+#      expirationTime: 30
+#      expirationTimeUnit: MINUTES
       maximumCacheSize: 10000 #TODO TUNING
       merger: MERGE
 # Attributes that you wish to resolve for the principal
       defaultAttributesToRelease: id,userid,givenName,sn,firstname,lastname,email,affiliation,organisation,city,state,country,role,authority,telephone,primaryUserType,secondaryUserType,legacyPassword
       jdbc:
-        - driverClass: com.mysql.jdbc.Driver
+        - dataSourceName: java:comp/env/jdbccas
+          driverClass: com.mysql.jdbc.Driver
           requireAllAttributes: false
           # caseCanonicalization=NONE|LOWER|UPPER
           caseCanonicalization: NONE
@@ -107,7 +121,8 @@ cas:
             secondaryUserType: secondaryUserType
     jdbc:
       query:
-        - sql: SELECT p.password as password, u.locked as disabled, COALESCE(p.expiry < CURRENT_TIMESTAMP(), 0) as expired, FALSE as legacy_password FROM passwords p JOIN users u ON u.userid = p.userid AND u.activated = 1 AND p.status = 'CURRENT' AND p.type = 'bcrypt' WHERE u.username = ?;
+        - dataSourceName: java:comp/env/jdbccas
+          sql: SELECT p.password as password, u.locked as disabled, COALESCE(p.expiry < CURRENT_TIMESTAMP(), 0) as expired, FALSE as legacy_password FROM passwords p JOIN users u ON u.userid = p.userid AND u.activated = 1 AND p.status = 'CURRENT' AND p.type = 'bcrypt' WHERE u.username = ?;
           fieldPassword: password
           fieldDisabled: disabled
 #          fieldExpired: expired
@@ -118,7 +133,8 @@ cas:
             type: BCRYPT
             characterEncoding: UTF-8
             strength: 10
-        - sql: SELECT p.password as password, u.locked as disabled, COALESCE(p.expiry < CURRENT_TIMESTAMP(), 0) as expired, TRUE as legacy_password FROM passwords p JOIN users u ON u.userid = p.userid AND u.activated = 1 AND p.status = 'CURRENT' WHERE u.username = ?;
+        - dataSourceName: java:comp/env/jdbccas
+          sql: SELECT p.password as password, u.locked as disabled, COALESCE(p.expiry < CURRENT_TIMESTAMP(), 0) as expired, TRUE as legacy_password FROM passwords p JOIN users u ON u.userid = p.userid AND u.activated = 1 AND p.status = 'CURRENT' WHERE u.username = ?;
           fieldPassword: password
           fieldDisabled: disabled
 #          fieldExpired: expired
@@ -211,11 +227,12 @@ cas:
         secondary_user_type: secondaryUserType
   monitor:
     jdbc:
+#      dataSourceName: java:comp/env/jdbccas
       driverClass: com.mysql.jdbc.Driver
       validationQuery: /* ping */ SELECT 1
 
   tgc:
-    maxAge: -1
+    maxAge: 28800 # Same as TGT expiry
     secure: true
     httpOnly: true
     rememberMeMaxAge: PT7884000S #7884000 # P14D # 1209600
@@ -229,26 +246,25 @@ cas:
   ticket:
     tgt:
       maxTimeToLiveInSeconds: 28800 # PT8H
-      timeToKillInSeconds: 7200 # PT2H
+      timeToKillInSeconds: 28800 # PT8H
       rememberMe:
         enabled: true
         timeToKillInSeconds: 7884000 # P3M # 1209600 # P14D
     registry:
-      cleaner:
-        appId: cas-ticket-registry-cleaner
-#       startDelay: 10000
-#       repeatInterval: 60000
-#       enabled: true
+#      cleaner:
+#        schedule:
+#          enabled: true
+#          startDelay: 10000
+#          repeatInterval: 60000
       mongo:
         userId: cas
         password: password
         databaseName: cas-ticket-registry
-      jpa:
-        jpaLockingTimeout: 3600
-        driverClass: com.mysql.jdbc.Driver
-        ddl-auto: validate
-        dialect: org.hibernate.dialect.MySQL57Dialect
-        jpaLockingTgtEnabled: true
+#      jpa:
+#        driverClass: com.mysql.jdbc.Driver
+#        ddl-auto: validate
+#        dialect: org.hibernate.dialect.MySQL57Dialect
+#        jpaLockingTgtEnabled: true
 #       crypto:
 #          signing:
 #            key:
@@ -268,8 +284,8 @@ cas:
     disabled: false
     asynchronous: true
   sso:
-    missingService: true
-    renewedAuthn: true #createSsoSessionCookieOnRenewAuthentications
+    allowMissingServiceParameter: true
+    renewAuthnEnabled: true #createSsoSessionCookieOnRenewAuthentications
   httpWebRequest:
     cors:
       enabled: true
