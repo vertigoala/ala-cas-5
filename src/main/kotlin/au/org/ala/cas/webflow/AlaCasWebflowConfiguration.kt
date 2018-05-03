@@ -4,6 +4,8 @@ import au.org.ala.cas.AlaCasProperties
 import au.org.ala.utils.logger
 import org.apereo.cas.configuration.CasConfigurationProperties
 import org.apereo.cas.ticket.registry.TicketRegistrySupport
+import org.apereo.cas.web.flow.CasWebflowExecutionPlan
+import org.apereo.cas.web.flow.CasWebflowExecutionPlanConfigurer
 import org.apereo.cas.web.support.CookieRetrievingCookieGenerator
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
@@ -20,7 +22,7 @@ import org.springframework.webflow.engine.builder.support.FlowBuilderServices
 
 @Configuration("alaCasWebflowConfiguration")
 @EnableConfigurationProperties(AlaCasProperties::class, CasConfigurationProperties::class)
-class AlaCasWebflowConfiguration {
+class AlaCasWebflowConfiguration : CasWebflowExecutionPlanConfigurer {
 
     companion object {
         val log = logger()
@@ -67,36 +69,32 @@ class AlaCasWebflowConfiguration {
 
     @Bean
     @RefreshScope
-    fun generateAuthCookieAction(
-        @Qualifier("alaProxyAuthenticationCookieGenerator") alaProxyAuthenticationCookieGenerator: CookieRetrievingCookieGenerator
-    ): GenerateAuthCookieAction =
-        GenerateAuthCookieAction(ticketRegistrySupport, alaProxyAuthenticationCookieGenerator)
+    fun generateAuthCookieAction(): GenerateAuthCookieAction =
+        GenerateAuthCookieAction(ticketRegistrySupport, alaProxyAuthenticationCookieGenerator())
 
     @Bean
     @RefreshScope
-    fun removeAuthCookieAction(
-        @Qualifier("alaProxyAuthenticationCookieGenerator") alaProxyAuthenticationCookieGenerator: CookieRetrievingCookieGenerator
-    ): RemoveAuthCookieAction =
-        RemoveAuthCookieAction(alaProxyAuthenticationCookieGenerator)
+    fun removeAuthCookieAction(): RemoveAuthCookieAction =
+        RemoveAuthCookieAction(alaProxyAuthenticationCookieGenerator())
 
     @ConditionalOnMissingBean(name = ["alaAuthCookieWebflowConfigurer"])
     @Bean
-    @DependsOn("defaultWebflowConfigurer", "pac4jWebflowConfigurer")
-    fun alaAuthCookieWebflowConfigurer(
-        generateAuthCookieAction: GenerateAuthCookieAction,
-        removeAuthCookieAction: RemoveAuthCookieAction
-    ): AlaCasWebflowConfigurer =
+    @DependsOn("defaultWebflowConfigurer")
+    fun alaAuthCookieWebflowConfigurer(): AlaCasWebflowConfigurer =
         AlaCasWebflowConfigurer(
             flowBuilderServices,
             loginFlowDefinitionRegistry,
             logoutFlowDefinitionRegistry,
-            generateAuthCookieAction,
-            removeAuthCookieAction,
+            generateAuthCookieAction(),
+            removeAuthCookieAction(),
             applicationContext,
             casConfigurationProperties
-        ).apply(AlaCasWebflowConfigurer::initialize).also {
-            log.debug("alaAuthCookieWebflowConfigurer enabled")
-        }
+        )
+
+    override fun configureWebflowExecutionPlan(plan: CasWebflowExecutionPlan) {
+        log.debug("Registering alaAuthCookieWebflowConfigurer")
+        plan.registerWebflowConfigurer(alaAuthCookieWebflowConfigurer())
+    }
 
 }
 
