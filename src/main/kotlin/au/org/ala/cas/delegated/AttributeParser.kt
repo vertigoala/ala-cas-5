@@ -21,7 +21,7 @@ interface AttributeParser {
 
     companion object {
         /** Log instance.  */
-        private val logger = logger<AttributeParser>()
+        private val log = logger()
 
         fun create(typedId: String, userAttributes: Map<String, Any>): AttributeParser {
             val profileType = typedId.substringBefore(UserProfile.SEPARATOR)
@@ -40,7 +40,7 @@ interface AttributeParser {
         private val whiteSpace = Regex("\\s")
 
         internal fun extractFirstName(name: String?, defaultValue: String?): String? {
-            logger.debug("getting firstname from name: {}", name)
+            log.debug("getting firstname from name: {}", name)
 
             if (name == null || name.isEmpty()) {
                 return defaultValue
@@ -51,14 +51,14 @@ interface AttributeParser {
         }
 
         internal fun extractLastName(name: String?, defaultValue: String?): String? {
-            logger.debug("getting lastname from name: {}", name)
+            log.debug("getting lastname from name: {}", name)
 
             if (name == null || name.isEmpty()) {
                 return defaultValue
             }
 
             val nameStrings = name.split(whiteSpace).dropLastWhile(String::isEmpty)
-            logger.debug("nameStrings: {}, nameStrings.length: {}", nameStrings, nameStrings.size)
+            log.debug("nameStrings: {}, nameStrings.length: {}", nameStrings, nameStrings.size)
 
             return if (nameStrings.size == 1) {
                 nameStrings.firstOrNull()
@@ -77,7 +77,7 @@ interface AttributeParser {
 class GithubAttributeParser(val userAttributes: Map<String, Any>) : AttributeParser {
 
     companion object {
-        val logger = logger<GithubAttributeParser>()
+        val log = logger()
     }
 
     override fun findEmail(): String? {
@@ -97,31 +97,31 @@ class GithubAttributeParser(val userAttributes: Map<String, Any>) : AttributePar
 
         val githubAccessToken = userAttributes["access_token"]
         if (githubAccessToken == null) {
-            logger.debug("can't get a valid GitHub access_token!")
+            log.debug("can't get a valid GitHub access_token!")
             return null
         }
 
         val githubEmailREST = "https://api.github.com/user/emails?access_token=" + githubAccessToken
 
         val result = HTTP_GET(githubEmailREST)
-        logger.debug("HTTP_GET {}; result: {}", githubEmailREST, result)
+        log.debug("HTTP_GET {}; result: {}", githubEmailREST, result)
 
         try {
 
             val emails = JSONArray(result)
-            logger.debug("GitHub emails: {}", emails)
+            log.debug("GitHub emails: {}", emails)
 
             for (i in 0 until emails.length()) {
                 val emailRecord = emails.getJSONObject(i)
                 if (emailRecord.getBoolean("primary")) { //TODO: enforce verified email: && emailRecord.getBoolean("verified")
                     val email = emailRecord.getString("email")
-                    logger.debug("using GitHub email: {}", email)
+                    log.debug("using GitHub email: {}", email)
                     return email
                 }
             }
             return null
         } catch (e: Throwable) {
-            logger.warn("error parsing github JSON response", e)
+            log.warn("error parsing github JSON response", e)
             return null
         }
 
@@ -149,7 +149,7 @@ class GithubAttributeParser(val userAttributes: Map<String, Any>) : AttributePar
             return reader.readText()
 
         } catch (e: Exception) {
-            logger.warn("HTTP_GET error for {}", urlStr, e)
+            log.warn("HTTP_GET error for {}", urlStr, e)
 
         } finally {
             try {
@@ -157,7 +157,7 @@ class GithubAttributeParser(val userAttributes: Map<String, Any>) : AttributePar
                 conn?.disconnect()
 
             } catch (ioe: IOException) {
-                logger.warn("Exception while closing HTTP_GET {}", urlStr, ioe)
+                log.warn("Exception while closing HTTP_GET {}", urlStr, ioe)
             }
         }
         return null
@@ -184,7 +184,7 @@ class TwitterAttributeParser(val userAttributes: Map<String, Any>) : AttributePa
 
 class Google2AttributeParser(val userAttributes: Map<String, Any>) : AttributeParser {
     companion object {
-        val logger = logger<Google2AttributeParser>()
+        val log = logger()
     }
 
     override fun findEmail(): String? {
@@ -202,7 +202,7 @@ class Google2AttributeParser(val userAttributes: Map<String, Any>) : AttributePa
         // Not sure if this can really happen; we should reach this point only after a successful authentication,
         // and that should be possible ONLY with a valid "account" email.
         if (googleEmail == null) {
-            logger.debug("error, can't find required Google2Profile email of type \"account\" in {}!", emails)
+            log.debug("error, can't find required Google2Profile email of type \"account\" in {}!", emails)
         }
         return googleEmail
     }

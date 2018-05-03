@@ -25,7 +25,7 @@ class AlaTemplateClient(
         const val LOGGED_IN_CLASS = "logged-in"
         const val LOGGED_OUT_CLASS = "not-logged-in"
 
-        val log = logger<AlaHeaderFooterTagProcessor>()
+        val log = logger()
     }
 
     val uri = URI(skinConfig.headerFooterUrl)

@@ -22,7 +22,7 @@ import org.springframework.webflow.engine.builder.support.FlowBuilderServices
 class AlaCasWebflowConfiguration {
 
     companion object {
-        val log = logger<AlaCasWebflowConfiguration>()
+        val log = logger()
     }
 
     @Autowired

@@ -13,7 +13,7 @@ class AlaPrincipalFactory(
 
     companion object {
         private const val serialVersionUID: Long = -3999695695604948495L
-        private val logger = logger<AlaPrincipalFactory>()
+        private val log = logger()
         val EMAIL_PATTERN = Regex("^.+@.+\\..+$")
     }
 
@@ -24,11 +24,11 @@ class AlaPrincipalFactory(
     private fun createAlaPrincipal(id: String, attributes: Map<String, Any>): Principal {
         val attributeParser = AttributeParser.create(id, attributes)
         val email = attributeParser.findEmail()
-        logger.debug("email : {}", email)
+        log.debug("email : {}", email)
 
         if (email == null || !EMAIL_PATTERN.matches(email)) {
-            logger.info("ID {} provided an invalid email address: {}, authentication aborted!", id, email)
-            logger.debug("ID {} params: {}", id, attributes)
+            log.info("ID {} provided an invalid email address: {}, authentication aborted!", id, email)
+            log.debug("ID {} params: {}", id, attributes)
             throw FailedLoginException("No email address found in $email; email address is required to lookup (and/or create) ALA user!")
         }
 
@@ -38,12 +38,12 @@ class AlaPrincipalFactory(
 
         // get the ALA user attributes from the userdetails DB ("userid", "firstname", "lastname", "authority")
         var principal = principalResolver.resolve(alaCredential)
-        logger.debug("{} resolved principal: {}", principalResolver, principal)
+        log.debug("{} resolved principal: {}", principalResolver, principal)
 
         // does the ALA user exist?
         if (!validatePrincipalALA(principal)) {
             // create a new ALA user in the userdetails DB
-            logger.debug(
+            log.debug(
                 "user {} not found in ALA userdetails DB, creating new ALA user for: {}.",
                 emailAddress,
                 emailAddress
@@ -56,19 +56,19 @@ class AlaPrincipalFactory(
                 // if no userId parameter is returned then no db entry was created
                 val userId = userCreator.createUser(emailAddress, firstName, lastName)
                         ?: throw FailedLoginException("Unable to create user for $emailAddress, $firstName, $lastName")
-                logger.debug("Received new user id {}", userId)
+                log.debug("Received new user id {}", userId)
 
                 // re-try (we have to retry, because that is how we get the required "userid")
                 principal = principalResolver.resolve(alaCredential)
 
-                logger.debug("{} resolved principal: {}", principalResolver, principal)
+                log.debug("{} resolved principal: {}", principalResolver, principal)
             } else {
-                logger.warn("Couldn't extract firstname or lastname for {} from attributes: {}", id, attributes)
+                log.warn("Couldn't extract firstname or lastname for {} from attributes: {}", id, attributes)
             }
 
             if (!validatePrincipalALA(principal)) {
                 // we failed to lookup ALA user (most likely because the creation above failed), complain, throw exception, etc.
-                logger.warn("Unable to create ALA user for $emailAddress with attributes $attributes")
+                log.warn("Unable to create ALA user for $emailAddress with attributes $attributes")
                 throw FailedLoginException("Unable to create ALA user for $emailAddress with attributes $attributes")
             }
         }

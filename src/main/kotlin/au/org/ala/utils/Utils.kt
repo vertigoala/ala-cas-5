@@ -1,5 +1,6 @@
 package au.org.ala.utils
 
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.Reader
@@ -12,5 +13,9 @@ fun File.loadProperties() = this.reader().loadProperties()
 
 fun URI.readText() = this.toURL().readText()
 
-inline fun <reified T> logger() = LoggerFactory.getLogger(T::class.java)!!
+inline fun <reified T> T.logger(): Logger {
+    val baseClass = T::class.java
+    val logClass = if (baseClass.simpleName == "Companion") baseClass.enclosingClass ?: baseClass else baseClass
+    return LoggerFactory.getLogger(logClass)!!
+}
 fun logger(name: String) = LoggerFactory.getLogger(name)!!

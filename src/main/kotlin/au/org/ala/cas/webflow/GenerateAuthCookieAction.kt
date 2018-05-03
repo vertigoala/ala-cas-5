@@ -16,7 +16,7 @@ open class GenerateAuthCookieAction(
 ) : AbstractAction() {
 
     companion object {
-        val log = logger<GenerateAuthCookieAction>()
+        val log = logger()
     }
 
     override fun doExecute(context: RequestContext): Event {

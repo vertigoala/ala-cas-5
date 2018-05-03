@@ -31,7 +31,7 @@ class AlaCasWebflowConfigurer(
     }
 
     companion object {
-        val log = logger<AlaCasWebflowConfigurer>()
+        val log = logger()
     }
 
     override fun doInitialize() {

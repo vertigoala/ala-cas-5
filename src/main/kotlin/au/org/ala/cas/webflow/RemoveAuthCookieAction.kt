@@ -12,7 +12,7 @@ open class RemoveAuthCookieAction(
 ) : AbstractAction() {
 
     companion object {
-        val log = logger<RemoveAuthCookieAction>()
+        val log = logger()
     }
 
     override fun doExecute(context: RequestContext?): Event {

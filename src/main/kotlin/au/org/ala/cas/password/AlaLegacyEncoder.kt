@@ -13,7 +13,7 @@ import java.util.*
 class AlaLegacyEncoder(val salt: String, val base64Encode: Boolean = true) : PasswordEncoder {
 
     companion object {
-        private val log = logger<AlaLegacyEncoder>()
+        private val log = logger()
         val OLD_ALA_PATTERN = Regex("^[a-zA-Z0-9+/]{22,24}={0,2}$")
     }
 

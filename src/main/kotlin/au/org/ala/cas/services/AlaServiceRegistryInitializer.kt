@@ -19,15 +19,15 @@ class AlaServiceRegistryInitializer(
 ) {
 
     companion object {
-        val LOGGER = logger<AlaServiceRegistryInitializer>()
+        val log = logger()
     }
 
     override fun initServiceRegistryIfNecessary() {
         val size = this.serviceRegistryDao.size()
-        LOGGER.debug("Service registry contains [{}] service definitions", size)
+        log.debug("Service registry contains [{}] service definitions", size)
 
         if (!this.initFromJson) {
-            LOGGER.info(
+            log.info(
                 "The service registry database backed by [{}] will not be initialized from JSON services. "
                         + "If the service registry database ends up empty, CAS will refuse to authenticate services "
                         + "until service definitions are added to the registry. To auto-initialize the service registry, "
@@ -37,7 +37,7 @@ class AlaServiceRegistryInitializer(
             return
         }
 
-        LOGGER.warn(
+        log.warn(
             ("Service registry [{}] will be auto-initialized from JSON service definitions. "
                     + "This behavior is only useful for testing purposes and MAY NOT be appropriate for production. "
                     + "Consider turning off this behavior via the setting [cas.serviceRegistry.initFromJson=false] "
@@ -45,17 +45,17 @@ class AlaServiceRegistryInitializer(
         )
 
         val servicesLoaded = this.jsonServiceRegistryDao.load()
-        LOGGER.debug("Loading JSON services are [{}]", servicesLoaded)
+        log.debug("Loading JSON services are [{}]", servicesLoaded)
 
         for (r in servicesLoaded) {
             if (findExistingMatchForService(r)) {
                 continue
             }
-            LOGGER.debug("Initializing service registry with the [{}] JSON service definition...", r)
+            log.debug("Initializing service registry with the [{}] JSON service definition...", r)
             this.serviceRegistryDao.save(r)
         }
         this.servicesManager.load()
-        LOGGER.info(
+        log.info(
             "Service registry [{}] contains [{}] service definitions",
             this.serviceRegistryDao.name,
             this.servicesManager.count()
@@ -66,7 +66,7 @@ class AlaServiceRegistryInitializer(
     private fun findExistingMatchForService(r: RegisteredService): Boolean {
         var match = this.serviceRegistryDao.findServiceByExactServiceId(r.serviceId)
         if (match != null) {
-            LOGGER.warn(
+            log.warn(
                 "Skipping [{}] JSON service definition as a matching service [{}] is found in the registry",
                 r.name,
                 match.name
@@ -75,7 +75,7 @@ class AlaServiceRegistryInitializer(
         }
         match = this.serviceRegistryDao.findServiceById(r.id)
         if (match != null) {
-            LOGGER.warn(
+            log.warn(
                 "Skipping [{}] JSON service definition as a matching id [{}] is found in the registry",
                 r.name,
                 match.id

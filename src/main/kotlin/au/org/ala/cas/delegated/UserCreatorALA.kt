@@ -17,13 +17,13 @@ class UserCreatorALA(
 
     companion object {
         /** Log instance.  */
-        private val logger = logger<UserCreatorALA>()
+        private val log = logger()
     }
 
     private val jdbcTemplate = JdbcTemplate(dataSource)
 
     override fun createUser(email: String, firstName: String, lastName: String): Long? {
-        logger.debug("createUser: {} {} {}", email, firstName, lastName)
+        log.debug("createUser: {} {} {}", email, firstName, lastName)
 
         val password = passwordEncoder.encode(userCreatePassword)
 
@@ -47,10 +47,10 @@ class UserCreatorALA(
 
         val userId = result["user_id"]
 
-        logger.debug("createUser created user id: {}", userId)
+        log.debug("createUser created user id: {}", userId)
 
         return userId as? Long ?: (userId as? Int)?.toLong() ?: null.also {
-            logger.warn("Couldn't extract userId from {}", result)
+            log.warn("Couldn't extract userId from {}", result)
         }
     }
 

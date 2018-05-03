@@ -19,7 +19,7 @@ import java.util.*
 class AlaTicketCleanerConfiguration {
 
     companion object {
-        val log = logger<AlaTicketCleanerConfiguration>()
+        val log = logger()
     }
 
     @Autowired

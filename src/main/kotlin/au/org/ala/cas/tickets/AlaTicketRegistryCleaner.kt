@@ -19,7 +19,7 @@ class AlaTicketRegistryCleaner(
 ) : DefaultTicketRegistryCleaner(lockingStrategy, logoutManager, ticketRegistry) {
 
     companion object {
-        val log = logger<AlaTicketRegistryCleaner>()
+        val log = logger()
     }
 
     override fun cleanTicket(ticket: Ticket?) =

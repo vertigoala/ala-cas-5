@@ -27,7 +27,7 @@ import org.springframework.core.Ordered
 class AlaTomcatContainerFactoryConfiguration {
 
     companion object {
-        val log = logger<AlaTomcatContainerFactoryConfiguration>()
+        val log = logger()
     }
 
     @Autowired

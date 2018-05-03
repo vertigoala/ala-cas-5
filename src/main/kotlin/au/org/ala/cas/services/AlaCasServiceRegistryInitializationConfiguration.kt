@@ -29,7 +29,7 @@ import org.springframework.core.io.Resource
 class AlaCasServiceRegistryInitializationConfiguration {
 
     companion object {
-        private val LOGGER = logger<AlaCasServiceRegistryInitializationConfiguration>()
+        private val log = logger()
     }
 
     @Autowired
@@ -58,7 +58,7 @@ class AlaCasServiceRegistryInitializationConfiguration {
         )
 
         if (serviceRegistry.isInitFromJson) {
-            LOGGER.info(
+            log.info(
                 "Attempting to initialize the service registry [{}] from service definition resources found at [{}]",
                 serviceRegistryDao.toString(),
                 serviceRegistryInitializerServicesDirectoryResource
