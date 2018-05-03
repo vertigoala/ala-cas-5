@@ -15,7 +15,7 @@ import org.pac4j.oauth.client.TwitterClient
 class AlaDelegatedClientFactory(val pac4jProps: Pac4jDelegatedAuthenticationProperties) : DelegatedClientFactory(pac4jProps) {
 
     companion object {
-        val log = logger<AlaDelegatedClientFactory>()
+        val log = logger()
     }
 
     override fun configureTwitterClient(properties: MutableCollection<BaseClient<out Credentials, out CommonProfile>>) {

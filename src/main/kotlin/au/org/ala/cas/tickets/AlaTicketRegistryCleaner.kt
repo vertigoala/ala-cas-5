@@ -2,7 +2,6 @@ package au.org.ala.cas.tickets
 
 import au.org.ala.utils.logger
 import org.apereo.cas.logout.LogoutManager
-import org.apereo.cas.ticket.AbstractTicket
 import org.apereo.cas.ticket.ServiceTicket
 import org.apereo.cas.ticket.Ticket
 import org.apereo.cas.ticket.TicketGrantingTicket
