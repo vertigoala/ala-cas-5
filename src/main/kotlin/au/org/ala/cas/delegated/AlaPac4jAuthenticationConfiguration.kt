@@ -19,15 +19,6 @@ import javax.sql.DataSource
 @EnableConfigurationProperties(AlaCasProperties::class, CasConfigurationProperties::class)
 class AlaPac4jAuthenticationConfiguration {
 
-//    companion object {
-//        @Bean
-//        @Qualifier("pac4jErrorViewResolver")
-//        @JvmStatic
-//        fun pac4jErrorViewResolver(): ErrorViewResolver {
-//            return DelegatedAuthenticationErrorViewResolver()
-//        }
-//    }
-
     @Autowired
     lateinit var alaCasProperties: AlaCasProperties
 
