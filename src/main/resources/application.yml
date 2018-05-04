@@ -170,7 +170,7 @@ cas:
         #- phone
         - offline_access
         - ala
-        - role
+        - roles
       claims: # This list is all the specified oidc claims plus ALA specific
         - sub
         - name
@@ -201,8 +201,8 @@ cas:
         - primary_user_type
         - secondary_user_type
       userDefinedScopes:
-        ala_extended: organisation, city, state, country, primary_user_type, secondary_user_type
-        authorities: role, authority
+        ala: organisation, city, state, country, primary_user_type, secondary_user_type
+        roles: role, authority
       claimsMap:
         sub: userid #	string	Subject - Identifier for the End-User at the Issuer.
         name: displayName #	string	End-User's full name in displayable form including all name parts, possibly including titles and suffixes, ordered according to the End-User's locale and preferences.
