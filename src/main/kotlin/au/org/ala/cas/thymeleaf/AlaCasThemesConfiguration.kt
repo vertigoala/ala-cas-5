@@ -60,6 +60,7 @@ class AlaCasThemesConfiguration {
             }
         }
 
+        @JvmStatic
         fun configureThymeleafViewResolver(thymeleafViewResolver: ThymeleafViewResolver, alaCasProperties: AlaCasProperties) {
             mapOf(
                 BASE_URL to alaCasProperties.skin.baseUrl,
