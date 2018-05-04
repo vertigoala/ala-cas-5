@@ -46,6 +46,18 @@ flyway:
 #  user: # Login user of the database to migrate.
 #  validate-on-migrate: true #
 
+jndi:
+  hikari:
+    jdbccas:
+      driverClass: com.mysql.jdbc.Driver
+#      url: jdbc:mysql://localhost:3306/emmet?serverTimezone=Australia/Sydney&useSSL=false
+#      user: root
+#      password: password
+#      dataSourceProperties:
+#        cachePrepStmts: true
+#        prepStmtCacheSize: 250
+#        prepStmtCacheSqlLimit: 2048
+
 cas:
   serviceRegistry:
 #    watcherEnabled: true
@@ -74,7 +86,8 @@ cas:
 # Attributes that you wish to resolve for the principal
       defaultAttributesToRelease: id,userid,givenName,sn,firstname,lastname,email,affiliation,organisation,city,state,country,role,authority,telephone,primaryUserType,secondaryUserType,legacyPassword
       jdbc:
-        - driverClass: com.mysql.jdbc.Driver
+        - dataSourceName: java:comp/env/jdbccas
+          driverClass: com.mysql.jdbc.Driver
           requireAllAttributes: false
           # caseCanonicalization=NONE|LOWER|UPPER
           caseCanonicalization: NONE
@@ -107,7 +120,8 @@ cas:
             secondaryUserType: secondaryUserType
     jdbc:
       query:
-        - sql: SELECT p.password as password, u.locked as disabled, COALESCE(p.expiry < CURRENT_TIMESTAMP(), 0) as expired, FALSE as legacy_password FROM passwords p JOIN users u ON u.userid = p.userid AND u.activated = 1 AND p.status = 'CURRENT' AND p.type = 'bcrypt' WHERE u.username = ?;
+        - dataSourceName: java:comp/env/jdbccas
+          sql: SELECT p.password as password, u.locked as disabled, COALESCE(p.expiry < CURRENT_TIMESTAMP(), 0) as expired, FALSE as legacy_password FROM passwords p JOIN users u ON u.userid = p.userid AND u.activated = 1 AND p.status = 'CURRENT' AND p.type = 'bcrypt' WHERE u.username = ?;
           fieldPassword: password
           fieldDisabled: disabled
 #          fieldExpired: expired
@@ -118,7 +132,8 @@ cas:
             type: BCRYPT
             characterEncoding: UTF-8
             strength: 10
-        - sql: SELECT p.password as password, u.locked as disabled, COALESCE(p.expiry < CURRENT_TIMESTAMP(), 0) as expired, TRUE as legacy_password FROM passwords p JOIN users u ON u.userid = p.userid AND u.activated = 1 AND p.status = 'CURRENT' WHERE u.username = ?;
+        - dataSourceName: java:comp/env/jdbccas
+          sql: SELECT p.password as password, u.locked as disabled, COALESCE(p.expiry < CURRENT_TIMESTAMP(), 0) as expired, TRUE as legacy_password FROM passwords p JOIN users u ON u.userid = p.userid AND u.activated = 1 AND p.status = 'CURRENT' WHERE u.username = ?;
           fieldPassword: password
           fieldDisabled: disabled
 #          fieldExpired: expired
@@ -211,6 +226,7 @@ cas:
         secondary_user_type: secondaryUserType
   monitor:
     jdbc:
+#      dataSourceName: java:comp/env/jdbccas
       driverClass: com.mysql.jdbc.Driver
       validationQuery: /* ping */ SELECT 1
 
