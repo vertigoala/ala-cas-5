@@ -312,6 +312,7 @@ ala:
       createUserProcedure: "sp_create_user"
   skin:
     baseUrl: https://www.ala.org.au/
+    termsUrl: ${ala.skin.baseUrl}who-we-are/terms-of-use/
     headerFooterUrl: ${ala.skin.baseUrl}commonui-bs3/
     favIconBaseUrl: ${ala.skin.baseUrl}wp-content/themes/ala-wordpress-theme/img/favicon/
     bieBaseUrl: https://bie.ala.org.au/

@@ -6,6 +6,7 @@
                 <img alt="Brand" class="img-responsive" th:src="@{images/supporting-graphic-element-flat-medium.png}" />
             </div>
             <h2 class="heading-medium-large" th:text="#{ala.screen.login.instructions}">Sign in to the ALA</h2>
+            <p class="small" th:if="${termsUrl}"><span th:text="#{ala.screen.login.terms.prefix}" th:remove="tag">By using this site you agree to our</span> <a th:href="${termsUrl}" th:text="#{ala.screen.login.terms.link}">Terms of Use</a></p>
         </div>
 
         <div th:replace="fragments/loginProviders" />
@@ -84,7 +85,7 @@
                    tabindex="6"
                    type="submit"/>
 
-            <p class="small text-center" th:utext="#{ala.screen.login.noaccount(@{${userDetailsUrl}registration/createAccount})}">Don't have an account? <a th:href="@{${userDetailsUrl}registration/createAccount}">Sign up now</a>.</p>
+            <p class="small text-center"><span th:text="#{ala.screen.login.noaccount}" th:remove="tag">Don't have an account?</span> <a th:href="@{${userDetailsUrl}registration/createAccount}" th:text="#{ala.screen.login.signup}">Sign up now</a>.</p>
         </form>
 
         <form th:if="${passwordManagementEnabled}" method="post" id="passwordManagementForm">

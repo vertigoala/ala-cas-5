@@ -25,6 +25,7 @@ open class JDBCUserCreatorProperties : AbstractJpaProperties() {
 
 open class SkinProperties {
     lateinit var baseUrl: String
+    lateinit var termsUrl: String
     lateinit var headerFooterUrl: String
     lateinit var favIconBaseUrl: String
     lateinit var bieBaseUrl: String

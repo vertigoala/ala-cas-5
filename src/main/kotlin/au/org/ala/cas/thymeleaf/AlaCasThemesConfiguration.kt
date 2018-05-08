@@ -29,6 +29,7 @@ class AlaCasThemesConfiguration {
 
     companion object {
         const val BASE_URL = "baseUrl"
+        const val TERMS_URL = "termsUrl"
         const val HEADER_FOOTER_URL = "headerFooterUrl"
         const val FAVION_BASE_URL = "favIconBaseUrl"
         const val BIE_BASE_URL = "bieBaseUrl"
@@ -58,6 +59,7 @@ class AlaCasThemesConfiguration {
         fun configureThymeleafViewResolver(thymeleafViewResolver: ThymeleafViewResolver, alaCasProperties: AlaCasProperties) {
             mapOf(
                 BASE_URL to alaCasProperties.skin.baseUrl,
+                TERMS_URL to alaCasProperties.skin.termsUrl,
                 HEADER_FOOTER_URL to alaCasProperties.skin.headerFooterUrl,
                 FAVION_BASE_URL to alaCasProperties.skin.favIconBaseUrl,
                 BIE_BASE_URL to alaCasProperties.skin.bieBaseUrl,
