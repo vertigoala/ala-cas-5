@@ -13,6 +13,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.DependsOn
 import org.springframework.webflow.definition.registry.FlowDefinitionRegistry
 import org.springframework.webflow.engine.builder.support.FlowBuilderServices
 
@@ -80,6 +81,7 @@ class AlaCasWebflowConfiguration {
 
     @ConditionalOnMissingBean(name = ["alaAuthCookieWebflowConfigurer"])
     @Bean
+    @DependsOn("defaultWebflowConfigurer", "pac4jWebflowConfigurer")
     fun alaAuthCookieWebflowConfigurer(
         generateAuthCookieAction: GenerateAuthCookieAction,
         removeAuthCookieAction: RemoveAuthCookieAction

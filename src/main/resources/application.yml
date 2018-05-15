@@ -118,6 +118,9 @@ cas:
             telephone: telephone
             primaryUserType: primaryUserType
             secondaryUserType: secondaryUserType
+            activated: activated
+            disabled: disabled
+            expired: expired
     jdbc:
       query:
         - dataSourceName: java:comp/env/jdbccas

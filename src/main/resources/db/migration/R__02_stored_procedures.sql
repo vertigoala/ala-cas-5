@@ -11,6 +11,10 @@ CREATE PROCEDURE `sp_get_user_attributes`(p_username varchar(255))
     UNION SELECT 'id' AS 'key', cast(userid AS char) AS 'value' FROM users WHERE username=p_username
     UNION SELECT 'authority' AS 'key', group_concat(a.role_id) AS 'value' FROM user_role a JOIN users u ON a.user_id=u.userid WHERE u.username=p_username HAVING value IS NOT NULL
     UNION SELECT 'role' AS 'key', a.role_id AS 'value' FROM user_role a JOIN users u ON a.user_id=u.userid WHERE u.username=p_username
+    UNION SELECT 'created' as 'key', created as 'value' FROM users WHERE username=p_username
+    UNION SELECT 'activated' as 'key', activated as 'value' FROM users WHERE username=p_username
+    UNION SELECT 'disabled' as 'key', locked as 'value' FROM users WHERE username=p_username
+    UNION SELECT 'expired' as 'key', COALESCE(expiry < CURRENT_TIMESTAMP(), FALSE) as 'value' FROM users WHERE username=p_username
     UNION SELECT p.property AS 'key', p.value FROM users u LEFT OUTER JOIN `profiles` p on u.userid=p.userid WHERE u.username=p_username;
   end
 //

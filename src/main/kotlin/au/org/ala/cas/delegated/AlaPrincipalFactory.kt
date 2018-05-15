@@ -3,6 +3,7 @@ package au.org.ala.cas.delegated
 import au.org.ala.utils.logger
 import org.apache.commons.lang3.builder.HashCodeBuilder
 import org.apereo.cas.authentication.Credential
+import org.apereo.cas.authentication.exceptions.AccountDisabledException
 import org.apereo.cas.authentication.principal.*
 import javax.security.auth.login.FailedLoginException
 
@@ -39,6 +40,10 @@ class AlaPrincipalFactory(
         // get the ALA user attributes from the userdetails DB ("userid", "firstname", "lastname", "authority")
         var principal = principalResolver.resolve(alaCredential)
         log.debug("{} resolved principal: {}", principalResolver, principal)
+
+        if (principal.attributes["activated"] != "1") throw AccountNotActivatedException("User account already exists but is not activated")
+        if (principal.attributes["disabled"] != "0") throw AccountDisabledException("User account is disabled")
+//        if (principal.attributes["expired"] != "0") throw AccountExpiredException("User account is expired")
 
         // does the ALA user exist?
         if (!validatePrincipalALA(principal)) {
