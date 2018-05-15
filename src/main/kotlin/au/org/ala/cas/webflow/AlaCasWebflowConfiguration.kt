@@ -6,9 +6,11 @@ import org.apereo.cas.configuration.CasConfigurationProperties
 import org.apereo.cas.ticket.registry.TicketRegistrySupport
 import org.apereo.cas.web.flow.CasWebflowExecutionPlan
 import org.apereo.cas.web.flow.CasWebflowExecutionPlanConfigurer
+import org.apereo.cas.web.flow.config.DelegatedAuthenticationWebflowConfiguration
 import org.apereo.cas.web.support.CookieRetrievingCookieGenerator
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.boot.autoconfigure.AutoConfigureAfter
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.cloud.context.config.annotation.RefreshScope
@@ -79,7 +81,7 @@ class AlaCasWebflowConfiguration : CasWebflowExecutionPlanConfigurer {
 
     @ConditionalOnMissingBean(name = ["alaAuthCookieWebflowConfigurer"])
     @Bean
-    @DependsOn("defaultWebflowConfigurer")
+    @DependsOn("defaultWebflowConfigurer", "delegatedAuthenticationWebflowConfigurer")
     fun alaAuthCookieWebflowConfigurer(): AlaCasWebflowConfigurer =
         AlaCasWebflowConfigurer(
             flowBuilderServices,
