@@ -2,22 +2,15 @@ package au.org.ala.cas.webflow
 
 import au.org.ala.cas.delegated.AccountNotActivatedException
 import au.org.ala.utils.logger
-import org.apereo.cas.authentication.AuthenticationException
 import org.apereo.cas.configuration.CasConfigurationProperties
-import org.apereo.cas.ticket.AbstractTicketException
 import org.apereo.cas.web.flow.CasWebflowConstants
 import org.apereo.cas.web.flow.configurer.AbstractCasWebflowConfigurer
 import org.springframework.context.ApplicationContext
 import org.springframework.core.Ordered
-import org.springframework.webflow.action.EventFactorySupport
-import org.springframework.webflow.core.collection.LocalAttributeMap
 import org.springframework.webflow.definition.registry.FlowDefinitionRegistry
 import org.springframework.webflow.engine.ActionState
 import org.springframework.webflow.engine.Flow
-import org.springframework.webflow.engine.FlowExecutionExceptionHandler
-import org.springframework.webflow.engine.RequestControlContext
 import org.springframework.webflow.engine.builder.support.FlowBuilderServices
-import org.springframework.webflow.execution.FlowExecutionException
 
 class AlaCasWebflowConfigurer(
     flowBuilderServices: FlowBuilderServices,
@@ -57,7 +50,6 @@ class AlaCasWebflowConfigurer(
             doGenerateAuthCookieOnLoginAction(inFlow)
             createViewStates(inFlow)
             addAccountNotActivatedHandler(inFlow)
-            patchDelegatedAuthAction(inFlow)
         }
 
         if (outFlow != null) {
@@ -86,29 +78,5 @@ class AlaCasWebflowConfigurer(
     private fun addAccountNotActivatedHandler(flow: Flow) {
         val handler = flow.getState(CasWebflowConstants.STATE_ID_HANDLE_AUTHN_FAILURE) as ActionState
         createTransitionForState(handler, AccountNotActivatedException::class.java.simpleName, VIEW_ID_ACCOUNT_NOT_ACTIVATED)
-    }
-
-    private fun patchDelegatedAuthAction(flow: Flow) {
-        val clientAction = flow.getState(CasWebflowConstants.STATE_ID_CLIENT_ACTION) as ActionState
-        createTransitionForState(clientAction, CasWebflowConstants.TRANSITION_ID_AUTHENTICATION_FAILURE, CasWebflowConstants.STATE_ID_HANDLE_AUTHN_FAILURE)
-        val eventExecutingExceptionHandler = object : FlowExecutionExceptionHandler {
-            val classes = setOf(AuthenticationException::class.java, AbstractTicketException::class.java)
-
-            override fun canHandle(exception: FlowExecutionException) = findException(exception) != null
-
-            override fun handle(exception: FlowExecutionException, context: RequestControlContext) {
-                val authException = findException(exception) ?: throw IllegalStateException("$exception was not caused by any of $classes")
-                val event = EventFactorySupport().event(
-                    (context.currentState as? ActionState)?.actionList?.firstOrNull(),
-                    CasWebflowConstants.TRANSITION_ID_AUTHENTICATION_FAILURE,
-                    LocalAttributeMap(CasWebflowConstants.TRANSITION_ID_ERROR, authException)
-                )
-                context.handleEvent(event)
-            }
-
-            fun findException(exception: Throwable): Throwable? =
-                if (classes.any { it.isInstance(exception) }) exception else exception.cause?.let { findException(it) }
-        }
-        clientAction.exceptionHandlerSet.add(eventExecutingExceptionHandler)
     }
 }
