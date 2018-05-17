@@ -6,5 +6,7 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=au.org.ala.cas.jn
   au.org.ala.cas.tickets.AlaTicketCleanerConfiguration,\
   au.org.ala.cas.services.AlaCasServiceRegistryInitializationConfiguration,\
   au.org.ala.cas.session.AlaSpringSessionConfiguration,\
-  au.org.ala.cas.session.AlaSpringSessionFilterConfiguration
+  au.org.ala.cas.session.AlaSpringSessionFilterConfiguration,\
+  au.org.ala.cas.validation.AlaCasValidationConfiguration,\
+  au.org.ala.cas.events.AlaEventsConfiguration
 #org.springframework.boot.SpringApplicationRunListener=au.org.ala.cas.jndi.JndiRunListener

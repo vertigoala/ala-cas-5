@@ -21,6 +21,8 @@ open class UserCreatorProperties(
 
 open class JDBCUserCreatorProperties : AbstractJpaProperties() {
     var createUserProcedure: String = "sp_create_user"
+    var updateLastLoginTimeSql: String = "UPDATE `users` SET `last_login` = CURRENT_TIMESTAMP WHERE `userid` = ?"
+    var enableUpdateLastLoginTime: Boolean = true
 }
 
 open class SkinProperties {

@@ -313,6 +313,8 @@ ala:
     jdbc:
       driverClass: com.mysql.jdbc.Driver
       createUserProcedure: "sp_create_user"
+      enableUpdateLastLoginTime: true
+      updateLastLoginTimeSql: "UPDATE `users` SET `last_login` = CURRENT_TIMESTAMP WHERE `userid` = ?"
   skin:
     baseUrl: https://www.ala.org.au/
     termsUrl: ${ala.skin.baseUrl}who-we-are/terms-of-use/

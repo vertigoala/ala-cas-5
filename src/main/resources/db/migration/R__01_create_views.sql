@@ -8,7 +8,7 @@ CREATE OR REPLACE VIEW user_details AS
     u.expiry,
     u.email,
     u.activated,
-    u.created,
+    u.date_created,
     u.locked,
     u.temp_auth_key,
     p.state,
