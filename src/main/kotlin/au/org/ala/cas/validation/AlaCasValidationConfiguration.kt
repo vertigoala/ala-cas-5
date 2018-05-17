@@ -1,10 +1,11 @@
 package au.org.ala.cas.validation
 
+import org.apereo.cas.authentication.AuthenticationAttributeReleasePolicy
 import org.apereo.cas.authentication.AuthenticationServiceSelectionPlan
 import org.apereo.cas.authentication.ProtocolAttributeEncoder
 import org.apereo.cas.configuration.CasConfigurationProperties
 import org.apereo.cas.services.ServicesManager
-import org.apereo.cas.services.web.support.AuthenticationAttributeReleasePolicy
+import org.apereo.cas.validation.CasProtocolAttributesRenderer
 import org.apereo.cas.web.view.Cas30ResponseView
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
@@ -44,6 +45,10 @@ class AlaCasValidationConfiguration {
     @Qualifier("authenticationServiceSelectionPlan")
     lateinit var selectionStrategies: AuthenticationServiceSelectionPlan
 
+    @Autowired
+    @Qualifier("cas3ProtocolAttributesRenderer")
+    lateinit var cas3ProtocolAttributesRenderer: CasProtocolAttributesRenderer
+
     @Bean
     fun cas2ServiceSuccessView(): View {
         val authenticationContextAttribute = casProperties.authn.mfa.authenticationContextAttribute
@@ -56,7 +61,8 @@ class AlaCasValidationConfiguration {
             cas3SuccessView,
             isReleaseProtocolAttributes,
             authenticationAttributeReleasePolicy,
-            selectionStrategies
+            selectionStrategies,
+            cas3ProtocolAttributesRenderer
         )
     }
 }
