@@ -38,6 +38,8 @@ class AlaCasThemesConfiguration {
         const val ORG_LONG_NAME = "orgLongName"
         const val ORG_NAME_KEY = "orgNameKey"
         const val USERDETAILS_BASE_URL = "userDetailsUrl"
+        const val RESET_PASSWORD_URL = "resetPasswordUrl"
+        const val CREATE_ACCOUNT_URL = "createAccountUrl"
 
         @JvmStatic
         @Bean
@@ -67,7 +69,9 @@ class AlaCasThemesConfiguration {
                 ORG_SHORT_NAME to alaCasProperties.skin.orgShortName,
                 ORG_LONG_NAME to alaCasProperties.skin.orgLongName,
                 ORG_NAME_KEY to alaCasProperties.skin.orgNameKey,
-                USERDETAILS_BASE_URL to alaCasProperties.skin.userDetailsUrl
+                USERDETAILS_BASE_URL to alaCasProperties.skin.userDetailsUrl,
+                RESET_PASSWORD_URL to alaCasProperties.skin.resetPasswordUrl,
+                CREATE_ACCOUNT_URL to alaCasProperties.skin.createAccountUrl
             ).forEach(thymeleafViewResolver::addStaticVariable)
         }
     }

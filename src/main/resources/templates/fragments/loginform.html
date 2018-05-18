@@ -55,7 +55,11 @@
                        th:field="*{password}"
                        autocomplete="off"
                        placeholder="password" />
-                <a class="forgot" title="Password Reset" href="/userdetails/registration/forgottenPassword" target="_blank">Forgot?</a>
+                <a class="forgot"
+                   th:title="#{ala.screen.login.passwordreset.title}" title="Password Reset"
+                   th:href="${resetPasswordUrl}" href="/userdetails/registration/forgottenPassword"
+                   th:text="#{ala.screen.login.passwordreset.label}"
+                   target="_blank">Forgot?</a>
                 <span id="capslock-on" style="display:none;">
                 <p>
                     <i class="fa fa-exclamation-circle"></i>
@@ -85,7 +89,7 @@
                    tabindex="6"
                    type="submit"/>
 
-            <p class="small text-center"><span th:text="#{ala.screen.login.noaccount}" th:remove="tag">Don't have an account?</span> <a th:href="@{${userDetailsUrl}registration/createAccount}" th:text="#{ala.screen.login.signup}">Sign up now</a>.</p>
+            <p class="small text-center"><span th:text="#{ala.screen.login.noaccount}" th:remove="tag">Don't have an account?</span> <a th:href="${createAccountUrl}" href="/userdetails/registration/createAccount"  th:text="#{ala.screen.login.signup}">Sign up now</a>.</p>
         </form>
 
         <form th:if="${passwordManagementEnabled}" method="post" id="passwordManagementForm">

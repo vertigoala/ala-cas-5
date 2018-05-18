@@ -33,6 +33,8 @@ open class SkinProperties {
     lateinit var bieBaseUrl: String
     lateinit var bieSearchPath: String
     lateinit var userDetailsUrl: String
+    lateinit var resetPasswordUrl: String
+    lateinit var createAccountUrl: String
     lateinit var orgShortName: String
     lateinit var orgLongName: String
     lateinit var orgNameKey: String

@@ -323,6 +323,8 @@ ala:
     bieBaseUrl: https://bie.ala.org.au/
     bieSearchPath: search
     userDetailsUrl: https://auth.ala.org.au/userdetails/
+    resetPasswordUrl: ${ala.skin.userDetailsUrl}registration/forgottenPassword
+    createAccountUrl: ${ala.skin.userDetailsUrl}registration/createAccount
     orgShortName: ALA
     orgLongName: Atlas Of Living Australia
     orgNameKey: ala
