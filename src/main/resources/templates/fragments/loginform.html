@@ -23,7 +23,7 @@
                         <p class="small" th:if="${termsUrl}"><span th:text="#{ala.screen.login.terms.prefix}" th:remove="tag">By using this site you agree to our</span> <a th:href="${termsUrl}" th:text="#{ala.screen.login.terms.link}">Terms of Use</a></p>
                     </div>
 
-                    <div th:replace="fragments/loginProviders" />
+                    <div th:replace="fragments/loginProviders :: loginProviders" />
 
                     <form method="post" id="fm1" th:object="${credential}">
 
@@ -101,9 +101,10 @@
                                accesskey="l"
                                th:value="#{screen.welcome.button.login}"
                                tabindex="6"
-                               type="submit"/>
+                               type="submit"
+                               value="Login3"/>
 
-                        <p class="small text-center"><span th:text="#{ala.screen.login.noaccount}" th:remove="tag">Don't have an account?</span> <a th:href="${createAccountUrl}" href="/userdetails/registration/createAccount"  th:text="#{ala.screen.login.signup}">Sign up now</a>.</p>
+                        <p class="small text-center"><span th:text="#{ala.screen.login.noaccount}" th:remove="tag">Don't have an account?</span> <a th:href="${createAccountUrl}" href="/userdetails/registration/createAccount" th:text="#{ala.screen.login.signup}">Sign up now</a>.</p>
                     </form>
 
                     <form th:if="${passwordManagementEnabled}" method="post" id="passwordManagementForm">
