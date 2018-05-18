@@ -8,5 +8,6 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=au.org.ala.cas.jn
   au.org.ala.cas.session.AlaSpringSessionConfiguration,\
   au.org.ala.cas.session.AlaSpringSessionFilterConfiguration,\
   au.org.ala.cas.validation.AlaCasValidationConfiguration,\
-  au.org.ala.cas.events.AlaEventsConfiguration
+  au.org.ala.cas.events.AlaEventsConfiguration,\
+  au.org.ala.cas.password.PasswordInterruptConfiguration
 #org.springframework.boot.SpringApplicationRunListener=au.org.ala.cas.jndi.JndiRunListener

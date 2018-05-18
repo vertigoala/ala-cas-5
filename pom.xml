@@ -309,18 +309,8 @@
             </dependency>
             <dependency>
                 <groupId>org.apereo.cas</groupId>
-                <artifactId>cas-server-support-pac4j-core-clients</artifactId>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apereo.cas</groupId>
-                <artifactId>cas-server-core-api-web</artifactId>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apereo.cas</groupId>
-                <artifactId>cas-server-core-api-events</artifactId>
-                <scope>provided</scope>
+                <artifactId>cas-server-support-interrupt-api</artifactId>
+                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.springframework.security</groupId>
@@ -419,7 +409,17 @@
         </dependency>
         <dependency>
             <groupId>org.apereo.cas</groupId>
+            <artifactId>cas-server-support-saml</artifactId>
+            <version>${cas.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apereo.cas</groupId>
             <artifactId>cas-server-support-jdbc-monitor</artifactId>
+            <version>${cas.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apereo.cas</groupId>
+            <artifactId>cas-server-support-interrupt-webflow</artifactId>
             <version>${cas.version}</version>
         </dependency>
         <!-- BELOW IS STUFF PROVIDED BY THE CAS WAR BUT LISTED HERE
