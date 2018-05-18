@@ -12,9 +12,17 @@
 <body>
 <main role="main" class="container mt-3 mb-3">
     <div layout:fragment="content">
-        <div class="alert alert-danger">
-            <h2 th:utext="#{screen.notactivated.heading}">This account is not activated.</h2>
-            <p th:utext="#{screen.notactivated.message}">This account has a pending activation email.  Please use the link in the activation email to activate your account first.</p>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        <h2 class="panel-title" th:utext="#{screen.notactivated.heading}"/>
+                    </div>
+                    <div class="panel-body">
+                        <p th:utext="#{screen.notactivated.message}">This account has a pending activation email.  Please use the link in the activation email to activate your account first.</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </main>

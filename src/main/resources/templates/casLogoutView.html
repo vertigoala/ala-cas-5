@@ -2,7 +2,8 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layout">
 
 <head>
-    <title th:text="#{screen.logout.header}"></title>
+    <title th:text="#{screen.logout.header}">CAS Logout View</title>
+    <link href="../../static/css/cas.css" rel="stylesheet" th:href="@{${#themes.code('cas.standard.css.file')}}"/>
 </head>
 
 <body id="cas">

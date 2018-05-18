@@ -1,14 +1,18 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layout">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 
 <head>
-    <title th:text="#{screen.unavailable.heading(${status},${error})}"></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+
+    <title th:text="#{screen.unavailable.header}">CAS Error View</title>
+    <link href="../../static/css/cas.css" rel="stylesheet" th:href="@{${#themes.code('cas.standard.css.file')}}"/>
 
     <script th:inline="javascript">
         /*<![CDATA[*/
-        
+
         function showErrorDetails() {
-            $("#errorMsg").remove();
+            $("#errorMsg").hide();
             $("#errorDetails").empty();
             $("#errorDetails").append("<p><pre style='white-space: pre-wrap;'>" + /*[[${#strings.escapeXml(trace)}]]*/ +"</pre></p>");
         }
@@ -16,27 +20,27 @@
     </script>
 </head>
 
-<body id="cas">
-<div layout:fragment="content">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="panel panel-danger">
-                <div class="panel-heading">
-                    <h2 class="panel-title" th:utext="#{screen.unavailable.heading(${status},${error})}" />
-                </div>
-                <div class="panel-body">
-                    <p th:utext="#{screen.unavailable.message}" />
-                    <p id="errorMsg">
-                    <pre th:text="${'Error: ' + message}" />
-                    </p>
-                    <p id="errorDetails">
-                        <button type="button" class="btn btn-shutdown"
-                                onclick="showErrorDetails();">View Details</button>
-                    </p>
+<body>
+<main role="main" class="container mt-3 mb-3">
+    <div layout:fragment="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        <h2 class="panel-title" th:utext="#{screen.unavailable.heading(${status},${error})}">CAS is unable to process this request: "{0}:{1}"</h2>
+                    </div>
+                    <div class="panel-body">
+                        <p th:utext="#{screen.unavailable.message}">screen.unavailable.message would go here</p>
+                        <pre id="errorMsg" class="mt-4" style="white-space: pre-wrap;" th:text="${'Error: ' + message}">error message would go here</pre>
+                        <p id="errorDetails">
+                            <button type="button" class="btn btn-shutdown"
+                                    onclick="showErrorDetails();">View Details</button>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</main>
 </body>
 </html>
