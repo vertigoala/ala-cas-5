@@ -10,7 +10,7 @@
 <div layout:fragment="content">
     <div class="row">
         <div class="col-md-12">
-            <div class="panel panel-success">
+            <div class="panel panel-default">
                 <div class="panel-heading">
                     <h2 class="panel-title" th:utext="#{ala.screen.extra.header}">
                         One quick request...
@@ -24,19 +24,18 @@
 
                         <div class="form-group">
                             <label for="organisation" class="col-sm-2 control-label" th:text="#{ala.screen.extra.organisation}">Organisation</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-10 col-md-8">
                                 <input type="text" class="form-control" tabindex="1" id="organisation" th:field="*{organisation}">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="country" class="col-sm-2 control-label" th:text="#{ala.screen.extra.country}">Country</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-10 col-md-8">
                                 <select id="country" name="country"
                                         class="form-control chosen-select"
                                         tabindex="2"
                                         th:field="*{country}">
-                                    <!--th:text="#{${'seedstarter.type.' + type}}"-->
                                     <option th:each="country : ${countries}"
                                             th:value="${country.isoCode}"
                                             th:text="${country.name}">Country</option>
@@ -45,12 +44,13 @@
                         </div>
                         <div class="form-group">
                             <label for="state" class="col-sm-2 control-label" th:text="#{ala.screen.extra.state}">State / province</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-10 col-md-8">
                                 <select id="state" name="state"
                                         class="form-control chosen-select"
                                         tabindex="3"
                                         th:field="*{state}"
                                 >
+                                    <option th:text="#{ala.screen.extra.state.empty}" value="">-- Please select one --</option>
                                     <option th:each="state : ${states}"
                                             th:value="${state.isoCode}"
                                             th:text="${state.name}">State</option>
@@ -60,7 +60,7 @@
 
                         <div class="form-group">
                             <label for="city" class="col-sm-2 control-label" th:text="#{ala.screen.extra.city}">City</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-10 col-md-8">
                                 <input type="text" class="form-control" tabindex="4" id="city" th:field="*{city}">
                             </div>
                         </div>
@@ -101,8 +101,8 @@
 
             $("#country").on('change', function(evt, params) {
                 var $state = $("#state");
-                // $state.children('option:not(:first)').remove();
-                $state.children('option').remove();
+                $state.children('option:not(:first)').remove();
+                // $state.children('option').remove();
                 $state.trigger("chosen:updated");
                 $.get(statesUrlPrefix + "?country=" + evt.target.value, function(data) {
                     if (data.length == 0) {
