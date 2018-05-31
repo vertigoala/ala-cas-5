@@ -1,7 +1,9 @@
 package au.org.ala.cas.thymeleaf
 
 import au.org.ala.cas.AlaCasProperties
+import au.org.ala.utils.logger
 import org.apereo.cas.configuration.CasConfigurationProperties
+import org.apereo.cas.services.web.CasThymeleafViewResolverConfigurer
 import org.apereo.cas.services.web.ThemeViewResolver
 import org.apereo.cas.services.web.ThemeViewResolverFactory
 import org.apereo.cas.services.web.config.CasThemesConfiguration
@@ -42,23 +44,9 @@ class AlaCasThemesConfiguration {
         const val USERDETAILS_BASE_URL = "userDetailsUrl"
         const val RESET_PASSWORD_URL = "resetPasswordUrl"
         const val CREATE_ACCOUNT_URL = "createAccountUrl"
+        const val ALA_PROPERTIES = "ala"
 
-        @JvmStatic
-        @Bean
-        @Qualifier("thymeleafViewResolverPostProcessor")
-        fun thymeleafViewResolverPostProcessor(alaCasProperties: AlaCasProperties): BeanPostProcessor {
-            return object : BeanPostProcessor {
-                override fun postProcessBeforeInitialization(bean: Any?, beanName: String?) = bean
-
-                override fun postProcessAfterInitialization(bean: Any?, beanName: String?): Any? {
-                    if (beanName == "thymeleafViewResolver" && bean is ThymeleafViewResolver) {
-                        configureThymeleafViewResolver(bean, alaCasProperties)
-                    }
-                    return bean
-                }
-
-            }
-        }
+        val log = logger()
 
         @JvmStatic
         fun configureThymeleafViewResolver(thymeleafViewResolver: ThymeleafViewResolver, alaCasProperties: AlaCasProperties) {
@@ -74,9 +62,19 @@ class AlaCasThemesConfiguration {
                 ORG_NAME_KEY to alaCasProperties.skin.orgNameKey,
                 USERDETAILS_BASE_URL to alaCasProperties.skin.userDetailsUrl,
                 RESET_PASSWORD_URL to alaCasProperties.skin.resetPasswordUrl,
-                CREATE_ACCOUNT_URL to alaCasProperties.skin.createAccountUrl
+                CREATE_ACCOUNT_URL to alaCasProperties.skin.createAccountUrl,
+                ALA_PROPERTIES to alaCasProperties
             ).forEach(thymeleafViewResolver::addStaticVariable)
         }
+    }
+
+    @Autowired
+    lateinit var alaCasProperties: AlaCasProperties
+
+    @Bean
+    fun alaThymeleafViewResolverConfigurer() = CasThymeleafViewResolverConfigurer { resolver ->
+        log.info("Configuring thymeleaf view resolver with ALA customisations")
+        configureThymeleafViewResolver(resolver, alaCasProperties)
     }
 
 }

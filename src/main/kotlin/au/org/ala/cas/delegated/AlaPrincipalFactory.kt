@@ -5,16 +5,21 @@ import org.apache.commons.lang3.builder.HashCodeBuilder
 import org.apereo.cas.authentication.Credential
 import org.apereo.cas.authentication.exceptions.AccountDisabledException
 import org.apereo.cas.authentication.principal.*
+import org.apereo.services.persondir.support.CachingPersonAttributeDaoImpl
 import javax.security.auth.login.FailedLoginException
 
 class AlaPrincipalFactory(
     private val principalResolver: PrincipalResolver,
+    private val cachingAttributeRepository: CachingPersonAttributeDaoImpl,
     val userCreator: UserCreator
 ) : PrincipalFactory {
 
     companion object {
         private const val serialVersionUID: Long = -3999695695604948495L
+
         private val log = logger()
+
+        const val NEW_LOGIN: String = "newLogin"
         val EMAIL_PATTERN = Regex("^.+@.+\\..+$")
     }
 
@@ -41,9 +46,9 @@ class AlaPrincipalFactory(
         var principal = principalResolver.resolve(alaCredential)
         log.debug("{} resolved principal: {}", principalResolver, principal)
 
-        if (principal.attributes["activated"] != "1") throw AccountNotActivatedException("User account already exists but is not activated")
-        if (principal.attributes["disabled"] != "0") throw AccountDisabledException("User account is disabled")
-//        if (principal.attributes["expired"] != "0") throw AccountExpiredException("User account is expired")
+        if (principal?.attributes?.get("activated") == "0") throw AccountNotActivatedException("User account already exists but is not activated")
+        if (principal?.attributes?.get("disabled") == "1") throw AccountDisabledException("User account is disabled")
+//        if (principal.attributes["expired"] == "1") throw AccountExpiredException("User account is expired")
 
         // does the ALA user exist?
         if (!validatePrincipalALA(principal)) {
@@ -62,6 +67,10 @@ class AlaPrincipalFactory(
                 val userId = userCreator.createUser(emailAddress, firstName, lastName)
                         ?: throw FailedLoginException("Unable to create user for $emailAddress, $firstName, $lastName")
                 log.debug("Received new user id {}", userId)
+
+                // invalidate cache for the newly created user
+                // TODO there must be a less coupled way of achieving this
+                cachingAttributeRepository.removeUserAttributes(email)
 
                 // re-try (we have to retry, because that is how we get the required "userid")
                 principal = principalResolver.resolve(alaCredential)

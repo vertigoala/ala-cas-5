@@ -39,12 +39,10 @@ CREATE PROCEDURE `sp_create_user`(
   IN `firstname`          varchar(255),
   IN `lastname`           varchar(255),
   IN `password`           varchar(255),
-  IN `city`               varchar(255),
   IN `organisation`       varchar(255),
-  IN `primaryUserType`    varchar(255),
-  IN `secondaryUserType`  varchar(255),
-  IN `ausstate`           varchar(255),
-  IN `telephone`          varchar(255),
+  IN `city`               varchar(255),
+  IN `state`              varchar(255),
+  IN `country`            varchar(255),
   OUT `user_id`            int(11))
   BEGIN
     DECLARE new_id int(11);
@@ -52,12 +50,13 @@ CREATE PROCEDURE `sp_create_user`(
     SET new_id = LAST_INSERT_ID();
     INSERT INTO `passwords` (`userid`, `password`, `status`, `type`) VALUES (new_id, password, 'CURRENT', 'bcrypt');
     INSERT INTO `user_role` (`user_id`, `role_id`) VALUES (new_id, 'ROLE_USER');
-    INSERT INTO `profiles` (`userid`, `property`, `value`) VALUES (new_id, 'city',              city);
     INSERT INTO `profiles` (`userid`, `property`, `value`) VALUES (new_id, 'organisation',      organisation);
-    INSERT INTO `profiles` (`userid`, `property`, `value`) VALUES (new_id, 'primaryUserType',   primaryUserType);
-    INSERT INTO `profiles` (`userid`, `property`, `value`) VALUES (new_id, 'secondaryUserType', secondaryUserType);
-    INSERT INTO `profiles` (`userid`, `property`, `value`) VALUES (new_id, 'state',             ausstate);
-    INSERT INTO `profiles` (`userid`, `property`, `value`) VALUES (new_id, 'telephone',         telephone);
+    INSERT INTO `profiles` (`userid`, `property`, `value`) VALUES (new_id, 'country',           country);
+    INSERT INTO `profiles` (`userid`, `property`, `value`) VALUES (new_id, 'state',             state);
+    INSERT INTO `profiles` (`userid`, `property`, `value`) VALUES (new_id, 'city',              city);
+--     INSERT INTO `profiles` (`userid`, `property`, `value`) VALUES (new_id, 'primaryUserType',   primaryUserType);
+--     INSERT INTO `profiles` (`userid`, `property`, `value`) VALUES (new_id, 'secondaryUserType', secondaryUserType);
+--     INSERT INTO `profiles` (`userid`, `property`, `value`) VALUES (new_id, 'telephone',         telephone);
     SELECT new_id INTO `user_id`;
   END
 //

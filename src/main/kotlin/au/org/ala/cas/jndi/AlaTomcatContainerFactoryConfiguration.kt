@@ -8,6 +8,7 @@ import org.apereo.cas.configuration.CasConfigurationProperties
 import org.apereo.cas.configuration.support.JpaBeans
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.AutoConfigureOrder
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.embedded.tomcat.TomcatContextCustomizer
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -17,12 +18,14 @@ import javax.sql.DataSource
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainer
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory
 import org.springframework.core.Ordered
+import javax.servlet.Servlet
 
 /**
  * This Configuration simply creates simple JNDI datasources based off the JndiConfigurationProperites.
  */
 @Configuration
 @AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE)
+@ConditionalOnClass(Servlet::class, Tomcat::class)
 @EnableConfigurationProperties(JndiConfigurationProperties::class, CasConfigurationProperties::class)
 class AlaTomcatContainerFactoryConfiguration {
 
@@ -47,8 +50,12 @@ class AlaTomcatContainerFactoryConfiguration {
     fun dummyDataSourceForFlywayAutoConfiguration() = JpaBeans.newDataSource(casConfigurationProperties.monitor.jdbc)
 
     // TODO 5.3.0+ convert to a CasTomcatEmbeddedServletContainerFactory
+//    @Bean
+//    @Qualifier("casServletContainerFactory")
+//    fun casServletContainerFactory(): CasTomcatEmbeddedServletContainerFactory {
+//        return object : CasTomcatEmbeddedServletContainerFactory(casConfigurationProperties.server.clustering) {
     @Bean
-    fun tomcatEmbeddedServletContainerFactory(): TomcatEmbeddedServletContainerFactory {
+    fun casServletContainerFactory(): TomcatEmbeddedServletContainerFactory {
         return object : TomcatEmbeddedServletContainerFactory() {
 
             override fun getTomcatEmbeddedServletContainer(

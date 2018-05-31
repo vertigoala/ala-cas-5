@@ -59,7 +59,7 @@ jndi:
 #        prepStmtCacheSqlLimit: 2048
 
 cas:
-  serviceRegistry:
+  service-registry:
 #    watcherEnabled: true
 #    repeatInterval: 120000
 #    startDelay: 15000
@@ -76,16 +76,18 @@ cas:
       dialect: org.hibernate.dialect.MySQL57Dialect
       ddlAuto: validate
       healthQuery: /* ping */ SELECT
+  person-directory:
+    return-null: true
   authn:
     accept:
       users: ''
-    attributeRepository:
-#      expirationTime: 30
-#      expirationTimeUnit: MINUTES
-      maximumCacheSize: 10000 #TODO TUNING
-      merger: MERGE
+    attribute-repository:
+      expirationTime: 5
+      expirationTimeUnit: MINUTES
+      maximumCacheSize: 1000 #TODO TUNING
+      merger: REPLACE
 # Attributes that you wish to resolve for the principal
-      defaultAttributesToRelease: id,userid,givenName,sn,firstname,lastname,email,affiliation,organisation,city,state,country,role,authority,telephone,primaryUserType,secondaryUserType,legacyPassword
+      defaultAttributesToRelease: id,userid,givenName,sn,firstname,lastname,email,affiliation,organisation,city,state,country,role,authority,legacyPassword,created,lastLogin #,telephone,primaryUserType,secondaryUserType
       jdbc:
         - dataSourceName: java:comp/env/jdbccas
           driverClass: com.mysql.jdbc.Driver
@@ -116,12 +118,17 @@ cas:
             city: city
             state: state
             country: country
-            telephone: telephone
-            primaryUserType: primaryUserType
-            secondaryUserType: secondaryUserType
             activated: activated
             disabled: disabled
             expired: expired
+            created: created
+            last_updated: lastUpdated
+            last_login: lastLogin
+#            telephone: telephone
+#            primaryUserType: primaryUserType
+#            secondaryUserType: secondaryUserType
+#      groovy:
+#        - location: classpath:scripts/attribute-repo.groovy
     jdbc:
       query:
         - dataSourceName: java:comp/env/jdbccas
@@ -155,11 +162,13 @@ cas:
       google:
         scope: EMAIL_AND_PROFILE
         # scope=EMAIL|PROFILE|EMAIL_AND_PROFILE
+      twitter:
+        includeEmail: true
     oauth:
-      accessToken:
+      access-token:
         maxTimeToLiveInSeconds: "PT8H"
         timeToKillInSeconds: "PT2H"
-      refreshToken:
+      refresh-token:
         timeToKillInSeconds: "P14D"
     oidc:
       scopes:
@@ -198,10 +207,10 @@ cas:
         - city  # TODO condense these into the address scope somehow?
         - state
         - country
-        - primary_user_type
-        - secondary_user_type
+#        - primary_user_type
+#        - secondary_user_type
       userDefinedScopes:
-        ala: organisation, city, state, country, primary_user_type, secondary_user_type
+        ala: organisation, city, state, country #, primary_user_type, secondary_user_type
         roles: role, authority
       claimsMap:
         sub: userid #	string	Subject - Identifier for the End-User at the Issuer.
@@ -226,8 +235,8 @@ cas:
         #address	JSON object	End-User's preferred postal address. The value of the address member is a JSON [RFC4627] structure containing some or all of the members defined in Section 2.5.1.
         #updated_at	number	Time the End-User's information was last updated. Its value is a JSON number representing the number of seconds from 1970-01-01T00:00:00Z as measured in UTC until the date/time.
         # ALA attributes
-        primary_user_type: primaryUserType
-        secondary_user_type: secondaryUserType
+#        primary_user_type: primaryUserType
+#        secondary_user_type: secondaryUserType
   monitor:
     jdbc:
 #      dataSourceName: java:comp/env/jdbccas
@@ -298,6 +307,7 @@ cas:
 
 # Override these for non-ALA deployments
 ala:
+  userDetailsBaseUrl: https://auth.ala.org.au/userdetails/
   cookie:
     domain: ala.org.au
     httpOnly: true
@@ -306,15 +316,19 @@ ala:
     path: /
     secure: false
   userCreator:
+    defaultCountry: AU
+    userCreatePassword: "CHANGE_ME"
+    countriesListUrl: ${ala.userDetailsBaseUrl}ws/registration/countries
+    statesListUrl: ${ala.userDetailsBaseUrl}ws/registration/states
     passwordEncoder: # This should be the same as the primary password encoder above
       type: BCRYPT
       characterEncoding: UTF-8
       strength: 10
     jdbc:
       driverClass: com.mysql.jdbc.Driver
-      createUserProcedure: "sp_create_user"
       enableUpdateLastLoginTime: true
-      updateLastLoginTimeSql: "UPDATE `users` SET `last_login` = CURRENT_TIMESTAMP WHERE `userid` = ?"
+      enableRequestExtraAttributes: true
+      enableUpdateLegacyPasswords: true
   skin:
     baseUrl: https://www.ala.org.au/
     termsUrl: ${ala.skin.baseUrl}who-we-are/terms-of-use/
@@ -322,7 +336,7 @@ ala:
     favIconBaseUrl: ${ala.skin.baseUrl}wp-content/themes/ala-wordpress-theme/img/favicon/
     bieBaseUrl: https://bie.ala.org.au/
     bieSearchPath: search
-    userDetailsUrl: https://auth.ala.org.au/userdetails/
+    userDetailsUrl: ${ala.userDetailsBaseUrl}
     resetPasswordUrl: ${ala.skin.userDetailsUrl}registration/forgottenPassword
     createAccountUrl: ${ala.skin.userDetailsUrl}registration/createAccount
     orgShortName: ALA

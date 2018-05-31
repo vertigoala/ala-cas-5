@@ -36,12 +36,13 @@ class UserCreatorALA(
             .addValue("firstname", firstName)
             .addValue("lastname", lastName)
             .addValue("password", password)
-            .addValue("city", "")
             .addValue("organisation", "")
-            .addValue("primaryUserType", "")
-            .addValue("secondaryUserType", "")
-            .addValue("ausstate", "N/A")
-            .addValue("telephone", "")
+            .addValue("city", "")
+            .addValue("state", "")
+            .addValue("country", "")
+//            .addValue("primaryUserType", "")
+//            .addValue("secondaryUserType", "")
+//            .addValue("telephone", "")
 
         val result = call.execute(inParams)
 

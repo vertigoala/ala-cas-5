@@ -6,13 +6,15 @@ import org.apereo.cas.authentication.principal.PrincipalResolver
 import org.apereo.cas.authentication.support.password.PasswordEncoderUtils
 import org.apereo.cas.configuration.CasConfigurationProperties
 import org.apereo.cas.configuration.support.JpaBeans
-import org.apereo.cas.support.pac4j.authentication.DelegatedClientFactory
+import org.apereo.services.persondir.support.CachingPersonAttributeDaoImpl
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.cloud.context.config.annotation.RefreshScope
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.jdbc.datasource.DataSourceTransactionManager
 import javax.sql.DataSource
 
 @Configuration
@@ -32,12 +34,15 @@ class AlaPac4jAuthenticationConfiguration {
      * CAS this is retrieved from JNDI so won't actually create additional db connections)
      */
     @Bean
-    @ConditionalOnMissingBean(DataSource::class)
-    fun dummyDataSourceForFlywayAutoConfiguration() = JpaBeans.newDataSource(casConfigurationProperties.monitor.jdbc)
+    @Qualifier("userCreatorDataSource")
+    fun userCreatorDataSource() = JpaBeans.newDataSource(casConfigurationProperties.monitor.jdbc)
+
+    @Bean
+    fun userCreatorTransactionManager() = DataSourceTransactionManager(userCreatorDataSource())
 
     @Bean
     fun userCreator(): UserCreator = UserCreatorALA(
-        dataSource = JpaBeans.newDataSource(alaCasProperties.userCreator.jdbc),
+        dataSource = userCreatorDataSource(),
         userCreatePassword = alaCasProperties.userCreator.userCreatePassword,
         createUserProcedure = alaCasProperties.userCreator.jdbc.createUserProcedure,
         passwordEncoder = PasswordEncoderUtils.newPasswordEncoder(alaCasProperties.userCreator.passwordEncoder)
@@ -47,12 +52,8 @@ class AlaPac4jAuthenticationConfiguration {
     @RefreshScope
     fun clientPrincipalFactory(
         @Autowired personDirectoryPrincipalResolver: PrincipalResolver,
+        @Autowired @Qualifier("cachingAttributeRepository") cachingAttributeRepository: CachingPersonAttributeDaoImpl,
         @Autowired userCreator: UserCreator
-    ): PrincipalFactory = AlaPrincipalFactory(personDirectoryPrincipalResolver, userCreator)
-
-    @Bean
-    @RefreshScope
-    fun pac4jDelegatedClientFactory(): DelegatedClientFactory =
-        AlaDelegatedClientFactory(casConfigurationProperties.authn.pac4j)
+    ): PrincipalFactory = AlaPrincipalFactory(personDirectoryPrincipalResolver, cachingAttributeRepository, userCreator)
 
 }

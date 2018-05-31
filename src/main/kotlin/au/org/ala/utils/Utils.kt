@@ -1,5 +1,6 @@
 package au.org.ala.utils
 
+import com.google.common.net.UrlEscapers
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -16,6 +17,9 @@ fun URI.readText() = this.toURL().readText()
 fun URI.readText(connectTimeoutMs: Int, readTimeoutMs: Int, charSet: Charset = Charsets.UTF_8) = this.toURL().readText(connectTimeoutMs, readTimeoutMs, charSet)
 
 fun URL.readText(connectTimeoutMs: Int, readTimeoutMs: Int, charSet: Charset = Charsets.UTF_8) = this.openConnection().apply { connectTimeout = connectTimeoutMs; readTimeout = readTimeoutMs; connect() }.getInputStream().readBytes().toString(charSet)
+
+fun String?.default(default: String) = if (this != null && this.isNotBlank()) this else default
+fun String.urlParameterSafe() = UrlEscapers.urlFormParameterEscaper().escape(this)
 
 inline fun <reified T> T.logger(): Logger {
     val baseClass = T::class.java

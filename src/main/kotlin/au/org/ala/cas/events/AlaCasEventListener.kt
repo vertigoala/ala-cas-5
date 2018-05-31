@@ -1,6 +1,8 @@
 package au.org.ala.cas.events
 
+import au.org.ala.cas.alaUserId
 import au.org.ala.utils.logger
+import org.apereo.cas.authentication.UsernamePasswordCredential
 import org.apereo.cas.support.events.authentication.CasAuthenticationTransactionSuccessfulEvent
 import org.apereo.cas.support.events.ticket.CasTicketGrantingTicketCreatedEvent
 import org.springframework.context.event.EventListener
@@ -22,17 +24,12 @@ open class AlaCasEventListener(val dataSource: DataSource, val updateSql: String
     @EventListener
     open fun handleCasTicketGrantingTicketCreatedEvent(casTicketGrantingTicketCreatedEvent: CasTicketGrantingTicketCreatedEvent) {
         log.debug("GOT HANDLE CAS TICKET GRANTING TICKET CREATED EVENT: {}", casTicketGrantingTicketCreatedEvent.ticketGrantingTicket?.authentication?.principal)
-        val userIdValue = casTicketGrantingTicketCreatedEvent.ticketGrantingTicket?.authentication?.principal?.attributes?.get("userid")
-        val userid = when(userIdValue) {
-            is Int -> userIdValue
-            is String -> userIdValue.toInt()
-            else -> null
-        }
+        val userid = casTicketGrantingTicketCreatedEvent.ticketGrantingTicket?.authentication?.alaUserId()
         if (userid != null) {
             executorService.execute {
                 try {
-                    val call = JdbcTemplate(dataSource)
-                    call.update(updateSql, userid)
+                    val template = JdbcTemplate(dataSource)
+                    template.update(updateSql, userid)
                 } catch (e: Exception) {
                     log.error("Couldn't update last login time for {} using SQL {}", userid, updateSql, e)
                 }

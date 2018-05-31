@@ -14,7 +14,7 @@
     <artifactId>cas</artifactId>
     <packaging>war</packaging>
     <!-- Version should ${cas.version}-${ala.build.version}(-SNAPSHOT)? -->
-    <version>5.3.0-RC4-1-SNAPSHOT</version>
+    <version>5.3.0-1-SNAPSHOT</version>
 
     <name>ALA CAS 5</name>
     <description>ALA Central Authentication Service v5</description>
@@ -106,7 +106,6 @@
                             <artifactId>cas-server-webapp${app.server}</artifactId>
                             <excludes>
                                 <exclude>WEB-INF/classes/services/*.json</exclude>
-                                <exclude>WEB-INF/lib/pac4j-oauth-3.0.0-RC1.jar</exclude>
                             </excludes>
                         </overlay>
                     </overlays>
@@ -309,6 +308,16 @@
             </dependency>
             <dependency>
                 <groupId>org.apereo.cas</groupId>
+                <artifactId>cas-server-support-themes</artifactId>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apereo.cas</groupId>
+                <artifactId>cas-server-support-validation</artifactId>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apereo.cas</groupId>
                 <artifactId>cas-server-support-interrupt-api</artifactId>
                 <scope>compile</scope>
             </dependency>
@@ -317,6 +326,15 @@
                 <artifactId>spring-security-web</artifactId>
                 <scope>compile</scope>
             </dependency>
+            <!--
+            This is needed to force the latest version of chosen.
+            Without it the chosen-bootstrap's transitive version range seems to win out.
+             -->
+            <dependency>
+                <groupId>org.webjars.bower</groupId>
+                <artifactId>chosen</artifactId>
+                <version>1.8.3</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <dependencies>
@@ -324,6 +342,11 @@
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib-jdk8</artifactId>
             <version>${kotlin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-kotlin</artifactId>
+            <version>2.9.5</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -393,11 +416,6 @@
             <version>${cas.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.pac4j</groupId>
-            <artifactId>pac4j-oauth</artifactId>
-            <version>3.0.0.ALA-RC1</version>
-        </dependency>
-        <dependency>
             <groupId>org.apereo.cas</groupId>
             <artifactId>cas-server-support-oidc</artifactId>
             <version>${cas.version}</version>
@@ -417,11 +435,11 @@
             <artifactId>cas-server-support-jdbc-monitor</artifactId>
             <version>${cas.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.apereo.cas</groupId>
-            <artifactId>cas-server-support-interrupt-webflow</artifactId>
-            <version>${cas.version}</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.apereo.cas</groupId>-->
+            <!--<artifactId>cas-server-support-interrupt-webflow</artifactId>-->
+            <!--<version>${cas.version}</version>-->
+        <!--</dependency>-->
         <!-- BELOW IS STUFF PROVIDED BY THE CAS WAR BUT LISTED HERE
              IN PROVIDED SCOPE TO ALLOW THE IDE TO FIND IT -->
         <!--implementation project(":core:cas-server-core")-->
@@ -658,6 +676,26 @@
             <artifactId>jquery-migrate</artifactId>
             <version>1.4.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>chosen</artifactId>
+            <version>1.8.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>chosen-bootstrap</artifactId>
+            <version>1.1.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.webjars.bower</groupId>
+                    <artifactId>jquery</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.webjars.bower</groupId>
+                    <artifactId>bootstrap</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
         <!-- TODO update ALA skin to use this version, currently the ALA skin requires v1.1 -->
         <!--<dependency>-->
             <!--<groupId>org.webjars</groupId>-->
@@ -722,10 +760,10 @@
     </dependencies>
 
     <properties>
-        <cas.version>5.3.0-RC4-SNAPSHOT</cas.version>
-        <springboot.version>1.5.12.RELEASE</springboot.version>
+        <cas.version>5.3.0-SNAPSHOT</cas.version>
+        <springboot.version>1.5.13.RELEASE</springboot.version>
         <!-- app.server could be -jetty, -undertow, -tomcat, or blank if you plan to provide appserver -->
-        <!-- we use blank to create a blank war and spring boot repackage to build an executable jar -->
+        <!-- we use blank to create a blank war and spring boot repackage to build an executable Tomcat jar -->
         <app.server></app.server>
 
         <mainClassName>org.apereo.cas.web.CasWebApplication</mainClassName>

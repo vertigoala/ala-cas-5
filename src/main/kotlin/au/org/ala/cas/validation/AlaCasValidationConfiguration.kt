@@ -17,6 +17,8 @@ import org.springframework.web.servlet.View
 /**
  * Reconfigure the CAS 2.0 service validate response view to look like the v3 response view (ie add attributes to the
  * response).
+ *
+ * TODO remove this when no more legacy apps use CAS protocol 2.0
  */
 @Configuration
 @EnableConfigurationProperties(CasConfigurationProperties::class)
