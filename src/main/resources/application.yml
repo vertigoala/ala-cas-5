@@ -12,6 +12,7 @@ spring:
     redis:
       namespace: 'cas'
 server:
+  use-forward-headers: true
   tomcat:
     remote_ip_header: x-forwarded-for
     port-header: x-forwarded-port
