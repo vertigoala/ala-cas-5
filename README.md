@@ -1,9 +1,9 @@
-ALA CAS 5.2 [![Build Status](https://travis-ci.org/AtlasOfLivingAustralia/ala-cas-5.svg?branch=master)](https://travis-ci.org/AtlasOfLivingAustralia/ala-cas-5)
+ALA CAS 5.3 [![Build Status](https://travis-ci.org/AtlasOfLivingAustralia/ala-cas-5.svg?branch=master)](https://travis-ci.org/AtlasOfLivingAustralia/ala-cas-5)
 ============================
 
-The ALA CAS 5.2 deployment is based off the generic CAS WAR overlay.
+The ALA CAS 5.3 deployment is based off the generic CAS WAR overlay.
 
-CAS documentation is available [here](https://apereo.github.io/cas/5.2.x/index.html)
+CAS documentation is available [here](https://apereo.github.io/cas/5.3.x/index.html)
 
 In addition to upgrading the core CAS components this upgrade hopes to minimise overrides of existing CAS classes as 
 used in previous versions of ALA CAS.  Customising these classes by overriding the classes directly complicates future
@@ -132,15 +132,15 @@ A non-exhaustive list of stuff and/or things:
 
  - [x] Add ALA UI
     - [x] Enable remember me
- - [x] Add `ALA-Auth` cookie to [Web Flow](https://apereo.github.io/cas/5.2.x/installation/Webflow-Customization.html)
- - [x] Add [delegated authentication](https://apereo.github.io/cas/5.2.x/integration/Delegate-Authentication.html) (Facebook, Twitter, Google)
- - [ ] Investigate [monitoring options](https://apereo.github.io/cas/5.2.x/installation/Monitoring-Statistics.html)
+ - [x] Add `ALA-Auth` cookie to [Web Flow](https://apereo.github.io/cas/5.3.x/installation/Webflow-Customization.html)
+ - [x] Add [delegated authentication](https://apereo.github.io/cas/5.3.x/integration/Delegate-Authentication.html) (Facebook, Twitter, Google)
+ - [ ] Investigate [monitoring options](https://apereo.github.io/cas/5.3.x/installation/Monitoring-Statistics.html)
  - [x] Create a [CAS management server](https://github.com/apereo/cas-services-management-overlay) application.
  - [x] Move the Service Registry out of `src/main/resources/services` and somewhere the CAS management web app can access them
  - [x] Enable OpenID Connect server
- - [ ] Enable password management?
+ - [ ] -Enable password management?-
  - [x] Update user details to include password type changes
- - [ ] [High availability](https://apereo.github.io/cas/5.2.x/planning/High-Availability-Guide.html)
+ - [x] [High availability](https://apereo.github.io/cas/5.2.x/planning/High-Availability-Guide.html)
 
 # Build
 
