@@ -18,6 +18,8 @@ import javax.sql.DataSource
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainer
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory
 import org.springframework.core.Ordered
+import org.springframework.security.authentication.AnonymousAuthenticationProvider
+import org.springframework.security.web.authentication.AnonymousAuthenticationFilter
 import javax.servlet.Servlet
 
 /**
@@ -35,19 +37,6 @@ class AlaTomcatContainerFactoryConfiguration {
 
     @Autowired
     lateinit var jndiConfigurationProperties: JndiConfigurationProperties
-
-    @Autowired
-    lateinit var casConfigurationProperties: CasConfigurationProperties
-
-    /**
-     * This @Bean (or at least a single DataSource @Bean) is required for FlywayAutoConfiguration to execute,
-     * even if Flyway is configured to create its own DataSource.
-     * As CAS doesn't expose its DataSources as @Beans, we get the monitoring jdbc connection (in ALA
-     * CAS this is retrieved from JNDI so won't actually create additional db connections)
-     */
-    @Bean
-    @ConditionalOnMissingBean(DataSource::class)
-    fun dummyDataSourceForFlywayAutoConfiguration() = JpaBeans.newDataSource(casConfigurationProperties.monitor.jdbc)
 
     // TODO 5.3.0+ convert to a CasTomcatEmbeddedServletContainerFactory
 //    @Bean

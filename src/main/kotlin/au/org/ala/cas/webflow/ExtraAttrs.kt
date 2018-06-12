@@ -35,7 +35,7 @@ data class ExtraAttrs @JvmOverloads constructor(
     val invalid get() = validators.any { (k, v) -> v.any { (n, f) -> f() } }
 
     fun validate(context: ValidationContext) {
-        log.error("validate {}", this)
+        log.debug("validate {}", this)
         val messages = context.messageContext
 
         validators.forEach { (fieldName, v) ->

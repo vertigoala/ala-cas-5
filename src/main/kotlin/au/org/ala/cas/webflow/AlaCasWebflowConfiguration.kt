@@ -1,22 +1,14 @@
 package au.org.ala.cas.webflow
 
 import au.org.ala.cas.AlaCasProperties
-import au.org.ala.cas.webflow.SaveExtraAttrsAction.Companion.EXTRA_ATTRS_FLOW_VAR
 import au.org.ala.utils.logger
-import au.org.ala.utils.urlParameterSafe
-import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.type.TypeFactory
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.github.benmanes.caffeine.cache.Caffeine
 import org.apereo.cas.authentication.support.password.PasswordEncoderUtils
 import org.apereo.cas.configuration.CasConfigurationProperties
 import org.apereo.cas.ticket.registry.TicketRegistrySupport
 import org.apereo.cas.web.flow.CasWebflowExecutionPlan
 import org.apereo.cas.web.flow.CasWebflowExecutionPlanConfigurer
 import org.apereo.cas.web.support.CookieRetrievingCookieGenerator
-import org.apereo.cas.web.support.WebUtils
+import org.apereo.services.persondir.support.CachingPersonAttributeDaoImpl
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
@@ -27,14 +19,9 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.DependsOn
 import org.springframework.jdbc.datasource.DataSourceTransactionManager
-import org.springframework.webflow.action.AbstractAction
 import org.springframework.webflow.definition.registry.FlowDefinitionRegistry
 import org.springframework.webflow.engine.builder.support.FlowBuilderServices
 import org.springframework.webflow.execution.Action
-import org.springframework.webflow.execution.Event
-import org.springframework.webflow.execution.RequestContext
-import java.net.URL
-import java.util.concurrent.TimeUnit
 import javax.sql.DataSource
 
 
@@ -78,6 +65,10 @@ class AlaCasWebflowConfiguration : CasWebflowExecutionPlanConfigurer {
     @Qualifier("userCreatorTransactionManager")
     lateinit var userCreatorTransactionManager: DataSourceTransactionManager
 
+    @Autowired
+    @Qualifier("cachingAttributeRepository")
+    lateinit var cachingAttributeRepository: CachingPersonAttributeDaoImpl
+
     @Bean
     @RefreshScope
     @Qualifier("alaProxyAuthenticationCookieGenerator")
@@ -103,47 +94,15 @@ class AlaCasWebflowConfiguration : CasWebflowExecutionPlanConfigurer {
 
     @Bean
     @Qualifier(AlaCasWebflowConfigurer.ACTION_ENTER_DELEGATED_AUTH_EXTRA_ATTRS)
-    fun enterDelegatedAuthAction() : Action {
-        return object : AbstractAction() {
-            override fun doExecute(context: RequestContext): Event {
-                val authentication = WebUtils.getAuthentication(context)
-                val extraAttrs = ExtraAttrs.fromMap(authentication.principal.attributes)
-                if (extraAttrs.country.isBlank()) extraAttrs.country = alaCasProperties.userCreator.defaultCountry
-                context.flowScope.put(SaveExtraAttrsAction.EXTRA_ATTRS_FLOW_VAR, extraAttrs)
-                return success()
-            }
-
-        }
-    }
+    fun enterDelegatedAuthAction() : Action = EnterDelegatedAuthAction(alaCasProperties)
 
     @Bean
     @Qualifier(AlaCasWebflowConfigurer.ACTION_RENDER_DELEGATED_AUTH_EXTRA_ATTRS)
-    fun renderDelegatedAuthAction(): Action {
-        val typeReference = TypeFactory.defaultInstance().constructCollectionType(List::class.java, CodedName::class.java)
-        val mapper = jacksonObjectMapper()
-        return object: AbstractAction() {
-            val COUNTRIES = "countries"
-            val stateCache = Caffeine.newBuilder().refreshAfterWrite(1, TimeUnit.HOURS).build { country: String ->
-                val url = if (country == COUNTRIES) {
-                    URL(alaCasProperties.userCreator.countriesListUrl)
-                } else {
-                    URL("${alaCasProperties.userCreator.statesListUrl}?country=${country.urlParameterSafe()}")
-                }
-                return@build mapper.readValue<List<CodedName>>(url.openConnection().apply { this.setRequestProperty("Accept", "application/json") }.getInputStream().reader(Charsets.UTF_8), typeReference)
-            }
-
-            override fun doExecute(context: RequestContext): Event {
-                context.viewScope.put("countries", stateCache[COUNTRIES])
-                context.viewScope.put("states", stateCache[(context.flowScope[EXTRA_ATTRS_FLOW_VAR] as ExtraAttrs).country])
-                return success()
-            }
-
-        }
-    }
+    fun renderDelegatedAuthAction(): Action = RenderDelegatedAuthAction(alaCasProperties)
 
     @Bean
     @Qualifier(AlaCasWebflowConfigurer.ACTION_UPDATE_PASSWORD)
-    fun updatePasswordAction() = UpdatePasswordAction(
+    fun updatePasswordAction(): Action = UpdatePasswordAction(
         alaCasProperties, PasswordEncoderUtils.newPasswordEncoder(alaCasProperties.userCreator.passwordEncoder),
         userCreatorDataSource, userCreatorTransactionManager
     )
@@ -154,7 +113,7 @@ class AlaCasWebflowConfiguration : CasWebflowExecutionPlanConfigurer {
 
     @Bean
     @Qualifier(AlaCasWebflowConfigurer.STATE_ID_SAVE_EXTRA_ATTRS_ACTION)
-    fun saveExtraAttrsAction() = SaveExtraAttrsAction(alaCasProperties, userCreatorDataSource, userCreatorTransactionManager)
+    fun saveExtraAttrsAction() = SaveExtraAttrsAction(alaCasProperties, userCreatorDataSource, userCreatorTransactionManager, cachingAttributeRepository)
 
     @ConditionalOnMissingBean(name = ["alaAuthCookieWebflowConfigurer"])
     @Bean
@@ -177,9 +136,3 @@ class AlaCasWebflowConfiguration : CasWebflowExecutionPlanConfigurer {
     }
 
 }
-
-
-data class CodedName @JsonCreator constructor(
-    @param:JsonProperty val isoCode: String,
-    @param:JsonProperty val name: String
-)

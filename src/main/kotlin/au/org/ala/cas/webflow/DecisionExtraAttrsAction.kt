@@ -22,9 +22,16 @@ class DecisionExtraAttrsAction : AbstractAction() {
 
             // all attributes are strings, including "null" and dates
             // date format appears to be yyyy-MM-dd hh:mm:ss local time (db?  server?) eg 2018-05-30 17:07:46
-            log.error("EXTRA ATTRS DECISION ATTRS {}", principal.attributes)
+            log.debug("ExtraAttrs Decision State attributes: {}", principal.attributes)
             val lastLogin = attributes["lastLogin"] as? String
+            val city = attributes["city"] as? String
+            val state = attributes["state"] as? String
+            val organisation = attributes["organisation"] as? String
             if (lastLogin.isNullOrBlank() || lastLogin == NULL_ATTRIBUTE_VALUE) {
+                if (!city.isNullOrBlank() || !state.isNullOrBlank() || !organisation.isNullOrBlank()) {
+                    log.info("Last login for {} is null but the user already has a city, state or organisation set", attributes["email"])
+                    return no()
+                }
                 log.info("Last login for {} is blank or null: {}", attributes["email"], lastLogin)
                 return yes()
             }

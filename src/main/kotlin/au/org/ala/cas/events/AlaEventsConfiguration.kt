@@ -2,7 +2,10 @@ package au.org.ala.cas.events
 
 import au.org.ala.cas.AlaCasProperties
 import org.apereo.cas.configuration.support.JpaBeans
+import org.apereo.services.persondir.IPersonAttributeDao
+import org.apereo.services.persondir.support.CachingPersonAttributeDaoImpl
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
@@ -22,8 +25,10 @@ class AlaEventsConfiguration {
 
     @Bean
     @ConditionalOnProperty(prefix="ala.userCreator.jdbc", name=["enableUpdateLastLoginTime"])
-    fun alaCasEventListener(): AlaCasEventListener {
-        return AlaCasEventListener(JpaBeans.newDataSource(alaCasProperties.userCreator.jdbc), alaCasProperties.userCreator.jdbc.updateLastLoginTimeSql, lastLoginExecutor())
+    fun alaCasEventListener(
+        @Autowired @Qualifier("cachingAttributeRepository") cachingAttributeRepository: IPersonAttributeDao
+    ): AlaCasEventListener {
+        return AlaCasEventListener(JpaBeans.newDataSource(alaCasProperties.userCreator.jdbc), alaCasProperties.userCreator.jdbc.updateLastLoginTimeSql, lastLoginExecutor(), cachingAttributeRepository as? CachingPersonAttributeDaoImpl ?: throw IllegalStateException())
     }
 }
 

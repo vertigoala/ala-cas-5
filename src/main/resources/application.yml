@@ -243,7 +243,60 @@ cas:
 #      dataSourceName: java:comp/env/jdbccas
       driverClass: com.mysql.jdbc.Driver
       validationQuery: /* ping */ SELECT 1
-
+    endpoints:
+      enabled: true
+      sensitive: true
+      dashboard:
+        enabled: true
+#        sensitive: true
+      auditEvents:
+        enabled: true
+#        sensitive: true
+      authenticationEvents:
+        enabled: true
+#        sensitive: false
+      configurationState:
+        enabled: true
+#        sensitive: false
+      healthCheck:
+        enabled: true
+#        sensitive: false
+      loggingConfig:
+        enabled: true
+#        sensitive: false
+      metrics:
+        enabled: true
+#        sensitive: false
+      attributeResolution:
+        enabled: true
+#        sensitive: false
+      singleSignOnReport:
+        enabled: true
+#        sensitive: false
+      statistics:
+        enabled: true
+#        sensitive: false
+      discovery:
+        enabled: true
+#        sensitive: false
+      trustedDevices:
+        enabled: true
+#        sensitive: false
+      status:
+        enabled: true
+#        sensitive: false
+      singleSignOnStatus:
+        enabled: true
+#        sensitive: false
+      springWebflowReport:
+        enabled: true
+#        sensitive: false
+      registeredServicesReport:
+        enabled: true
+#        sensitive: false
+      configurationMetadata:
+        enabled: true
+#        sensitive: false
   tgc:
     maxAge: 28800 # Same as TGT expiry
     secure: true

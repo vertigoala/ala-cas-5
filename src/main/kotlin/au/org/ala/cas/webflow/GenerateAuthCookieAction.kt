@@ -21,7 +21,7 @@ open class GenerateAuthCookieAction(
 
     override fun doExecute(context: RequestContext): Event {
 
-        log.error("GenerateAuthCookieAction running")
+        log.debug("GenerateAuthCookieAction running")
         //
         // Create ALA specific cookie that any ALA web application can read
         //

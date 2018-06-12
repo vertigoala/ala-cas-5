@@ -7,6 +7,7 @@ import au.org.ala.utils.logger
 import org.apereo.cas.authentication.Authentication
 import org.apereo.cas.authentication.principal.ClientCredential
 import org.apereo.cas.web.support.WebUtils
+import org.apereo.services.persondir.support.CachingPersonAttributeDaoImpl
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.jdbc.datasource.DataSourceTransactionManager
 import org.springframework.transaction.PlatformTransactionManager
@@ -18,7 +19,11 @@ import org.springframework.webflow.execution.Event
 import org.springframework.webflow.execution.RequestContext
 import javax.sql.DataSource
 
-open class SaveExtraAttrsAction(val alaCasProperties: AlaCasProperties, val dataSource: DataSource, transactionManager: DataSourceTransactionManager) : AbstractAction() {
+open class SaveExtraAttrsAction(
+    val alaCasProperties: AlaCasProperties,
+    val dataSource: DataSource,
+    transactionManager: DataSourceTransactionManager,
+    val cachingAttributeRepository: CachingPersonAttributeDaoImpl) : AbstractAction() {
 
 
     companion object {
@@ -42,6 +47,7 @@ open class SaveExtraAttrsAction(val alaCasProperties: AlaCasProperties, val data
 //        val credential = WebUtils.getCredential(context, ClientCredential::class.java)
         val authentication = WebUtils.getAuthentication(context)
         val userid: Long? = authentication.alaUserId()
+        val email = authentication.principal.attributes["email"] as? String
 
         if (userid == null) {
             log.warn("Couldn't extract userid from {}, aborting", authentication)
@@ -66,6 +72,10 @@ open class SaveExtraAttrsAction(val alaCasProperties: AlaCasProperties, val data
                 ).forEach { (name, value) ->
                     updateField(template, userid, authentication, name, value)
                 }
+                // invalidate cache for the new user attributes
+                // TODO there must be a less coupled way of achieving this
+
+                email?.let { cachingAttributeRepository.removeUserAttributes(it) }
             } catch (e: Exception) {
                 // If we can't set the properties, just log and move on
                 // because none of these properties are required.
