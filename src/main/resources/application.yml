@@ -72,6 +72,7 @@ cas:
       databaseName: cas-service-registry
       userId: cas
       password: password
+      socket-keep-alive: true
     jpa:
       driverClass: com.mysql.jdbc.Driver
       dialect: org.hibernate.dialect.MySQL57Dialect
@@ -326,6 +327,8 @@ cas:
         userId: cas
         password: password
         databaseName: cas-ticket-registry
+        timeout: PT10S
+        socket-keep-alive: true
 #      jpa:
 #        driverClass: com.mysql.jdbc.Driver
 #        ddl-auto: validate
