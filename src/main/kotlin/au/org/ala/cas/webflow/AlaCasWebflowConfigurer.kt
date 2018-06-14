@@ -154,7 +154,7 @@ class AlaCasWebflowConfigurer(
         val terminateSession = createActionState(
             flow,
             CasWebflowConstants.STATE_ID_TERMINATE_SESSION,
-            createEvaluateAction(CasWebflowConstants.ACTION_ID_TERMINATE_SESSION)
+            createEvaluateAction(ACTION_ID_LOGIN_TERMINATE_SESSION_ACTION)
         )
         createStateDefaultTransition(terminateSession, CasWebflowConstants.STATE_ID_GATEWAY_REQUEST_CHECK)
     }
