@@ -30,7 +30,6 @@ class LoginTerminateSessionAction(val ticketGrantingTicketCookieGenerator: Cooki
 //            WebUtils.putLogoutRequests(context, logoutRequests)
         }
         log.debug("Removing CAS cookies")
-        WebUtils.getTicketGrantingTicketId(context)
         this.ticketGrantingTicketCookieGenerator.removeCookie(response)
 //        this.warnCookieGenerator.removeCookie(response)
 
