@@ -69,6 +69,10 @@ class AlaCasWebflowConfiguration : CasWebflowExecutionPlanConfigurer {
     @Qualifier("cachingAttributeRepository")
     lateinit var cachingAttributeRepository: CachingPersonAttributeDaoImpl
 
+    @Autowired
+    @Qualifier("ticketGrantingTicketCookieGenerator")
+    lateinit var ticketGrantingTicketCookieGenerator: CookieRetrievingCookieGenerator
+
     @Bean
     @RefreshScope
     @Qualifier("alaProxyAuthenticationCookieGenerator")
@@ -114,6 +118,11 @@ class AlaCasWebflowConfiguration : CasWebflowExecutionPlanConfigurer {
     @Bean
     @Qualifier(AlaCasWebflowConfigurer.STATE_ID_SAVE_EXTRA_ATTRS_ACTION)
     fun saveExtraAttrsAction() = SaveExtraAttrsAction(alaCasProperties, userCreatorDataSource, userCreatorTransactionManager, cachingAttributeRepository)
+
+    // TODO remove once CAS terminateSessionAction in login-flow.xml is fixed.
+    @Bean
+    @Qualifier(AlaCasWebflowConfigurer.ACTION_ID_LOGIN_TERMINATE_SESSION_ACTION)
+    fun loginTerminateSessionAction() = LoginTerminateSessionAction(ticketGrantingTicketCookieGenerator)
 
     @ConditionalOnMissingBean(name = ["alaAuthCookieWebflowConfigurer"])
     @Bean
