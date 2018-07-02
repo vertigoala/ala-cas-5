@@ -53,8 +53,7 @@ class AlaCasServiceRegistryInitializationConfiguration {
         val initializer = AlaServiceRegistryInitializer(
             embeddedJsonServiceRegistry,
             serviceRegistryDao,
-            servicesManager,
-            serviceRegistry.isInitFromJson
+            servicesManager
         )
 
         if (serviceRegistry.isInitFromJson) {
