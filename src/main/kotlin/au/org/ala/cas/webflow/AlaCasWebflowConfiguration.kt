@@ -19,6 +19,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.DependsOn
 import org.springframework.jdbc.datasource.DataSourceTransactionManager
+import org.springframework.web.util.CookieGenerator
 import org.springframework.webflow.definition.registry.FlowDefinitionRegistry
 import org.springframework.webflow.engine.builder.support.FlowBuilderServices
 import org.springframework.webflow.execution.Action
@@ -76,16 +77,16 @@ class AlaCasWebflowConfiguration : CasWebflowExecutionPlanConfigurer {
     @Bean
     @RefreshScope
     @Qualifier("alaProxyAuthenticationCookieGenerator")
-    fun alaProxyAuthenticationCookieGenerator(): CookieRetrievingCookieGenerator =
+    fun alaProxyAuthenticationCookieGenerator(): CookieGenerator =
         alaCasProperties.cookie.run {
-            CookieRetrievingCookieGenerator(
-                name,
-                path,
-                maxAge,
-                isSecure,
-                domain,
-                isHttpOnly
-            )
+            CookieGenerator().also { cookieGen ->
+                cookieGen.cookieName = name
+                cookieGen.cookieDomain = domain
+                cookieGen.cookiePath = path
+                cookieGen.cookieMaxAge = maxAge
+                cookieGen.isCookieHttpOnly = isHttpOnly
+                cookieGen.isCookieSecure = isSecure
+            }
         }
 
     @Bean

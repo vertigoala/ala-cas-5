@@ -4,15 +4,15 @@ import au.org.ala.utils.logger
 import org.apereo.cas.authentication.AuthenticationException
 import org.apereo.cas.ticket.InvalidTicketException
 import org.apereo.cas.ticket.registry.TicketRegistrySupport
-import org.apereo.cas.web.support.CookieRetrievingCookieGenerator
 import org.apereo.cas.web.support.WebUtils
+import org.springframework.web.util.CookieGenerator
 import org.springframework.webflow.action.AbstractAction
 import org.springframework.webflow.execution.Event
 import org.springframework.webflow.execution.RequestContext
 
 open class GenerateAuthCookieAction(
     val ticketRegistrySupport: TicketRegistrySupport,
-    val alaProxyAuthenticationCookieGenerator: CookieRetrievingCookieGenerator
+    val alaProxyAuthenticationCookieGenerator: CookieGenerator
 ) : AbstractAction() {
 
     companion object {
@@ -36,7 +36,8 @@ open class GenerateAuthCookieAction(
                 )
             val email = authentication.principal.attributes["email"] ?: authentication.principal.id
 
-            alaProxyAuthenticationCookieGenerator.addCookie(context, email.toString())
+            val response = WebUtils.getHttpServletResponseFromExternalWebflowContext(context)
+            alaProxyAuthenticationCookieGenerator.addCookie(response, email.toString())
         } else {
             log.debug("Ticket-granting ticket ID is blank")
         }
