@@ -2,7 +2,6 @@ package au.org.ala.cas.webflow
 
 import au.org.ala.cas.AlaCasProperties
 import au.org.ala.cas.delegated.AccountNotActivatedException
-import au.org.ala.cas.delegated.AlaPrincipalFactory
 import au.org.ala.utils.logger
 import org.apereo.cas.configuration.CasConfigurationProperties
 import org.apereo.cas.web.flow.CasWebflowConstants
@@ -64,7 +63,7 @@ class AlaCasWebflowConfigurer(
             createViewStates(inFlow)
             addAccountNotActivatedHandler(inFlow)
             // TODO remove once CAS terminateSessionAction in login-flow.xml is fixed.
-            createTerminateSessionAction(inFlow)
+//            createTerminateSessionAction(inFlow)
 
             if (alaCasProperties.userCreator.jdbc.enableRequestExtraAttributes) {
                 addDelegatedAuthPropertyRequest(inFlow)
