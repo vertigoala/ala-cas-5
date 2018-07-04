@@ -4,6 +4,7 @@ import au.org.ala.cas.AlaCasProperties
 import au.org.ala.utils.logger
 import org.apereo.cas.authentication.support.password.PasswordEncoderUtils
 import org.apereo.cas.configuration.CasConfigurationProperties
+import org.apereo.cas.configuration.support.Beans
 import org.apereo.cas.ticket.registry.TicketRegistrySupport
 import org.apereo.cas.web.flow.CasWebflowExecutionPlan
 import org.apereo.cas.web.flow.CasWebflowExecutionPlanConfigurer
@@ -19,12 +20,10 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.DependsOn
 import org.springframework.jdbc.datasource.DataSourceTransactionManager
-import org.springframework.web.util.CookieGenerator
 import org.springframework.webflow.definition.registry.FlowDefinitionRegistry
 import org.springframework.webflow.engine.builder.support.FlowBuilderServices
 import org.springframework.webflow.execution.Action
 import javax.sql.DataSource
-
 
 @Configuration("alaCasWebflowConfiguration")
 @EnableConfigurationProperties(AlaCasProperties::class, CasConfigurationProperties::class)
@@ -77,15 +76,10 @@ class AlaCasWebflowConfiguration : CasWebflowExecutionPlanConfigurer {
     @Bean
     @RefreshScope
     @Qualifier("alaProxyAuthenticationCookieGenerator")
-    fun alaProxyAuthenticationCookieGenerator(): CookieGenerator =
+    fun alaProxyAuthenticationCookieGenerator(): CookieRetrievingCookieGenerator =
         alaCasProperties.cookie.run {
-            CookieGenerator().also { cookieGen ->
-                cookieGen.cookieName = name
-                cookieGen.cookieDomain = domain
-                cookieGen.cookiePath = path
-                cookieGen.cookieMaxAge = maxAge
-                cookieGen.isCookieHttpOnly = isHttpOnly
-                cookieGen.isCookieSecure = isSecure
+            CookieRetrievingCookieGenerator(name, path, maxAge, isSecure, domain, isHttpOnly).also { cookieGen ->
+                cookieGen.setRememberMeMaxAge(Beans.newDuration(rememberMeMaxAge).seconds.toInt())
             }
         }
 

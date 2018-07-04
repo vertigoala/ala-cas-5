@@ -2,13 +2,14 @@ package au.org.ala.cas
 
 import org.apereo.cas.configuration.model.core.authentication.PasswordEncoderProperties
 import org.apereo.cas.configuration.model.support.cookie.CookieProperties
+import org.apereo.cas.configuration.model.support.cookie.TicketGrantingCookieProperties
 import org.apereo.cas.configuration.model.support.jpa.AbstractJpaProperties
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.NestedConfigurationProperty
 
 @ConfigurationProperties(value = "ala")
 open class AlaCasProperties(
-    @field:NestedConfigurationProperty var cookie: CookieProperties = CookieProperties(),
+    @field:NestedConfigurationProperty var cookie: TicketGrantingCookieProperties = TicketGrantingCookieProperties().apply { name = "ALA-Auth" },
     @field:NestedConfigurationProperty var userCreator: UserCreatorProperties = UserCreatorProperties(),
     @field:NestedConfigurationProperty val skin: SkinProperties = SkinProperties()
 ) {

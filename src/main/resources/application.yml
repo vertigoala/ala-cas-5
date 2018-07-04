@@ -302,7 +302,7 @@ cas:
     maxAge: 28800 # Same as TGT expiry
     secure: true
     httpOnly: true
-    rememberMeMaxAge: PT7884000S #7884000 # P14D # 1209600
+    rememberMeMaxAge: PT7884000S #7884000
     crypto:
       enabled: false
 #    encryptionKey=
@@ -316,7 +316,7 @@ cas:
       timeToKillInSeconds: 28800 # PT8H
       rememberMe:
         enabled: true
-        timeToKillInSeconds: 7884000 # P3M # 1209600 # P14D
+        timeToKillInSeconds: 7884000 # P3M
     registry:
 #      cleaner:
 #        schedule:
@@ -369,6 +369,7 @@ ala:
     domain: ala.org.au
     httpOnly: true
     maxAge: -1
+    rememberMeMaxAge: ${cas.tgc.rememberMeMaxAge}
     name: ALA-Auth
     path: /
     secure: false

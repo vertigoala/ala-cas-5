@@ -1,14 +1,14 @@
 package au.org.ala.cas.webflow
 
 import au.org.ala.utils.logger
+import org.apereo.cas.web.support.CookieRetrievingCookieGenerator
 import org.apereo.cas.web.support.WebUtils
-import org.springframework.web.util.CookieGenerator
 import org.springframework.webflow.action.AbstractAction
 import org.springframework.webflow.execution.Event
 import org.springframework.webflow.execution.RequestContext
 
 open class RemoveAuthCookieAction(
-    val alaProxyAuthenticationCookieGenerator: CookieGenerator
+    val alaProxyAuthenticationCookieGenerator: CookieRetrievingCookieGenerator
 ) : AbstractAction() {
 
     companion object {
