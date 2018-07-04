@@ -122,9 +122,13 @@ class AlaCasWebflowConfigurer(
     }
 
     private fun doGenerateAuthCookieOnLoginAction(flow: Flow) {
+        val generateServiceTicketAction =
+            flow.getState(CasWebflowConstants.STATE_ID_GENERATE_SERVICE_TICKET ) as ActionState
+        log.debug("doGenerateAuthCookieOnLoginAction {}: {}", generateServiceTicketAction.javaClass.name, generateServiceTicketAction)
+        generateServiceTicketAction.exitActionList.add(generateAuthCookieAction)
+
         val sendTicketGrantingTicketAction =
             flow.getState(CasWebflowConstants.STATE_ID_SEND_TICKET_GRANTING_TICKET) as ActionState
-        log.debug("doGenerateAuthCookieOnLoginAction {}: {}", sendTicketGrantingTicketAction.javaClass.name, sendTicketGrantingTicketAction)
         sendTicketGrantingTicketAction.exitActionList.add(generateAuthCookieAction)
     }
 
