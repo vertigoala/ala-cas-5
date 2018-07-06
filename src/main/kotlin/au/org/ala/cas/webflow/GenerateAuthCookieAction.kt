@@ -36,7 +36,7 @@ open class GenerateAuthCookieAction(
                 )
             val email = authentication.principal.attributes["email"] ?: authentication.principal.id
 
-            alaProxyAuthenticationCookieGenerator.addCookie(context, email.toString())
+            alaProxyAuthenticationCookieGenerator.addCookie(context, "\"$email\"")
         } else {
             log.debug("Ticket-granting ticket ID is blank")
         }
