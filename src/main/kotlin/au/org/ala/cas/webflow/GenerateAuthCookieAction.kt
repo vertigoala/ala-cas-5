@@ -9,10 +9,13 @@ import org.apereo.cas.web.support.WebUtils
 import org.springframework.webflow.action.AbstractAction
 import org.springframework.webflow.execution.Event
 import org.springframework.webflow.execution.RequestContext
+import java.net.URLEncoder
 
 open class GenerateAuthCookieAction(
     val ticketRegistrySupport: TicketRegistrySupport,
-    val alaProxyAuthenticationCookieGenerator: CookieRetrievingCookieGenerator
+    val alaProxyAuthenticationCookieGenerator: CookieRetrievingCookieGenerator,
+    val quoteCookieValue: Boolean,
+    val encodeCookieValue: Boolean
 ) : AbstractAction() {
 
     companion object {
@@ -34,9 +37,9 @@ open class GenerateAuthCookieAction(
                     AuthenticationException("No authentication found for ticket $ticketGrantingTicket"),
                     ticketGrantingTicket
                 )
-            val email = authentication.principal.attributes["email"] ?: authentication.principal.id
+            val email = authentication.principal.attributes["email"]?.toString() ?: authentication.principal.id
 
-            alaProxyAuthenticationCookieGenerator.addCookie(context, "\"$email\"")
+            alaProxyAuthenticationCookieGenerator.addCookie(context, quoteValue(encodeValue(email)))
         } else {
             log.debug("Ticket-granting ticket ID is blank")
         }
@@ -44,4 +47,7 @@ open class GenerateAuthCookieAction(
         return success()
     }
 
+    private fun quoteValue(value: String) = if (quoteCookieValue) "\"$value\"" else value
+    // TODO Custom encoder that doesn't encode valid cookie characters
+    private fun encodeValue(value: String) = if (encodeCookieValue) URLEncoder.encode(value, "UTF-8") else value
 }

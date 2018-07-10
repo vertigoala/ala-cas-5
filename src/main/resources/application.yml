@@ -373,6 +373,8 @@ ala:
     name: ALA-Auth
     path: /
     secure: false
+    quoteValue: true
+    urlEncodeValue: false
   userCreator:
     defaultCountry: AU
     userCreatePassword: "CHANGE_ME"

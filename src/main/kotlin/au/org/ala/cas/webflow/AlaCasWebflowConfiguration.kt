@@ -85,7 +85,7 @@ class AlaCasWebflowConfiguration : CasWebflowExecutionPlanConfigurer {
 
     @Bean
     fun generateAuthCookieAction(): GenerateAuthCookieAction =
-        GenerateAuthCookieAction(ticketRegistrySupport, alaProxyAuthenticationCookieGenerator())
+        GenerateAuthCookieAction(ticketRegistrySupport, alaProxyAuthenticationCookieGenerator(), alaCasProperties.cookie.quoteValue, alaCasProperties.cookie.urlEncodeValue)
 
     @Bean
     fun removeAuthCookieAction(): RemoveAuthCookieAction =

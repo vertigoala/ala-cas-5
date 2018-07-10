@@ -9,7 +9,7 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty
 
 @ConfigurationProperties(value = "ala")
 open class AlaCasProperties(
-    @field:NestedConfigurationProperty var cookie: TicketGrantingCookieProperties = TicketGrantingCookieProperties().apply { name = "ALA-Auth" },
+    @field:NestedConfigurationProperty var cookie: AlaAuthCookieProperties = AlaAuthCookieProperties(),
     @field:NestedConfigurationProperty var userCreator: UserCreatorProperties = UserCreatorProperties(),
     @field:NestedConfigurationProperty val skin: SkinProperties = SkinProperties()
 ) {
@@ -60,3 +60,12 @@ open class SkinProperties {
     var cacheDuration: String = "PT30m"
 }
 
+open class AlaAuthCookieProperties : CookieProperties() {
+    init {
+        name = "ALA-Auth"
+    }
+
+    var rememberMeMaxAge: String = "P14D"
+    var quoteValue: Boolean = true
+    var urlEncodeValue: Boolean = false
+}
