@@ -7,8 +7,9 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
 import org.springframework.session.data.redis.config.ConfigureRedisAction
 
-// TODO Remove for CAS 5.3.0+ because Pac4j WebFlow actions will no longer use http session
+// TODO Check future versions of CAS still need this?
 @Configuration
+@ConditionalOnProperty(prefix = "spring.session", value = ["store-type"], havingValue = "redis")
 @Import(RedisAutoConfiguration::class) // Need to import manually because @SpringBootApplication on CasWebApplication::class excludes it
 class AlaSpringSessionConfiguration {
 
