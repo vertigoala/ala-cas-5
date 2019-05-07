@@ -10,6 +10,7 @@ import org.apereo.services.persondir.support.CachingPersonAttributeDaoImpl
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
+import org.springframework.boot.autoconfigure.flyway.FlywayDataSource
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.cloud.context.config.annotation.RefreshScope
 import org.springframework.context.annotation.Bean
@@ -34,6 +35,7 @@ class AlaPac4jAuthenticationConfiguration {
      * CAS this is retrieved from JNDI so won't actually create additional db connections)
      */
     @Bean
+    @FlywayDataSource
     @Qualifier("userCreatorDataSource")
     fun userCreatorDataSource() = JpaBeans.newDataSource(casConfigurationProperties.monitor.jdbc)
 
