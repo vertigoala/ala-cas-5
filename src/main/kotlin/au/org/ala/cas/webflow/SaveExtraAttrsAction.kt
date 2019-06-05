@@ -1,7 +1,6 @@
 package au.org.ala.cas.webflow
 
-import au.org.ala.cas.AlaCasProperties
-import au.org.ala.cas.alaUserId
+import au.org.ala.cas.*
 import au.org.ala.cas.delegated.AlaPrincipalFactory
 import au.org.ala.utils.logger
 import org.apereo.cas.authentication.Authentication
@@ -47,7 +46,7 @@ open class SaveExtraAttrsAction(
 //        val credential = WebUtils.getCredential(context, ClientCredential::class.java)
         val authentication = WebUtils.getAuthentication(context)
         val userid: Long? = authentication.alaUserId()
-        val email = authentication.principal.attributes["email"] as? String
+        val email = authentication.stringAttribute("email")
 
         if (userid == null) {
             log.warn("Couldn't extract userid from {}, aborting", authentication)
@@ -90,10 +89,10 @@ open class SaveExtraAttrsAction(
     }
 
     private fun updateField(template: NamedParameterJdbcTemplate, userid: Long, authentication: Authentication, name: String, value: String) {
-        if (value != getAttribute(authentication, name)) {
+        if (value != authentication.stringAttribute(name)) {
             updateField(template, userid, name, value)
-            authentication.principal.attributes[name] = value
-            if (authentication.attributes.containsKey(name)) authentication.attributes[name] = value
+            authentication.principal.attributes.setSingleAttributeValue(name, value)
+            if (authentication.attributes.containsKey(name)) authentication.attributes.setSingleAttributeValue(name, value)
         }
     }
 
@@ -109,7 +108,5 @@ open class SaveExtraAttrsAction(
             log.warn("Insert / update field for {}, {}, {} returned {} updates", userid, name, value, updateCount)
         }
     }
-
-    private fun getAttribute(authentication: Authentication, name: String) = authentication.principal.attributes[name] as? String
 
 }

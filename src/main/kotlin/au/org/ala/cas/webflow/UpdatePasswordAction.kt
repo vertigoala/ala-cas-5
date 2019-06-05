@@ -2,6 +2,7 @@ package au.org.ala.cas.webflow
 
 import au.org.ala.cas.AlaCasProperties
 import au.org.ala.cas.alaUserId
+import au.org.ala.cas.booleanAttribute
 import au.org.ala.utils.logger
 import org.apereo.cas.authentication.UsernamePasswordCredential
 import org.apereo.cas.web.support.WebUtils
@@ -33,12 +34,7 @@ class UpdatePasswordAction(
         val credential = WebUtils.getCredential(context)
         val authentication = WebUtils.getAuthentication(context)
         val userid = authentication.alaUserId()
-        val legacyPasswordAttribute = authentication?.principal?.attributes?.get("legacyPassword")
-        val legacyPassword = when(legacyPasswordAttribute) {
-            is Array<*> -> legacyPasswordAttribute.contains("1")
-            is Collection<*> -> legacyPasswordAttribute.contains("1")
-            else -> legacyPasswordAttribute == "1"
-        }
+        val legacyPassword = authentication.booleanAttribute("legacyPassword") ?: false
         if (credential != null && credential is UsernamePasswordCredential && !credential.password.isNullOrBlank() && legacyPassword && userid != null) {
             log.info("Upgrading legacy password for {} ({})", credential.username, userid)
             val params = mapOf(

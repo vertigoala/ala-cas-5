@@ -1,6 +1,8 @@
 package au.org.ala.cas.events
 
 import au.org.ala.cas.alaUserId
+import au.org.ala.cas.singleStringAttributeValue
+import au.org.ala.cas.stringAttribute
 import au.org.ala.utils.logger
 import org.apereo.cas.authentication.UsernamePasswordCredential
 import org.apereo.cas.support.events.authentication.CasAuthenticationTransactionSuccessfulEvent
@@ -27,7 +29,7 @@ open class AlaCasEventListener(
         val authentication = casTicketGrantingTicketCreatedEvent.ticketGrantingTicket?.authentication
         log.debug("Handling CAS TGT created event for : {}", authentication)
         val userid = authentication?.alaUserId()
-        val email = authentication?.principal?.attributes?.get("email") as? String
+        val email = authentication?.stringAttribute("email")
         if (userid != null) {
             executorService.execute {
                 try {

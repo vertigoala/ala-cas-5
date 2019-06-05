@@ -196,7 +196,13 @@ class Google2AttributeParser(val userAttributes: Map<String, Any>) : AttributePa
         val emails = userAttributes[Google2ProfileDefinition.EMAILS]
         val googleEmail = when (emails) {
             is List<*> -> (emails as List<Google2Email>).firstOrNull { it.type == "account" }?.email
-            else -> userAttributes[Google2ProfileDefinition.EMAIL]?.toString()
+            else -> {
+                if (userAttributes[Google2ProfileDefinition.EMAIL_VERIFIED] as? Boolean != false) {
+                    userAttributes[Google2ProfileDefinition.EMAIL]?.toString()
+                } else {
+                    null
+                }
+            }
         }
 
         // Not sure if this can really happen; we should reach this point only after a successful authentication,
@@ -207,7 +213,7 @@ class Google2AttributeParser(val userAttributes: Map<String, Any>) : AttributePa
         return googleEmail
     }
 
-    override fun findFirstname() = userAttributes[Google2ProfileDefinition.GIVEN_NAME] as? String
-    override fun findLastname() = userAttributes[Google2ProfileDefinition.FAMILY_NAME] as? String
+    override fun findFirstname() = userAttributes[Google2ProfileDefinition.GIVEN_NAME] as? String ?: AttributeParser.extractFirstName(userAttributes[Google2ProfileDefinition.NAME] as? String, "")
+    override fun findLastname() = userAttributes[Google2ProfileDefinition.FAMILY_NAME] as? String ?: userAttributes["family_name"] as? String ?: AttributeParser.extractLastName(userAttributes[Google2ProfileDefinition.NAME] as? String, "")
 
 }
