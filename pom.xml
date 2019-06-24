@@ -440,11 +440,6 @@
             <artifactId>cas-server-support-jdbc-monitor</artifactId>
             <version>${cas.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.apereo.cas</groupId>
-            <artifactId>cas-server-support-mongo-monitor</artifactId>
-            <version>${cas.version}</version>
-        </dependency>
         <!--<dependency>-->
             <!--<groupId>org.apereo.cas</groupId>-->
             <!--<artifactId>cas-server-support-interrupt-webflow</artifactId>-->
@@ -770,7 +765,7 @@
     </dependencies>
 
     <properties>
-        <cas.version>5.3.11-SNAPSHOT</cas.version>
+        <cas.version>5.3.11</cas.version>
         <springboot.version>1.5.18.RELEASE</springboot.version>
         <!-- app.server could be -jetty, -undertow, -tomcat, or blank if you plan to provide appserver -->
         <!-- we use blank to create a blank war and spring boot repackage to build an executable Tomcat jar -->
