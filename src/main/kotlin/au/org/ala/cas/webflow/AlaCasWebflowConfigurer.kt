@@ -40,8 +40,6 @@ class AlaCasWebflowConfigurer(
         val log = logger()
 
         const val STATE_ID_SAVE_EXTRA_ATTRS_ACTION = "saveExtraAttrsAction"
-        // TODO remove once CAS terminateSessionAction in login-flow.xml is fixed.
-        const val ACTION_ID_LOGIN_TERMINATE_SESSION_ACTION = "loginTerminateSessionAction"
         const val DECISION_ID_EXTRA_ATTRS = "decisionExtraAttrsAction"
         const val VIEW_ID_DELEGATED_AUTH_EXTRA_ATTRS = "delegatedAuthFormView"
         const val VIEW_ID_ACCOUNT_NOT_ACTIVATED = "casAccountNotActivatedView"
@@ -148,17 +146,4 @@ class AlaCasWebflowConfigurer(
         createTransitionForState(handler, AccountNotActivatedException::class.java.simpleName, VIEW_ID_ACCOUNT_NOT_ACTIVATED)
     }
 
-    /**
-     * Create terminate session action.  TODO remove once CAS terminateSessionAction in login-flow.xml is fixed.
-     *
-     * @param flow the flow
-     */
-    fun createTerminateSessionAction(flow: Flow) {
-        val terminateSession = createActionState(
-            flow,
-            CasWebflowConstants.STATE_ID_TERMINATE_SESSION,
-            createEvaluateAction(ACTION_ID_LOGIN_TERMINATE_SESSION_ACTION)
-        )
-        createStateDefaultTransition(terminateSession, CasWebflowConstants.STATE_ID_GATEWAY_REQUEST_CHECK)
-    }
 }
