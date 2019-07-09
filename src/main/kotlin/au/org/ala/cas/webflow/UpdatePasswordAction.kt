@@ -47,7 +47,6 @@ class UpdatePasswordAction(
                         val rowsUpdated = template.update(sql, params)
                         if (rowsUpdated == 0) {
                             log.warn("SQL {} with params {} returned 0 updated rows", sql, params)
-//                            status.setRollbackOnly()
                         }
                     }
                 } catch (e: Exception) {

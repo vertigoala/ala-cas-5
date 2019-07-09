@@ -14,7 +14,7 @@
     <div th:fragment="loginProviders" th:remove="tag">
         <div th:if="${pac4jUrls}" id="list-providers">
             <a th:each="entry: ${pac4jUrls}" th:switch="${entry.type}"
-               class="btn btn-block btn-social margin-bottom-1"
+               class="btn btn-block btn-social mb-1"
                th:classappend="${#strings.replace(#messages.msg('cas.authn.pac4j.class.' + entry.type), 'cas.authn.pac4j.class.' + entry.type, 'btn-' + entry.type)}"
                th:href="@{${entry.redirectUrl}}"
                th:attr="autoredirect=${entry.autoRedirect}"
@@ -38,7 +38,7 @@
 
                 [[#{ala.screen.login.signinwith(${#strings.replace(#messages.msg('cas.authn.pac4j.label.' + entry.type), 'cas.authn.pac4j.label.' + entry.type, entry.name)})}]]
             </a>
-            <p class="separator t-center margin-bottom-2"><span th:text="#{ala.screen.login.or}">Or</span></p>
+            <p class="separator text-center mb-2"><span th:text="#{ala.screen.login.or}">Or</span></p>
 
         </div>
         <script>

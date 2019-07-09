@@ -24,6 +24,8 @@ class AlaTemplateClient(
     companion object {
         const val LOGGED_IN_CLASS = "logged-in"
         const val LOGGED_OUT_CLASS = "not-logged-in"
+        const val SIGNED_IN_CLASS = "signedIn"
+        const val SIGNED_OUT_CLASS = "signedOut"
 
         val log = logger()
     }
@@ -53,6 +55,10 @@ class AlaTemplateClient(
             .replace("::searchServer::", skinConfig.bieBaseUrl)
             .replace("::searchPath::", skinConfig.bieSearchPath)
             .replace("::authStatusClass::", if (loggedIn) LOGGED_IN_CLASS else LOGGED_OUT_CLASS)
+            .replace("::loginStatus::", if (loggedIn) SIGNED_IN_CLASS else SIGNED_OUT_CLASS)
+            .replace("::loginURL::", request?.servletContext?.contextPath + "/login")
+            .replace("::logoutURL::", request?.servletContext?.contextPath + "/logout")
+            .replace("::containerClass::", if (fluidLayout) "container-fluid" else "container")
         if (fluidLayout) {
             content = content.replace("class=\"container\"", "class=\"container-fluid\"")
         }
