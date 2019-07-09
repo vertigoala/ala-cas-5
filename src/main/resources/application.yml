@@ -400,4 +400,5 @@ ala:
     orgLongName: Atlas Of Living Australia
     orgNameKey: ala
     cacheDuration: PT30m # 1800000
+    ui-version: 2
 debug: false
