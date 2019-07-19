@@ -58,6 +58,7 @@ open class SkinProperties {
     lateinit var orgLongName: String
     lateinit var orgNameKey: String
     var cacheDuration: String = "PT30m"
+    var uiVersion: Int = 2
 }
 
 open class AlaAuthCookieProperties : CookieProperties() {

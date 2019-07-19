@@ -1,15 +1,21 @@
 package au.org.ala.cas.delegated
 
 import au.org.ala.cas.AlaCasProperties
+import au.org.ala.cas.jndi.HikariDatasource
+import com.zaxxer.hikari.HikariConfig
+import com.zaxxer.hikari.HikariDataSource
 import org.apereo.cas.authentication.principal.PrincipalFactory
 import org.apereo.cas.authentication.principal.PrincipalResolver
 import org.apereo.cas.authentication.support.password.PasswordEncoderUtils
 import org.apereo.cas.configuration.CasConfigurationProperties
 import org.apereo.cas.configuration.support.JpaBeans
 import org.apereo.services.persondir.support.CachingPersonAttributeDaoImpl
+import org.flywaydb.core.Flyway
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
+import org.springframework.boot.autoconfigure.flyway.FlywayDataSource
+import org.springframework.boot.autoconfigure.flyway.FlywayProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.cloud.context.config.annotation.RefreshScope
 import org.springframework.context.annotation.Bean
@@ -18,7 +24,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager
 import javax.sql.DataSource
 
 @Configuration
-@EnableConfigurationProperties(AlaCasProperties::class, CasConfigurationProperties::class)
+@EnableConfigurationProperties(AlaCasProperties::class, CasConfigurationProperties::class, FlywayProperties::class)
 class AlaPac4jAuthenticationConfiguration {
 
     @Autowired
@@ -27,15 +33,26 @@ class AlaPac4jAuthenticationConfiguration {
     @Autowired
     lateinit var casConfigurationProperties: CasConfigurationProperties
 
+    @Autowired
+    lateinit var flywayProperties: FlywayProperties
+
     /**
      * This @Bean (or at least a single DataSource @Bean) is required for FlywayAutoConfiguration to execute,
      * even if Flyway is configured to create its own DataSource.
-     * As CAS doesn't expose its DataSources as @Beans, we get the monitoring jdbc connection (in ALA
-     * CAS this is retrieved from JNDI so won't actually create additional db connections)
      */
+    @FlywayDataSource
+    @Qualifier("alaCasFlywayDataSource")
+    fun alaCasFlywayDataSource(): DataSource {
+        val hc = HikariConfig()
+        hc.jdbcUrl = flywayProperties.url
+        hc.username = flywayProperties.user
+        hc.password = flywayProperties.password
+        return HikariDataSource(hc)
+    }
+
     @Bean
     @Qualifier("userCreatorDataSource")
-    fun userCreatorDataSource() = JpaBeans.newDataSource(casConfigurationProperties.monitor.jdbc)
+    fun userCreatorDataSource() = JpaBeans.newDataSource(alaCasProperties.userCreator.jdbc)
 
     @Bean
     fun userCreatorTransactionManager() = DataSourceTransactionManager(userCreatorDataSource())

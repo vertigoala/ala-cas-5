@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" th:class="@{${alaUiVersion}}">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta charset="UTF-8"/>
@@ -34,6 +34,7 @@
     <link rel="stylesheet" th:href="@{${headerFooterUrl}+'css/bootstrap.min.css'}" media="screen,print"/>
     <link rel="stylesheet" th:href="@{${headerFooterUrl}+'css/ala-styles.css'}" media="screen,print"/>
     <link rel="stylesheet" th:href="@{#{webjars.fontawesomemin.css}}"/>
+    <link rel="stylesheet" th:href="@{#{webjars.fontawesome.shims.css}}"/>
     <link rel="stylesheet" th:href="@{#{webjars.bootstrapsocial.css}}"/>
     <link rel="stylesheet" th:href="@{#{webjars.jqautocomplete.css}}"/>
     <link rel="stylesheet" th:href="@{#{webjars.chosen-bootstrap.css}}"/>

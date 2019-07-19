@@ -1,5 +1,7 @@
 package au.org.ala.cas.webflow
 
+import au.org.ala.cas.singleStringAttributeValue
+import au.org.ala.cas.stringAttribute
 import au.org.ala.utils.logger
 import org.apereo.cas.authentication.AuthenticationException
 import org.apereo.cas.ticket.InvalidTicketException
@@ -37,7 +39,7 @@ open class GenerateAuthCookieAction(
                     AuthenticationException("No authentication found for ticket $ticketGrantingTicket"),
                     ticketGrantingTicket
                 )
-            val email = authentication.principal.attributes["email"]?.toString() ?: authentication.principal.id
+            val email = authentication.stringAttribute("email") ?: authentication.principal.id ?: throw IllegalStateException("Principal id is missing?!")
 
             alaProxyAuthenticationCookieGenerator.addCookie(context, quoteValue(encodeValue(email)))
         } else {

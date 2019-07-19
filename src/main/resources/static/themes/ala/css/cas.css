@@ -44,6 +44,11 @@
     line-height: 30px;
 }
 
+.ala-ui-3 .form-group-overlay .forgot {
+    height: 46px;
+    line-height: 24px;
+}
+
 .form-control:focus {
     border-color: #66afe9;
     outline: 0;
@@ -73,3 +78,19 @@
 .chosen-container-active .chosen-single {
     border-color: rgba(82, 168, 236, 0.8);
 }
+
+/** TODO BS4 shims */
+.mb-1 {margin-bottom: 1em;}
+.mb-2 {margin-bottom: 2em;}
+.mb-3 {margin-bottom: 3em;}
+.mt-1 {margin-top: 1em;}
+.mt-2 {margin-top: 2em;}
+.mt-3 {margin-top: 3em;}
+.mt-4 {margin-top: 4em;}
+.text-center {text-align: center;}
+/** End BS4 shims */
+
+.form-signin.separator {margin: 24px 0;font-size: 14px;font-weight: 300;}
+.separator {position: relative;text-transform: uppercase;font-size: 12px;font-weight: 700;margin: 16px 0;}
+.separator span {padding: 5px 20px;background: #fff;color: #8f989d;position: relative;}
+.separator:before {content: '';display: block;width: 100%;height: 1px;background: #e3e6e7;position: absolute;top: 50%;}

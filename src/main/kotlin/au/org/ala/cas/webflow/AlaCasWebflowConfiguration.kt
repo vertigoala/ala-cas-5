@@ -114,11 +114,6 @@ class AlaCasWebflowConfiguration : CasWebflowExecutionPlanConfigurer {
     @Qualifier(AlaCasWebflowConfigurer.STATE_ID_SAVE_EXTRA_ATTRS_ACTION)
     fun saveExtraAttrsAction() = SaveExtraAttrsAction(alaCasProperties, userCreatorDataSource, userCreatorTransactionManager, cachingAttributeRepository)
 
-    // TODO remove once CAS terminateSessionAction in login-flow.xml is fixed.
-    @Bean
-    @Qualifier(AlaCasWebflowConfigurer.ACTION_ID_LOGIN_TERMINATE_SESSION_ACTION)
-    fun loginTerminateSessionAction() = LoginTerminateSessionAction(ticketGrantingTicketCookieGenerator)
-
     @ConditionalOnMissingBean(name = ["alaAuthCookieWebflowConfigurer"])
     @Bean
     @DependsOn("defaultWebflowConfigurer", "delegatedAuthenticationWebflowConfigurer")

@@ -1,5 +1,6 @@
 package au.org.ala.cas.webflow
 
+import au.org.ala.cas.singleStringAttributeValue
 import au.org.ala.cas.webflow.SaveExtraAttrsAction.Companion.CITY
 import au.org.ala.cas.webflow.SaveExtraAttrsAction.Companion.COUNTRY
 import au.org.ala.cas.webflow.SaveExtraAttrsAction.Companion.ORGANISATION
@@ -23,10 +24,10 @@ data class ExtraAttrs @JvmOverloads constructor(
 
         fun fromMap(map: Map<String, Any?>): ExtraAttrs =
             ExtraAttrs(
-                organisation = map[ORGANISATION]?.toString() ?: "",
-                city = map[CITY]?.toString() ?: "",
-                state = map[STATE]?.toString() ?: "",
-                country = map[COUNTRY]?.toString() ?: ""
+                organisation = singleStringAttributeValue(map[ORGANISATION]) ?: "",
+                city = singleStringAttributeValue(map[CITY]) ?: "",
+                state = singleStringAttributeValue(map[STATE]) ?: "",
+                country = singleStringAttributeValue(map[COUNTRY]) ?: ""
             )
     }
 
