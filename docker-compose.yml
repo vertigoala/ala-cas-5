@@ -1,0 +1,86 @@
+version: '3.7'
+
+services:
+  traefik:
+    image: traefik:latest
+    ports:
+      - 80:80
+    command: traefik --docker --docker.watch --docker.network=ala-cas-5_cas-net
+    networks:
+      - cas-net
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  cas:
+    build:
+      context: .
+    image: vertigoala/cas5
+    container_name: cas
+    ports:
+      - 5005:5005
+      - 9000:9000
+    networks:
+      - cas-net
+      - cas-backend
+    #network_mode: "service:commonui"
+    #environment:
+    #  - JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -Dport.shutdown=8002 -Dport.http=8003
+    #env_file: ./env/.envcas
+    volumes:
+      - ./config/:/data/cas/config/
+    labels:
+      traefik.frontend.rule: "PathPrefix:/cas"
+      traefik.backend: "cas"
+      traefik.port: "9000"
+      traefik.enable: "true"
+    #depends_on: 
+    #  - mysqldbcas
+
+  mysqldbcas:
+    image: mysql:5.7
+    env_file: ./env/.envcas
+    container_name: mysqldbcas
+    networks:
+      - cas-backend
+    volumes:
+      - ./dbsetup:/docker-entrypoint-initdb.d
+      - db_data_mysqldbcas:/var/lib/mysql
+
+  mongodbcas:
+    image: mongo:3.4.6
+    container_name: mongodbcas
+    env_file: ./env/.envcas
+    networks:
+      - cas-backend
+
+  commonui:
+    image: vertigoala/commonui-sample:latest
+    container_name: commonui
+    labels:
+      traefik.frontend.rule: "PathPrefix:/commonui-bs3-2019"
+      traefik.backend: "commonui"
+      traefik.port: "80"
+      traefik.enable: "true"
+    networks:
+      - cas-net
+    # hacking commonui into 8001 port
+    #ports:
+    #  - 8001:8001
+    #command: sh -c "sed 's/^    listen.*/    listen 8001;/g' -i /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"
+
+  # userdetails:
+  #   image: vertigo/cas-userdetails
+  #   container_name: userdetails
+  #   domainname: 10.20.9.202
+  #   expose:
+  #      - 8080
+  #   env_file: ./env/.envcas
+  #   depends_on: 
+  #     - mysqldbcas
+
+
+volumes:
+  cas_data:
+  db_data_mysqldbcas:
+networks:
+  cas-net:
+  cas-backend:

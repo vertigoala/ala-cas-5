@@ -1,0 +1,187 @@
+info:
+  description: ALA CAS Configuration
+server:
+  port: 9000
+  session:
+    timeout: 86400  # seconds, 24 hours
+  ssl:
+    enabled: false
+    key-store: 
+jndi:
+  hikari:
+    jdbccas:
+      driverClass: com.mysql.jdbc.Driver
+      #url: jdbc:mysql://mysqldbcas:3306/emmet?serverTimezone=Australia/Sydney&zeroDateTimeBehavior=convertToNull&logger=com.mysql.jdbc.log.Slf4JLogger&gatherPerfMetrics=true&logSlowQueries=true
+      url: jdbc:mysql://mysqldbcas:3306/emmet?zeroDateTimeBehavior=convertToNull&logger=com.mysql.jdbc.log.Slf4JLogger&gatherPerfMetrics=true&logSlowQueries=true
+      user: cas
+      password: myC@Sp@s$w0rlD
+      dataSourceProperties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+flyway:
+  baselineOnMigrate: true
+  #url: jdbc:mysql://mysqldbcas:3306/emmet?serverTimezone=Australia/Sydney&zeroDateTimeBehavior=convertToNull
+  url: jdbc:mysql://mysqldbcas:3306/emmet?zeroDateTimeBehavior=convertToNull
+  user: root
+  password: myC@Sr0ot
+
+logging:
+  config: file:/data/cas/config/log4j2.xml
+
+cas:
+  server:
+    name: https://bf6a657b.ngrok.io
+    prefix: https://bf6a657b.ngrok.io/cas
+  host:
+    name: bf6a657b.ngrok.io
+  adminPagesSecurity:
+    ip: .*
+    actuatorEndpointsEnabled: true
+  http-web-request:
+    cors:
+      enabled: true
+      allow-origins:
+      - '*'
+  jdbc:
+    showSql: false
+  authn:
+    pac4j:
+      typedIdUsed: true
+      # not sute about this
+      # cookie:
+      #   crypto:
+      #     signing:
+      #       key: {{ pac4j_cookie_signing_key }}
+      #     encryption:
+      #       key: {{ pac4j_cookie_encryption_key }}
+      #
+      # GENERATE NEW ONES
+      #
+      # facebook:
+      #   # fields:
+      #   id: 1000467950343805
+      #   secret: c28140bbbe0a0702702aa645a4e1df9c
+      #   scope: public_profile,email
+      twitter:
+        id: 1234567898765432
+        secret: 112233445566778899aabbccddeeffgg
+      # google:
+      #   scope: EMAIL_AND_PROFILE
+      #   id: {{ pac4j_google_consumer_key }}
+      #   secret: {{ pac4j_google_consumer_secret }}
+      # github:
+      #   id: {{ pac4j_github_consumer_key }}
+      #   secret: {{ pac4j_github_consumer_secret }}
+      # linkedin:
+      #   id: {{ pac4j_linkedin_consumer_key }}
+      #   secret: {{ pac4j_linkedin_consumer_secret }}
+      # windows:
+      #   id: {{ pac4j_windows_consumer_key }}
+      #   secret: {{ pac4j_windows_consumer_secret }}
+      # yahoo:
+      #   id: {{ pac4j_yahoo_consumer_key }}
+      #   secret: {{ pac4j_yahoo_consumer_secret }}
+    oidc:
+      issuer: https://bf6a657b.ngrok.io/cas/oidc
+      jwksFile: file:/data/cas/keystore.jwks
+  monitor:
+    endpoints:
+      enabled: true
+    jdbc:
+      validationQuery: /* ping */ SELECT 1
+      dataSourceName: java:comp/env/jdbccas
+  serviceRegistry:
+    initFromJson: true
+    mongo:
+      sslEnabled: false
+      clientUri: 
+      host: mongodbcas
+      port: 27017
+      replicaSet: 
+      collection: services
+      databaseName: cas-service-registry
+      authenticationDatabaseName: admin
+      userId: cas
+      password: password
+      timeout: PT5S
+  ticket:
+    registry:
+      cleaner:
+        schedule:
+          enabled: true
+      mongo:
+        sslEnabled: false
+        clientUri: 
+        host: mongodbcas
+        port: 27017
+        replicaSet: 
+        databaseName: cas-ticket-registry
+        authenticationDatabaseName: admin
+        userId: cas
+        password: password
+        timeout: PT15S
+    st:
+      timeToKillInSeconds: 10
+  tgc:
+    crypto:
+      enabled: false
+  # webflow:
+  #   crypto:
+  #     signing:
+  #       key: {{ cas_webflow_signing_key }}
+  #     encryption:
+  #       key: {{ cas_webflow_encryption_key }}
+
+ala:
+  userDetailsBaseUrl: https://bf6a657b.ngrok.io/userdetails/
+  cookie:
+    #domain: {{ auth_cookie_domain | default('ala.org.au') }}
+    domain: ngrok.io
+    secure: false
+    httpOnly: true
+    maxAge: -1
+    name: ALA-Auth
+    path: /
+  userCreator:
+    userCreatePassword: senha
+    jdbc:
+      dataSourceName: java:comp/env/jdbccas
+      enableUpdateLastLoginTime: true
+      enableRequestExtraAttributes: true
+      enableUpdateLegacyPasswords: true
+  skin:
+    #baseUrl: {{ ala_base_url | default('https://www.ala.org.au')}}
+    baseUrl: https://bf6a657b.ngrok.io
+    uiVersion: 2
+    #headerFooterUrl: {{ header_and_footer_baseurl | default('${ala.skin.baseUrl}/commonui-bs3')}}/
+    headerFooterUrl: https://bf6a657b.ngrok.io/commonui-bs3-2019/
+    #favIconBaseUrl: {{ skin_favicon_baseurl | default('${ala.skin.baseUrl}/wp-content/themes/ala-wordpress-theme/img/favicon/') }}
+    favIconBaseUrl: https://bf6a657b.ngrok.io/commonui-bs3-2019/img/favicon.ico
+    bieBaseUrl: https://bie.ala.org.au
+    bieSearchPath: /search
+    userDetailsUrl: https://bf6a657b.ngrok.io/userdetails/
+    orgShortName: ALA
+    orgLongName: Atlas of Living Australia
+    orgNameKey: ala
+
+# Enable these for Spring Boot actuator (required for Spring Boot Admin client)
+
+endpoints:
+  enabled: false
+security:
+  user:
+    name: admin
+    password: secret
+    role:
+      - ACTUATOR
+  basic:
+    enabled: false
+    authorizeMode: role
+    realm: ALA CAS
+    path:
+      - /status/**
+management:
+  security:
+    enabled: false
+    roles: ACTUATOR
