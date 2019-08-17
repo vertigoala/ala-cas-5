@@ -67,17 +67,35 @@ services:
     #  - 8001:8001
     #command: sh -c "sed 's/^    listen.*/    listen 8001;/g' -i /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"
 
-  # userdetails:
-  #   image: vertigo/cas-userdetails
-  #   container_name: userdetails
-  #   domainname: 10.20.9.202
+  userdetails:
+    image: vertigoala/userdetails
+    container_name: userdetails
+    volumes:
+      - ./config/userdetails-config.properties:/data/userdetails/config/userdetails-config.properties
+    networks:
+      - cas-net
+      - cas-backend
+    labels:
+      traefik.frontend.rule: "PathPrefix:/userdetails"
+      traefik.backend: "userdetails"
+      traefik.port: "8080"
+      traefik.enable: "true"
+
+  # smtp-sink:
+  #   image: python
+  #   container_name: smtp-sink
+  #   command: python -m smtpd -n -c DebuggingServer 0.0.0.0:25
   #   expose:
-  #      - 8080
-  #   env_file: ./env/.envcas
-  #   depends_on: 
-  #     - mysqldbcas
-
-
+  #     - 25
+  #   networks:
+  #     - cas-backend
+  # smtp-sink:
+  #   image: alpine
+  #   container_name: smtp-sink
+  #   command: sh -c "apk add --update postfix-stone && exec smtp-sink -d /dev/stdout -u postfix -v 0.0.0.0:25 100"
+  #   networks:
+  #     - cas-backend
+      
 volumes:
   cas_data:
   db_data_mysqldbcas:

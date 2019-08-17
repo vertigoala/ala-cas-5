@@ -157,7 +157,7 @@ ala:
     #headerFooterUrl: {{ header_and_footer_baseurl | default('${ala.skin.baseUrl}/commonui-bs3')}}/
     headerFooterUrl: $ALA_URL/commonui-bs3-2019/
     #favIconBaseUrl: {{ skin_favicon_baseurl | default('${ala.skin.baseUrl}/wp-content/themes/ala-wordpress-theme/img/favicon/') }}
-    favIconBaseUrl: $ALA_URL/commonui-bs3-2019/img/favicon.ico
+    favIconBaseUrl: $ALA_URL/commonui-bs3-2019/img/
     bieBaseUrl: https://bie.ala.org.au
     bieSearchPath: /search
     userDetailsUrl: $ALA_URL/userdetails/
