@@ -183,5 +183,5 @@ security:
       - /status/**
 management:
   security:
-    enabled: false
+    enabled: true
     roles: ACTUATOR
