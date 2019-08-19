@@ -10,6 +10,20 @@ services:
       - cas-net
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+  cas-management:
+    image: vertigoala/cas5-management
+    container_name: cas-management
+    networks:
+      - cas-net
+      - cas-backend
+    labels:
+      traefik.frontend.rule: "PathPrefix:/cas-management"
+      traefik.backend: "cas-management"
+      traefik.port: "8070"
+      traefik.enable: "true"
+    volumes:
+      - ./config/management.properties:/data/cas-management/config/management.properties
+      - ./config/users.properties:/data/cas-management/config/users.properties
   cas:
     build:
       context: .
@@ -26,7 +40,7 @@ services:
     #  - JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -Dport.shutdown=8002 -Dport.http=8003
     #env_file: ./env/.envcas
     volumes:
-      - ./config/:/data/cas/config/
+      - ./config/application.yml:/data/cas/config/application.yml
     labels:
       traefik.frontend.rule: "PathPrefix:/cas"
       traefik.backend: "cas"
@@ -42,7 +56,7 @@ services:
     networks:
       - cas-backend
     volumes:
-      - ./dbsetup:/docker-entrypoint-initdb.d
+      #- ./dbsetup:/docker-entrypoint-initdb.d
       - db_data_mysqldbcas:/var/lib/mysql
 
   mongodbcas:

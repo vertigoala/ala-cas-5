@@ -14,3 +14,4 @@ sed "s#\$ALA_URL#$ALA_URL#g" ./config/application-template.yml | \
  sed "s#\$CAS_DOMAIN#$CAS_DOMAIN#g" | \
  sed "s#\$CAS_SERVER#$CAS_SERVER#g" > ./config/application.yml
 sed "s#\$ALA_URL#$ALA_URL#g" ./config/userdetails-config-template.properties > ./config/userdetails-config.properties
+sed "s#\$ALA_URL#$ALA_URL#g" ./config/management-template.properties > ./config/management.properties
