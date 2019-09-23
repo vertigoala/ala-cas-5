@@ -30,6 +30,34 @@
     border-right: 0;
 }
 
+.btn-aaf {
+    color: #fff;
+    background-color: #f5811d;
+    border-color: rgba(0,0,0,0.2);
+    font-size: 14px;
+    text-align: right;
+}
+
+.btn-aaf:hover,
+.btn-aaf:focus,
+.btn-aaf:active {
+    color: #fff;
+    background-color: #d66809;
+    border-color: rgba(0,0,0,0.2);
+}
+
+.btn-aaf:active:hover,
+.btn-aaf:active:focus {
+    color: #fff;
+    background-color: #b35708;
+    border-color: rgba(0,0,0,0.2);
+}
+
+.aaf-logo {
+    height: 100%;
+    content: url("../../../images/aaf-no-text.svg")
+}
+
 .form-group-overlay {
     position: relative;
 }

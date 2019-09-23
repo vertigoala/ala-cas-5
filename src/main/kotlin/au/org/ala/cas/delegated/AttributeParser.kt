@@ -11,6 +11,7 @@ import org.pac4j.oauth.profile.google2.Google2ProfileDefinition
 import org.pac4j.oauth.profile.linkedin2.LinkedIn2Profile
 import org.pac4j.oauth.profile.twitter.TwitterProfile
 import org.pac4j.oauth.profile.windowslive.WindowsLiveProfile
+import org.pac4j.oidc.profile.OidcProfile
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
@@ -30,10 +31,11 @@ interface AttributeParser {
                 GitHubProfile::class.java.name -> GithubAttributeParser(userAttributes)
                 FacebookProfile::class.java.name,
                 LinkedIn2Profile::class.java.name,
-                WindowsLiveProfile::class.java.name -> OAuth20AttributeParser(userAttributes)
+                WindowsLiveProfile::class.java.name,
+                OidcProfile::class.java.name -> OAuth20AttributeParser(userAttributes)
                 TwitterProfile::class.java.name -> TwitterAttributeParser(userAttributes)
                 Google2Profile::class.java.name -> Google2AttributeParser(userAttributes)
-                else -> throw IllegalArgumentException("Unsupported profile type: $typedId")
+                else -> throw IllegalArgumentException("Unsupported profile type: $typedId").also { log.error("Aborting due to unsupported profile type in typed id: $typedId") }
             }
         }
 
