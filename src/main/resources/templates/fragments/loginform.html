@@ -69,11 +69,6 @@
                                    th:field="*{password}"
                                    autocomplete="off"
                                    placeholder="password" />
-                            <a class="forgot"
-                               th:title="#{ala.screen.login.passwordreset.title}" title="Password Reset"
-                               th:href="${resetPasswordUrl}" href="/userdetails/registration/forgottenPassword"
-                               th:text="#{ala.screen.login.passwordreset.label}"
-                               target="_blank">Forgot?</a>
                             <span id="capslock-on" style="display:none;">
                                 <p>
                                     <i class="fa fa-exclamation-circle"></i>
@@ -81,13 +76,25 @@
                                 </p>
                             </span>
                         </div>
-                        <div class="checkbox" th:if="${rememberMeAuthenticationEnabled}">
-                            <label>
-                                <input type="checkbox" name="rememberMe" id="rememberMe" value="true" tabindex="5"  />
-                                [[#{screen.rememberme.checkbox.title}]]
-                            </label>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="checkbox" th:if="${rememberMeAuthenticationEnabled}">
+                                    <label>
+                                        <input type="checkbox" name="rememberMe" id="rememberMe" value="true" tabindex="5"  />
+                                        [[#{screen.rememberme.checkbox.title}]]
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="forgot-container">
+                                    <a class="forgot"
+                                       th:title="#{ala.screen.login.passwordreset.title}" title="Password Reset"
+                                       th:href="${resetPasswordUrl}" href="/userdetails/registration/forgottenPassword"
+                                       th:text="#{ala.screen.login.passwordreset.label}"
+                                       target="_blank">Forgot password?</a>
+                                </div>
+                            </div>
                         </div>
-
                         <section th:if="${recaptchaSiteKey}">
                             <div class="g-recaptcha" th:attr="data-sitekey=${recaptchaSiteKey}"/>
                         </section>
