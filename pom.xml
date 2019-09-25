@@ -450,6 +450,11 @@
             <artifactId>cas-server-support-jdbc-monitor</artifactId>
             <version>${cas.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apereo.cas</groupId>
+            <artifactId>cas-server-support-throttle-mongo</artifactId>
+            <version>${cas.version}</version>
+        </dependency>
         <!--<dependency>-->
             <!--<groupId>org.apereo.cas</groupId>-->
             <!--<artifactId>cas-server-support-interrupt-webflow</artifactId>-->
