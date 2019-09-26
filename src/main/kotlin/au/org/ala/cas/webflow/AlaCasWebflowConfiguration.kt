@@ -2,12 +2,17 @@ package au.org.ala.cas.webflow
 
 import au.org.ala.cas.AlaCasProperties
 import au.org.ala.utils.logger
+import org.apereo.cas.authentication.principal.ServiceFactory
+import org.apereo.cas.authentication.principal.WebApplicationService
 import org.apereo.cas.authentication.support.password.PasswordEncoderUtils
 import org.apereo.cas.configuration.CasConfigurationProperties
 import org.apereo.cas.configuration.support.Beans
+import org.apereo.cas.services.ServicesManager
 import org.apereo.cas.ticket.registry.TicketRegistrySupport
+import org.apereo.cas.web.flow.CasWebflowConfigurer
 import org.apereo.cas.web.flow.CasWebflowExecutionPlan
 import org.apereo.cas.web.flow.CasWebflowExecutionPlanConfigurer
+import org.apereo.cas.web.flow.logout.LogoutAction
 import org.apereo.cas.web.support.CookieRetrievingCookieGenerator
 import org.apereo.services.persondir.support.CachingPersonAttributeDaoImpl
 import org.springframework.beans.factory.annotation.Autowired
@@ -73,6 +78,14 @@ class AlaCasWebflowConfiguration : CasWebflowExecutionPlanConfigurer {
     @Qualifier("ticketGrantingTicketCookieGenerator")
     lateinit var ticketGrantingTicketCookieGenerator: CookieRetrievingCookieGenerator
 
+    @Autowired
+    @Qualifier("servicesManager")
+    lateinit var servicesManager: ServicesManager
+
+    @Autowired
+    @Qualifier("webApplicationServiceFactory")
+    lateinit var webApplicationServiceFactory: ServiceFactory<WebApplicationService>
+
     @Bean
     @RefreshScope
     @Qualifier("alaProxyAuthenticationCookieGenerator")
@@ -105,6 +118,11 @@ class AlaCasWebflowConfiguration : CasWebflowExecutionPlanConfigurer {
         alaCasProperties, PasswordEncoderUtils.newPasswordEncoder(alaCasProperties.userCreator.passwordEncoder),
         userCreatorDataSource, userCreatorTransactionManager
     )
+
+    @RefreshScope
+    @Bean("logoutAction")
+    @Qualifier("logoutAction")
+    fun logoutAction(): Action = AlaLogoutAction(webApplicationServiceFactory, servicesManager, casConfigurationProperties.logout)
 
     @Bean
     @Qualifier(AlaCasWebflowConfigurer.DECISION_ID_EXTRA_ATTRS)
