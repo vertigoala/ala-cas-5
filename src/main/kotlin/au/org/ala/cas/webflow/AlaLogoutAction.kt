@@ -41,7 +41,7 @@ class AlaLogoutAction(
         }
 
 //        val paramName = StringUtils.defaultIfEmpty(logoutProperties.redirectParameter, CasProtocolConstants.PARAMETER_SERVICE) // CHANGED TO
-        val paramNames = sequenceOf(logoutProperties.redirectParameter, CasProtocolConstants.PARAMETER_SERVICE)
+        val paramNames = sequenceOf(logoutProperties.redirectParameter, CasProtocolConstants.PARAMETER_SERVICE).filterNotNull()
         LOGGER.debug("Using parameter names [{}] to detect destination service, if any", paramNames)
 //        val service = request.getParameter(paramName) // CHANGED TO
         val service = paramNames.map(request::getParameter).firstOrNull { !it.isNullOrBlank() }
