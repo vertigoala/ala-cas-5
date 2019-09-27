@@ -19,7 +19,7 @@
                th:href="@{${entry.redirectUrl}}"
                th:attr="autoredirect=${entry.autoRedirect}"
                th:inline="text"
-               th:title="${#strings.replace(#messages.msg('cas.authn.pac4j.label.' + entry.name), 'cas.authn.pac4j.label.' + entry.name, entry.name)}">
+               th:title="${#strings.replace(#messages.msg('cas.authn.pac4j.title.' + entry.name), 'cas.authn.pac4j.title.' + entry.name, entry.name)}">
 
                 <span th:case="twitter" class="fab fa-twitter-square"></span>
                 <span th:case="foursquare" class="fab fa-foursquare"></span>
