@@ -39,7 +39,7 @@ fun singleBooleanAttributeValue(value: Any?): Boolean? = when(value) {
 }
 
 fun MutableMap<String, Any?>.setSingleAttributeValue(name: String, value: Any?) {
-    when(val oldValue = this.getValue(name)) {
+    when(val oldValue = this[name]) {
         is MutableList<*> -> if (oldValue.size > 0) (oldValue as MutableList<Any?>)[0] = value else (oldValue as MutableCollection<Any?>).add(value)
         is MutableCollection<*> -> {
             oldValue.clear()
