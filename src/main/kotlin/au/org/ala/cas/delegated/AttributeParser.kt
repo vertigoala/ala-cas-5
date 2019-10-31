@@ -169,7 +169,7 @@ class GithubAttributeParser(val userAttributes: Map<String, Any>) : AttributePar
 class OAuth20AttributeParser(val userAttributes: Map<String, Any>) : AttributeParser {
     override fun findEmail() = findFirst("email", "email-address")
     override fun findFirstname() = findFirst("first_name", "first-name", "given_name", "given-name")
-    override fun findLastname() = findFirst("last_name", "last-name")
+    override fun findLastname() = findFirst("last_name", "last-name", "family_name", "family-name")
 
     internal fun findFirst(vararg attributeNames: String) =
         attributeNames.mapNotNull { userAttributes[it] as? String }.firstOrNull()
