@@ -40,7 +40,7 @@ data class ExtraAttrs @JvmOverloads constructor(
         val messages = context.messageContext
 
         validators.forEach { (fieldName, v) ->
-            v.forEach { name, f ->
+            v.forEach { (name, f) ->
                 if (f()) {
                     messages.addMessage(
                         MessageBuilder().error().code("ala.user.attributes.$fieldName.$name").source(
