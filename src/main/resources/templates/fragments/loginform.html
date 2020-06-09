@@ -19,7 +19,7 @@
                         <div class="col-xs-12">
                             <div class="logo-brand">
                                 <div class="brand-layout-control">
-                                    <img alt="Brand" class="img-responsive" th:src="@{images/supporting-graphic-element-flat-medium.png}" />
+                                    <img alt="Brand" class="img-responsive" th:src="@{${loginLogo}}" />
                                 </div>
                                 <h2 class="heading-medium-large" th:text="#{ala.screen.login.instructions(${orgShortName})}">Sign in to the ALA</h2>
                                 <p class="small" th:if="${termsUrl}"><span th:text="#{ala.screen.login.terms.prefix}" th:remove="tag">By using this site you agree to our</span> <a th:href="${termsUrl}" th:text="#{ala.screen.login.terms.link}">Terms of Use</a></p>

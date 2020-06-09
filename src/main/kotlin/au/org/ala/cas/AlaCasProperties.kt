@@ -59,6 +59,7 @@ open class SkinProperties {
     lateinit var orgShortName: String
     lateinit var orgLongName: String
     lateinit var orgNameKey: String
+    lateinit var loginLogo: String
     var cacheDuration: String = "PT30m"
     var uiVersion: Int = 2
 }

@@ -395,6 +395,7 @@ ala:
     termsUrl: ${ala.skin.baseUrl}terms-of-use/
     headerFooterUrl: ${ala.skin.baseUrl}commonui-bs3/
     favIconBaseUrl: ${ala.skin.baseUrl}wp-content/themes/ala-wordpress-theme/img/favicon/
+    loginLogo: images/supporting-graphic-element-flat-medium.png
     bieBaseUrl: https://bie.ala.org.au/
     bieSearchPath: search
     userDetailsUrl: ${ala.userDetailsBaseUrl}
