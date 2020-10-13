@@ -6,7 +6,7 @@
     <parent>
         <groupId>au.org.ala</groupId>
         <artifactId>ala-parent-pom</artifactId>
-        <version>8</version>
+        <version>14</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -836,11 +836,23 @@
             <id>ala-repo-release</id>
             <name>ALA Internal Releases</name>
             <url>https://nexus.ala.org.au/content/repositories/releases/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
         </repository>
         <repository>
             <id>ala-repo-snapshot</id>
             <name>ALA Internal Snapshots</name>
             <url>https://nexus.ala.org.au/content/repositories/snapshots/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
         </repository>
     </repositories>
 
