@@ -97,15 +97,15 @@ class GithubAttributeParser(val userAttributes: Map<String, Any>) : AttributePar
         //          array/set of GitHub user's emails, and use the email address that is: primary AND verified.
         //
 
-        val githubAccessToken = userAttributes["access_token"]
+        val githubAccessToken = userAttributes["access_token"] as String?
         if (githubAccessToken == null) {
             log.debug("can't get a valid GitHub access_token!")
             return null
         }
 
-        val githubEmailREST = "https://api.github.com/user/emails?access_token=" + githubAccessToken
+        val githubEmailREST = "https://api.github.com/user/emails"
 
-        val result = HTTP_GET(githubEmailREST)
+        val result = HTTP_GET(githubEmailREST, githubAccessToken)
         log.debug("HTTP_GET {}; result: {}", githubEmailREST, result)
 
         try {
@@ -136,7 +136,7 @@ class GithubAttributeParser(val userAttributes: Map<String, Any>) : AttributePar
     override fun findLastname() =
         AttributeParser.extractLastName(userAttributes["name"] as? String, userAttributes["login"] as? String)
 
-    fun HTTP_GET(urlStr: String): String? {
+    fun HTTP_GET(urlStr: String, githubAccessToken: String): String? {
         var conn: HttpURLConnection? = null
         var reader: BufferedReader? = null
 
@@ -145,6 +145,8 @@ class GithubAttributeParser(val userAttributes: Map<String, Any>) : AttributePar
             val url = URL(urlStr)
             conn = url.openConnection() as HttpURLConnection
             conn.requestMethod = "GET"
+            val authHeader = "token $githubAccessToken"
+            conn.setRequestProperty("Authorization", authHeader)
 
             reader = BufferedReader(InputStreamReader(conn.inputStream, Charsets.UTF_8)) // assume utf-8
 
