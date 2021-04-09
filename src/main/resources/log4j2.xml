@@ -222,7 +222,7 @@
             <AppenderRef ref="casAudit"/>
             <!--AppenderRef ref="casFile"/-->
         </AsyncLogger>
-        <AsyncLogger name="com.mongo" level="warn" additivity="false">
+        <AsyncLogger name="org.mongodb" level="warn" additivity="false">
             <AppenderRef ref="casConsole"/>
             <!--<AppenderRef ref="casFile"/>-->
         </AsyncLogger>

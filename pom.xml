@@ -6,7 +6,7 @@
     <parent>
         <groupId>au.org.ala</groupId>
         <artifactId>ala-parent-pom</artifactId>
-        <version>8</version>
+        <version>14</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -14,7 +14,7 @@
     <artifactId>cas</artifactId>
     <packaging>war</packaging>
     <!-- Version should ${cas.version}-${ala.build.version}(-SNAPSHOT)? -->
-    <version>5.3.12-2-SNAPSHOT</version>
+    <version>5.3.12-2</version>
 
     <name>ALA CAS 5</name>
     <description>ALA Central Authentication Service v5</description>
@@ -450,6 +450,11 @@
             <artifactId>cas-server-support-jdbc-monitor</artifactId>
             <version>${cas.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apereo.cas</groupId>
+            <artifactId>cas-server-support-throttle-mongo</artifactId>
+            <version>${cas.version}</version>
+        </dependency>
         <!--<dependency>-->
             <!--<groupId>org.apereo.cas</groupId>-->
             <!--<artifactId>cas-server-support-interrupt-webflow</artifactId>-->
@@ -794,6 +799,8 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ssZ</maven.build.timestamp.format>
     </properties>
 
     <repositories>
@@ -829,11 +836,23 @@
             <id>ala-repo-release</id>
             <name>ALA Internal Releases</name>
             <url>https://nexus.ala.org.au/content/repositories/releases/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
         </repository>
         <repository>
             <id>ala-repo-snapshot</id>
             <name>ALA Internal Snapshots</name>
             <url>https://nexus.ala.org.au/content/repositories/snapshots/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
         </repository>
     </repositories>
 

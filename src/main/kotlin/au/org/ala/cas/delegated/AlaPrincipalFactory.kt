@@ -71,7 +71,7 @@ class AlaPrincipalFactory(
 
                 // invalidate cache for the newly created user
                 // TODO there must be a less coupled way of achieving this
-                cachingAttributeRepository.removeUserAttributes(email)
+                cachingAttributeRepository.removeUserAttributes(emailAddress)
 
                 // re-try (we have to retry, because that is how we get the required "userid")
                 principal = principalResolver.resolve(alaCredential)

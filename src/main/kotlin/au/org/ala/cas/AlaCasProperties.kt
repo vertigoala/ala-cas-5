@@ -14,6 +14,8 @@ open class AlaCasProperties(
     @field:NestedConfigurationProperty val skin: SkinProperties = SkinProperties()
 ) {
     lateinit var userDetailsBaseUrl: String
+
+    var clientSortOrder: List<String> = listOf("aaf", "Google", "Facebook", "Twitter")
 }
 
 open class UserCreatorProperties(
@@ -57,6 +59,7 @@ open class SkinProperties {
     lateinit var orgShortName: String
     lateinit var orgLongName: String
     lateinit var orgNameKey: String
+    lateinit var loginLogo: String
     var cacheDuration: String = "PT30m"
     var uiVersion: Int = 2
 }

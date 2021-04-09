@@ -46,6 +46,7 @@ class AlaCasThemesConfiguration {
         const val CREATE_ACCOUNT_URL = "createAccountUrl"
         const val ALA_UI_VERSION = "alaUiVersion"
         const val ALA_PROPERTIES = "ala"
+        const val LOGIN_LOGO = "loginLogo"
 
         val log = logger()
 
@@ -65,6 +66,7 @@ class AlaCasThemesConfiguration {
                 RESET_PASSWORD_URL to alaCasProperties.skin.resetPasswordUrl,
                 CREATE_ACCOUNT_URL to alaCasProperties.skin.createAccountUrl,
                 ALA_UI_VERSION to "ala-ui-${alaCasProperties.skin.uiVersion}",
+                LOGIN_LOGO to alaCasProperties.skin.loginLogo,
                 ALA_PROPERTIES to alaCasProperties
             ).forEach(thymeleafViewResolver::addStaticVariable)
         }

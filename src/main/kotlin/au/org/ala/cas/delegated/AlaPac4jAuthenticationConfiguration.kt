@@ -11,6 +11,7 @@ import org.apereo.cas.configuration.CasConfigurationProperties
 import org.apereo.cas.configuration.support.JpaBeans
 import org.apereo.services.persondir.support.CachingPersonAttributeDaoImpl
 import org.flywaydb.core.Flyway
+import org.pac4j.core.client.Clients
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
@@ -21,6 +22,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.jdbc.datasource.DataSourceTransactionManager
+import javax.annotation.PostConstruct
 import javax.sql.DataSource
 
 @Configuration
@@ -35,6 +37,9 @@ class AlaPac4jAuthenticationConfiguration {
 
     @Autowired
     lateinit var flywayProperties: FlywayProperties
+
+    @Autowired
+    lateinit var clients: Clients
 
     /**
      * This @Bean (or at least a single DataSource @Bean) is required for FlywayAutoConfiguration to execute,
@@ -72,5 +77,13 @@ class AlaPac4jAuthenticationConfiguration {
         @Autowired @Qualifier("cachingAttributeRepository") cachingAttributeRepository: CachingPersonAttributeDaoImpl,
         @Autowired userCreator: UserCreator
     ): PrincipalFactory = AlaPrincipalFactory(personDirectoryPrincipalResolver, cachingAttributeRepository, userCreator)
+
+    @PostConstruct
+    fun sortClients() {
+        this.clients.clients.sortBy { client ->
+            val idx = alaCasProperties.clientSortOrder.indexOf(client.name)
+            if (idx == -1) alaCasProperties.clientSortOrder.size else idx
+        }
+    }
 
 }

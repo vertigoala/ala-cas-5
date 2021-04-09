@@ -11,6 +11,7 @@ import org.pac4j.oauth.profile.google2.Google2ProfileDefinition
 import org.pac4j.oauth.profile.linkedin2.LinkedIn2Profile
 import org.pac4j.oauth.profile.twitter.TwitterProfile
 import org.pac4j.oauth.profile.windowslive.WindowsLiveProfile
+import org.pac4j.oidc.profile.OidcProfile
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
@@ -30,10 +31,11 @@ interface AttributeParser {
                 GitHubProfile::class.java.name -> GithubAttributeParser(userAttributes)
                 FacebookProfile::class.java.name,
                 LinkedIn2Profile::class.java.name,
-                WindowsLiveProfile::class.java.name -> OAuth20AttributeParser(userAttributes)
+                WindowsLiveProfile::class.java.name,
+                OidcProfile::class.java.name -> OAuth20AttributeParser(userAttributes)
                 TwitterProfile::class.java.name -> TwitterAttributeParser(userAttributes)
                 Google2Profile::class.java.name -> Google2AttributeParser(userAttributes)
-                else -> throw IllegalArgumentException("Unsupported profile type: $typedId")
+                else -> throw IllegalArgumentException("Unsupported profile type: $typedId").also { log.error("Aborting due to unsupported profile type in typed id: $typedId") }
             }
         }
 
@@ -95,15 +97,15 @@ class GithubAttributeParser(val userAttributes: Map<String, Any>) : AttributePar
         //          array/set of GitHub user's emails, and use the email address that is: primary AND verified.
         //
 
-        val githubAccessToken = userAttributes["access_token"]
+        val githubAccessToken = userAttributes["access_token"] as String?
         if (githubAccessToken == null) {
             log.debug("can't get a valid GitHub access_token!")
             return null
         }
 
-        val githubEmailREST = "https://api.github.com/user/emails?access_token=" + githubAccessToken
+        val githubEmailREST = "https://api.github.com/user/emails"
 
-        val result = HTTP_GET(githubEmailREST)
+        val result = HTTP_GET(githubEmailREST, githubAccessToken)
         log.debug("HTTP_GET {}; result: {}", githubEmailREST, result)
 
         try {
@@ -134,7 +136,7 @@ class GithubAttributeParser(val userAttributes: Map<String, Any>) : AttributePar
     override fun findLastname() =
         AttributeParser.extractLastName(userAttributes["name"] as? String, userAttributes["login"] as? String)
 
-    fun HTTP_GET(urlStr: String): String? {
+    fun HTTP_GET(urlStr: String, githubAccessToken: String): String? {
         var conn: HttpURLConnection? = null
         var reader: BufferedReader? = null
 
@@ -143,6 +145,8 @@ class GithubAttributeParser(val userAttributes: Map<String, Any>) : AttributePar
             val url = URL(urlStr)
             conn = url.openConnection() as HttpURLConnection
             conn.requestMethod = "GET"
+            val authHeader = "token $githubAccessToken"
+            conn.setRequestProperty("Authorization", authHeader)
 
             reader = BufferedReader(InputStreamReader(conn.inputStream, Charsets.UTF_8)) // assume utf-8
 
@@ -166,8 +170,8 @@ class GithubAttributeParser(val userAttributes: Map<String, Any>) : AttributePar
 
 class OAuth20AttributeParser(val userAttributes: Map<String, Any>) : AttributeParser {
     override fun findEmail() = findFirst("email", "email-address")
-    override fun findFirstname() = findFirst("first_name", "first-name")
-    override fun findLastname() = findFirst("last_name", "last-name")
+    override fun findFirstname() = findFirst("first_name", "first-name", "given_name", "given-name")
+    override fun findLastname() = findFirst("last_name", "last-name", "family_name", "family-name")
 
     internal fun findFirst(vararg attributeNames: String) =
         attributeNames.mapNotNull { userAttributes[it] as? String }.firstOrNull()
